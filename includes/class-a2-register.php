@@ -23,6 +23,19 @@ class A2_Register{
      */
     private $removeRolesVersion;
 
+    /**
+	 * Inicialização da classe e configurações de hooks, filtros e propriedades.
+	 *
+	 * @since    1.0.0.
+	 */
+    public function __construct()
+    {
+        $this->updateRolesVersion = get_option( '_update_roles_version' );
+        $this->removeRolesVersion = get_option( '_remove_roles_version' );
+
+        add_action( 'init', array( $this, 'updateUsersRoles') );
+        add_action( 'init', array( $this, 'removeUsersRoles' ) );
+    }
 
     /**
      * Este método adiciona novos tipos de usuários para o wordpress.
