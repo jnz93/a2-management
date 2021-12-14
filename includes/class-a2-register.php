@@ -59,4 +59,25 @@ class A2_Register{
             update_option( '_update_roles_version', 1 );
         }
     }
+
+    /**
+     * Este método remove tipos de usuários obsoletos para a plataforma
+     * 
+     */
+    public function removeUsersRoles()
+    {
+        if( $this->removeRolesVersion < 1 ){
+            $removeRoles = array(
+                'subscriber',
+                'contributor',
+                'author',
+                'editor',
+            );
+            
+            foreach( $removeRoles as $role ){
+                remove_role( $role );
+            }
+            update_option( '_remove_roles_version', 1 );
+        }
+    }
 }
