@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       A2 Manager
  * Plugin URI:        unitycode.tech
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Description:       Acompanhantes A2 é uma plataforma de anúncios de acompanhantes para adultos. Este plugin é responsável pelo gerenciamento, funcionalidades e regras de negócio do sistema.
  * Version:           1.0.0
  * Author:            jnz93
  * Author URI:        unitycode.tech
