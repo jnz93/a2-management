@@ -23,4 +23,40 @@ class A2_Register{
      */
     private $removeRolesVersion;
 
+
+    /**
+     * Este método adiciona novos tipos de usuários para o wordpress.
+     * 
+     */
+    public function updateUsersRoles()
+    {
+        if( $this->updateRolesVersion < 1 ){
+            $followerSetup = array(
+                'seguidor'  => [
+                    'read'
+                ]
+            );
+            $scortSetup     = array(
+                'Acompanhante'  => [
+                    'delete_posts',
+                    'delete_published_posts',
+                    'edit_posts',
+                    'publish_posts',
+                    'read',
+                    'upload_files',
+                ]
+            );
+            $roles = array(
+                'a2_follower'   => $followerSetup,
+                'a2_scort'      => $scortSetup,
+            );
+    
+            foreach( $roles as $role => $setupRole ){
+                foreach( $setupRole as $name => $capabilities ){
+                    add_role( $role, __( $name ), $capabilities );
+                }
+            }
+            update_option( '_update_roles_version', 1 );
+        }
+    }
 }
