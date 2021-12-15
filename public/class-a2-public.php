@@ -75,6 +75,10 @@ class A2_Public {
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/a2-public.css', array(), $this->version, 'all' );
 
+		/**
+		 * Enqueue Materialize Front-End Framework
+		 */
+		wp_enqueue_style( 'materialize', 'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css', [], '', 'all' );
 	}
 
 	/**
@@ -98,6 +102,10 @@ class A2_Public {
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/a2-public.js', array( 'jquery' ), $this->version, false );
 
+		/**
+		 * Enqueue Materialize Front-End Framework
+		 */
+		wp_enqueue_script( 'materialize', 'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js', [], '', true );
 	}
 
 }
