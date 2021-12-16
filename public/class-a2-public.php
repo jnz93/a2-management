@@ -79,6 +79,11 @@ class A2_Public {
 		 * Enqueue Materialize Front-End Framework
 		 */
 		wp_enqueue_style( 'materialize', 'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css', [], '', 'all' );
+
+		/**
+		 * Enqueue Materialize Icons Font
+		 */
+		wp_enqueue_style( 'materialize-icons', 'https://fonts.googleapis.com/icon?family=Material+Icons', [], '', 'all' );
 	}
 
 	/**
