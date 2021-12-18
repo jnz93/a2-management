@@ -276,4 +276,33 @@ class A2_Register{
         
         }
     }
+
+    /**
+     * Método responsável por mostrar o formulário ou processar um novo cadastro
+     * Este método é passado para o shortcode.
+     * 
+     */
+    public function proccessForm()
+    {
+        if( isset( $_POST['submit'] ) ){
+            $this->validate(
+                $_POST['first_name'],
+                $_POST['last_name'],
+                $_POST['email'],
+                $_POST['terms_agree'],
+                $_POST['age_confirm'],
+            );
+
+            # Limpeza dos dados do usuário
+            $firstName  = sanitize_text_field( $_POST['first_name'] );
+            $lastName   = sanitize_text_field( $_POST['last_name'] );
+            $userType   = sanitize_text_field( $_POST['user_type'] );
+            $email      = sanitize_email( $_POST['email'] );
+
+            # Chamada da função de adição de usuário
+            $this->user($firstName, $lastName, $email, $userType);
+        }
+
+        $this->form( $firstName, $lastName, $email, $userType );
+    }
 }
