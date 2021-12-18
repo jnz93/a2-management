@@ -221,4 +221,59 @@ class A2_Register{
 
         echo $form;
     }
+
+    /**
+     * Método responsável pela validação dos inputs do usuário
+     * 
+     * @param string $firstName     Primeiro Nome
+     * @param string $lastName      Sobrenome
+     * @param string $email         E-mail do usuário
+     * @param boolean $termsConfirm Confirmação da aceitação dos termos
+     * @param boolean $ageConfirm   Confirmação de maioridade  
+     * 
+     */
+    private function validate( $firstName, $lastName, $email, $termsConfirm, $ageConfirm )
+    {
+        global $regErrors;
+        $regErrors = new WP_Error();
+
+        if( empty( $firstName ) || empty( $lastName ) || empty( $email ) ){
+            $regErrors->add( 'field', __('Todos os campos são obrigatórios.')  );
+        }
+
+        if( 4 > strlen( $firstName ) ){
+            $regErrors->add( 'short_firstname', __('Primeiro nome está muito curto. Preencha com pelo menos 4 caracteres.') );
+        }
+        if( 4 > strlen( $lastName ) )
+        {
+            $regErrors->add( 'short_lastname', __('Sobrenome está muito curto. Preencha com pelo menos 4 caracteres.') );
+        }
+
+        if( !is_email( $email ) ){
+            $regErrors->add('email_invalid', __('E-mail inválido.') );
+        }
+        if( email_exists( $email ) ){
+            $regErrors->add('email', __('E-mail em uso.') );
+        }
+
+        if( $termsConfirm == false ){
+            $regErrors->add('accept_terms', __('Você precisa aceitar os termos de uso e políticas de privacidade para completar o cadastro.') );
+        }
+
+        if( $ageConfirm == false ){
+            $regErrors->add('age_confirm', __('Você precisa confirmar ser maior de 18 anos para completar o cadastro.') );
+        }
+
+        // Checando os erros e mostrando se houver algum.
+        if ( is_wp_error( $regErrors ) ) {
+
+            foreach ( $regErrors->get_error_messages() as $error ) {
+                echo '<div>';
+                echo '<strong>ERROR</strong>:';
+                echo $error . '<br/>';
+                echo '</div>';
+            }
+        
+        }
+    }
 }
