@@ -93,4 +93,43 @@ class A2_Register{
             update_option( '_remove_roles_version', 1 );
         }
     }
+
+    /**
+     * Método responsável pela inserção de um novo usuário na base.
+     * 
+     * @param string $firstName     Primeiro nome
+     * @param string $lastName      Sobrenome
+     * @param string $email         Email do usuário
+     * @param string $userType      Nível do usuário
+     *
+     */
+    private function user( $firstName, $lastName, $email, $userType )
+    {
+        global $regErrors;
+
+        if( 1 > count( $regErrors->get_error_messages() ) ){
+            $userData = array(
+                'user_login'    => $firstName,
+                'first_name'    => $firstName,
+                'last_name'     => $lastName,
+                'user_email'    => $email,
+                'role'          => $userType,
+            );
+            $userId = wp_insert_user( $userData );
+            if( !is_wp_error( $userId ) ){
+                # Marcação das users metas pós-cadastro | 0=false/1=true
+                update_user_meta( $userId, '_acepted_terms', 1 );
+                update_user_meta( $userId, '_confirmation_age', 1 );
+                update_user_meta( $userId, '_is_completed_perfil', 0 );
+
+                # Disparo do e-mail
+                retrieve_password($firstName);
+                
+                echo 'Pré-cadastro completo! Enviamos um e-mail com instruções para configuração da senha. Acesse seu ' . $email . ' e clique no link enviado para finalizar o cadastro.'; 
+            } else {
+                echo 'Erro ao cadastrar </br>';
+                var_dump($userId);
+            }
+        }
+    }
 }
