@@ -14,12 +14,17 @@
 class A2_Shortcodes{
 
     /**
+     * Instância da classe A2_Register
+     */
+    private $register;
+
+    /**
 	 * Inicialização da classe e configurações de hooks, filtros e propriedades.
 	 *
 	 * @since    1.0.0
 	 */
     public function __construct()
     {
-
+        $this->register = new A2_Register();
     }
 }
