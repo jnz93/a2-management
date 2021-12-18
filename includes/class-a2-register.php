@@ -39,7 +39,7 @@ class A2_Register{
 
     /**
      * Este método adiciona novos tipos de usuários para o wordpress.
-     * 
+     * https://developer.wordpress.org/reference/functions/add_role/
      */
     public function updateUsersRoles()
     {
