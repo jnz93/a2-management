@@ -132,4 +132,93 @@ class A2_Register{
             }
         }
     }
+
+    /**
+     * Método responsável por retonar o HTML com formulário de cadastro
+     * O método recebe um parâmetro para saber qual tipo de usuário será cadastrado
+     * 
+     * @param string $firstName     Primeiro nome
+     * @param string $lastName      Sobrenome
+     * @param string $email         E-mail 
+     * @param string $userType      Tipo do usuário que será cadastrado Seguidor/Acompanhante
+     */
+    private function form( $firstName, $lastName, $email, $userType )
+    {
+        $form = '
+        <div id="selectPerfil" class="">
+            <h3>Selecione seu perfil</h3>
+            <a class="waves-effect waves-light btn-large" onclick="showFormScort()">Sou Acompanhante</a>
+            <a class="waves-effect waves-light btn-large" onclick="showFormFollower()">Sou Seguidor</a>
+        </div>
+
+        <div id="registrationForm" class="row hide">
+            <form class="col s12" action="'. $_SERVER['REQUEST_URI'] .'" method="post">
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input id="first_name" name="first_name" class="validate" type="text" value="'. ( isset( $_POST['first_name'] ) ? $firstName : null  ) .'">
+                        <label for="first_name">Nome</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input id="last_name" name="last_name" class="validate" type="text"  value="'. ( isset( $_POST['last_name'] ) ? $lastName : null  ) .'">
+                        <label for="last_name">Sobrenome</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="email" name="email" class="validate" type="email" value="'. ( isset( $_POST['email'] ) ? $email : null  ) .'">
+                        <label for="email">E-mail</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s12">
+                        <label>
+                            <input id="terms_agree" name="terms_agree" class="validate" type="checkbox"/>
+                            <span><b>Concordo com os <a href="#">termos de uso e políticas de privacidade</a> da plataforma A2 Acompanhantes.</b></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s12">
+                        <label>
+                            <input id="age_confirm" name="age_confirm" class="validate" type="checkbox"/>
+                            <span>Declaro que <b>sou maior de 18 anos.</b></span>
+                        </label>
+                    </div>
+                </div>
+
+                <input id="user_type" name="user_type" type="hidden" value="'. ( isset( $_POST['user_type'] ) ? $userType : null ) .'">
+                <button class="waves-effect waves-light btn-large" type="submit" name="submit" value="registerUser">Cadastrar
+                    <i class="material-icons right">send</i>
+                </button>
+            </form>
+        </div>
+
+        <script>
+            function showFormScort(){
+                var formWrapper     = jQuery("#registrationForm"),
+                    buttonsWrapper  = jQuery("#selectPerfil"),
+                    typeUser        = jQuery("#user_type");
+
+                formWrapper.removeClass("hide");
+                buttonsWrapper.hide();
+                typeUser.val("a2_scort");
+            }
+
+            function showFormFollower(){
+                var formWrapper = jQuery("#registrationForm"),
+                    buttonsWrapper = jQuery("#selectPerfil"),
+                    typeUser        = jQuery("#user_type");
+
+                formWrapper.removeClass("hide");
+                buttonsWrapper.hide();
+                typeUser.val("a2_follower");
+            }
+        </script>
+        ';
+
+        echo $form;
+    }
 }
