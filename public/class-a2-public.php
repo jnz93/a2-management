@@ -52,6 +52,17 @@ class A2_Public {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
+		/** Redirect para página de login Custom */
+		// add_action( 'init', [ $this, 'redirectLoginPage' ] ); # Funcionando mas desativado em desenvolvimento
+
+		/** Tratamento para quando há falhas no login */
+		add_action( 'wp_login_failed', [ $this, 'loginFailed'] );
+
+		/** Tratamento para quando username ou password estão vazios */
+		add_action( 'authenticate', [ $this, 'verifyUsernamePassword'] );
+
+		/** Redirecionamento quando faz logout */
+		add_action( 'wp_logout', [ $this, 'customLogoutPage'] );
 	}
 
 	/**
@@ -112,5 +123,61 @@ class A2_Public {
 		 */
 		wp_enqueue_script( 'materialize', 'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js', [], '', true );
 	}
+	
+	/**
+	 * Redirecionar acessos a página "/wp-login.php" para "/login"
+	 * 
+	 * @since 1.0.0
+	 */
+	public function redirectLoginPage()
+	{
+		$loginPage 	= home_url('/login/');
+		$pageViewed = basename( $_SERVER['REQUEST_URI'] );
 
+		if( $pageViewed == 'wp-login.php' && $_SERVER['REQUEST_METHOD'] == 'GET' ){
+			
+			wp_redirect( $loginPage );
+			exit;
+		}
+	}
+
+	/**
+	 * Redirecionamento para página login custom quando uma falha de login acontecer
+	 * 
+	 * @since 1.0.0
+	 */
+	public function loginFailed()
+	{
+		$loginPage = home_url('/login/');
+
+		wp_redirect( $loginPage . '?login=failed' );
+		exit;
+	}
+
+	/**
+	 * Verificação de entradas no login
+	 * 
+	 * @since 1.0.0
+	 */
+	public function verifyUsernamePassword( $user, $username, $password ){
+		$loginPage = home_url('/login/');
+
+		if( $username == '' || $password == '' ){
+			wp_redirect( $loginPage . '?login=empty' );
+			exit;
+		}
+	}
+
+	/**
+	 * Redirecionamento após logout
+	 * 
+	 * @since 1.0.0
+	 */
+	public function customLogoutPage()
+	{
+		$loginPage = home_url('/login/');
+
+		wp_redirect( $loginPage . '?login=false' );
+		exit;
+	}
 }
