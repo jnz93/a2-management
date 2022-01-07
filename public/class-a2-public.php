@@ -185,7 +185,7 @@ class A2_Public {
 	}
 
 	/**
-	 * Remoção de itens no menu do painel de seguidor
+	 * Customização dos menus dos painéis de Seguidores e Acompanhantes
 	 * 
 	 * @param array $menu_links
 	 * @return array $menu_links
@@ -206,7 +206,7 @@ class A2_Public {
 			$newLinks = [
 				'followed-profiles' => 'Favoritos',
 				'edit-account'		=> 'Editar Perfil',
-				'change-password' 	=> 'Alterar Senha',	
+				'change-password' 	=> 'Alterar Senha',
 			];
 		} elseif( current_user_can( 'a2_scort') ){
 
@@ -221,7 +221,7 @@ class A2_Public {
 				'gallery'			=> 'Galeria',
 				'edit-account'		=> 'Editar Perfil',
 				'orders'			=> 'Faturas',
-				'change-password' 	=> 'Alterar Senha',	
+				'change-password' 	=> 'Alterar Senha',
 			];
 		}
 
