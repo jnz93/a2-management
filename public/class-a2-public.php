@@ -62,7 +62,10 @@ class A2_Public {
 		add_action( 'authenticate', [ $this, 'verifyUsernamePassword'] );
 
 		/** Redirecionamento quando faz logout */
-		add_action( 'wp_logout', [ $this, 'customLogoutPage'] );
+		// add_action( 'wp_logout', [ $this, 'customLogoutPage'] );
+		
+		/** Filtro para customização do menu do painel */
+		add_filter( 'woocommerce_account_menu_items', [ $this, 'customizeUsersDashboardMenu'] );
 	}
 
 	/**
@@ -179,5 +182,51 @@ class A2_Public {
 
 		wp_redirect( $loginPage . '?login=false' );
 		exit;
+	}
+
+	/**
+	 * Remoção de itens no menu do painel de seguidor
+	 * 
+	 * @param array $menu_links
+	 * @return array $menu_links
+	 * 
+	 * @since 1.0.0
+	 */
+	public function customizeUsersDashboardMenu( $menu_links )
+	{
+		$newLinks 	= array();
+        if( current_user_can( 'a2_follower' ) ){
+			# Remoção de itens
+			unset( $menu_links['orders'] );
+			unset( $menu_links['downloads'] );
+			unset( $menu_links['edit-address'] );
+			unset( $menu_links['edit-account'] );
+			
+			# Adição de novos
+			$newLinks = [
+				'followed-profiles' => 'Favoritos',
+				'edit-account'		=> 'Editar Perfil',
+				'change-password' 	=> 'Alterar Senha',	
+			];
+		} elseif( current_user_can( 'a2_scort') ){
+
+			// Remoção de itens
+			unset( $menu_links['downloads'] );
+			unset( $menu_links['orders'] );
+			unset( $menu_links['edit-address'] );
+			unset( $menu_links['edit-account'] );
+
+			# Adição de novos
+			$newLinks = [
+				'gallery'			=> 'Galeria',
+				'edit-account'		=> 'Editar Perfil',
+				'orders'			=> 'Faturas',
+				'change-password' 	=> 'Alterar Senha',	
+			];
+		}
+
+		$menu_links = array_slice( $menu_links, 0, 1, true ) + $newLinks + array_slice( $menu_links, 1, NULL, true );
+
+		return $menu_links;
 	}
 }
