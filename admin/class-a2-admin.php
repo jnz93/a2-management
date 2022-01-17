@@ -52,6 +52,10 @@ class A2_Admin {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
+		/**
+		 * Adição do menu na dashboard admin
+		 */
+		add_action( 'admin_menu', array( $this, 'addMenuPageWpDashboard' ) );
 	}
 
 	/**
@@ -100,4 +104,29 @@ class A2_Admin {
 
 	}
 
+	/**
+	 * Registro do menu na dashboard wordpress
+	 * 
+	 */
+	public function addMenuPageWpDashboard()
+	{
+
+		$pageTitle 	= 'A2 - Management';
+		$menuTitle 	= 'A2 - Management';
+		$capability = '10';
+		$menuSlug 	= 'a2-dashboard';
+		$iconUrl 	= plugin_dir_url( __DIR__ ) . 'img/icon-menu.png';
+		$position	= '20';
+
+		add_menu_page( $pageTitle, $menuTitle, $capability, $menuSlug, array( $this, 'cbPluginPage' ), $iconUrl, $position );
+	}
+
+	/**
+	 * Callback para página do plugin
+	 * 
+	 */
+	public function cbPluginPage()
+	{
+		require_once plugin_dir_path( __FILE__ ) . 'partials/a2-admin-display.php';
+	}
 }
