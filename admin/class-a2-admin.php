@@ -41,6 +41,15 @@ class A2_Admin {
 	private $version;
 
 	/**
+	 * The register Class
+	 */
+	private $register;
+
+	/**
+	 * The shortcode Class
+	 */
+	private $shortcodes;
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
@@ -49,8 +58,10 @@ class A2_Admin {
 	 */
 	public function __construct( $plugin_name, $version ) {
 
-		$this->plugin_name = $plugin_name;
-		$this->version = $version;
+		$this->plugin_name 	= $plugin_name;
+		$this->version 		= $version;
+		$this->register 	= new A2_Register();
+		$this->shortcodes 	= new A2_Shortcodes();
 
 		/**
 		 * Adição do menu na dashboard admin
