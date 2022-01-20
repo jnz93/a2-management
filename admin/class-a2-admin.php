@@ -402,7 +402,7 @@ class A2_Admin {
 			'rewrite'           => array( 'slug' => 'localizacao' ),
 		);
 	 
-		register_taxonomy( 'localizacoes', array( 'a2_escort' ), $args );
+		register_taxonomy( 'localizacao', array( 'a2_escort' ), $args );
 		unset( $args );
 		unset( $labels );
 
