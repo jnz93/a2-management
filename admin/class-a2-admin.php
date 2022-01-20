@@ -390,7 +390,7 @@ class A2_Admin {
 			'update_item'       => __( 'Atualizar Localização', 'textdomain' ),
 			'add_new_item'      => __( 'Adicionar nova Localização', 'textdomain' ),
 			'new_item_name'     => __( 'Novo Localização', 'textdomain' ),
-			'menu_name'         => __( 'Localizações', 'textdomain' ),
+			'menu_name'         => __( 'Localização', 'textdomain' ),
 		);
 	 
 		$args = array(
