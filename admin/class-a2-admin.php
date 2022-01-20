@@ -492,17 +492,17 @@ class A2_Admin {
 
 		// Atende/Disponível para/Preferência
 		$labels = array(
-			'name'              => _x( 'Preferências', 'taxonomy general name', 'textdomain' ),
-			'singular_name'     => _x( 'Preferência', 'taxonomy singular name', 'textdomain' ),
-			'search_items'      => __( 'Procurar Preferências', 'textdomain' ),
-			'all_items'         => __( 'Todos as Preferências', 'textdomain' ),
-			'parent_item'       => __( 'Parent Preferências', 'textdomain' ),
-			'parent_item_colon' => __( 'Parent Preferências:', 'textdomain' ),
-			'edit_item'         => __( 'Editar Preferência', 'textdomain' ),
-			'update_item'       => __( 'Atualizar Preferência', 'textdomain' ),
-			'add_new_item'      => __( 'Adicionar Preferência', 'textdomain' ),
-			'new_item_name'     => __( 'Novo Preferência', 'textdomain' ),
-			'menu_name'         => __( 'Preferências', 'textdomain' ),
+			'name'              => _x( 'Atendimentos', 'taxonomy general name', 'textdomain' ),
+			'singular_name'     => _x( 'Atendimento', 'taxonomy singular name', 'textdomain' ),
+			'search_items'      => __( 'Procurar Atendimento', 'textdomain' ),
+			'all_items'         => __( 'Todos os Atendimentos', 'textdomain' ),
+			'parent_item'       => __( 'Parent Atendimento', 'textdomain' ),
+			'parent_item_colon' => __( 'Parent Atendimento:', 'textdomain' ),
+			'edit_item'         => __( 'Editar Atendimento', 'textdomain' ),
+			'update_item'       => __( 'Atualizar Atendimento', 'textdomain' ),
+			'add_new_item'      => __( 'Adicionar Atendimento', 'textdomain' ),
+			'new_item_name'     => __( 'Novo Atendimento', 'textdomain' ),
+			'menu_name'         => __( 'Atende', 'textdomain' ),
 		);
 	 
 		$args = array(
@@ -511,10 +511,10 @@ class A2_Admin {
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'query_var'         => true,
-			'rewrite'           => array( 'slug' => 'dias' ),
+			'rewrite'           => array( 'slug' => 'atende' ),
 		);
 	 
-		register_taxonomy( 'preferencia', array( 'a2_escort' ), $args );
+		register_taxonomy( 'atende', array( 'a2_escort' ), $args );
 		unset( $args );
 		unset( $labels );
 
