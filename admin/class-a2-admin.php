@@ -436,8 +436,8 @@ class A2_Admin {
 
 		// Dias da semana
 		$labels = array(
-			'name'              => _x( 'Dia da semana', 'taxonomy general name', 'textdomain' ),
-			'singular_name'     => _x( 'Dias da semana', 'taxonomy singular name', 'textdomain' ),
+			'name'              => _x( 'Dia de trabalho', 'taxonomy general name', 'textdomain' ),
+			'singular_name'     => _x( 'Dias de trabalho', 'taxonomy singular name', 'textdomain' ),
 			'search_items'      => __( 'Procurar Dias', 'textdomain' ),
 			'all_items'         => __( 'Todos os Dias', 'textdomain' ),
 			'parent_item'       => __( 'Parent Dias', 'textdomain' ),
@@ -446,7 +446,7 @@ class A2_Admin {
 			'update_item'       => __( 'Atualizar Dia', 'textdomain' ),
 			'add_new_item'      => __( 'Adicionar novo Dia', 'textdomain' ),
 			'new_item_name'     => __( 'Novo Dia', 'textdomain' ),
-			'menu_name'         => __( 'Dias da semana', 'textdomain' ),
+			'menu_name'         => __( 'Dias de trabalho', 'textdomain' ),
 		);
 	 
 		$args = array(
@@ -458,7 +458,7 @@ class A2_Admin {
 			'rewrite'           => array( 'slug' => 'dias' ),
 		);
 	 
-		register_taxonomy( 'dias-da-semana', array( 'a2_escort' ), $args );
+		register_taxonomy( 'dias-de-trabalho', array( 'a2_escort' ), $args );
 		unset( $args );
 		unset( $labels );
 
