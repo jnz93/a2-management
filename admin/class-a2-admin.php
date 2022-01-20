@@ -72,6 +72,11 @@ class A2_Admin {
 		 * Custom post types
 		 */
 		add_action( 'init', [ $this, 'registerCustomPostTypes' ] );
+
+		/**
+		 * Custom taxonomies
+		 */
+		add_action( 'init', [ $this, 'registerCustomTaxonomies' ] );
 	}
 
 	/**
@@ -195,6 +200,379 @@ class A2_Admin {
 			'supports'           => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt' ),
 		);
 
-		register_post_type( 'a2_escorts', $args );
+		register_post_type( 'a2_escort', $args );
+	}
+	
+	/**
+	 * Custom taxonomies
+	 * Criação de taxonomias para o cpt "a2_escort"
+	 * 
+	 */
+	public function registerCustomTaxonomies()
+	{
+		// Gênero/Sexo
+		$labels = array(
+			'name'              => _x( 'Gêneros', 'taxonomy general name', 'textdomain' ),
+			'singular_name'     => _x( 'Gênero', 'taxonomy singular name', 'textdomain' ),
+			'search_items'      => __( 'Procurar Gêneros', 'textdomain' ),
+			'all_items'         => __( 'Todos os Gêneros', 'textdomain' ),
+			'parent_item'       => __( 'Parent Gênero', 'textdomain' ),
+			'parent_item_colon' => __( 'Parent Gênero:', 'textdomain' ),
+			'edit_item'         => __( 'Editar Gênero', 'textdomain' ),
+			'update_item'       => __( 'Atualizar Gênero', 'textdomain' ),
+			'add_new_item'      => __( 'Adicionar novo Gênero', 'textdomain' ),
+			'new_item_name'     => __( 'Novo Gênero Name', 'textdomain' ),
+			'menu_name'         => __( 'Gêneros', 'textdomain' ),
+		);
+	 
+		$args = array(
+			'hierarchical'      => false,
+			'labels'            => $labels,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'query_var'         => true,
+			'rewrite'           => array( 'slug' => 'genero' ),
+		);
+	 
+		register_taxonomy( 'generos', array( 'a2_escort' ), $args );		
+		unset( $args );
+		unset( $labels );
+
+		// Etnias
+		$labels = array(
+			'name'              => _x( 'Etnias', 'taxonomy general name', 'textdomain' ),
+			'singular_name'     => _x( 'Etnia', 'taxonomy singular name', 'textdomain' ),
+			'search_items'      => __( 'Procurar Etnias', 'textdomain' ),
+			'all_items'         => __( 'Todas as Etnias', 'textdomain' ),
+			'parent_item'       => __( 'Parent Etnia', 'textdomain' ),
+			'parent_item_colon' => __( 'Parent Etnia:', 'textdomain' ),
+			'edit_item'         => __( 'Editar Etnia', 'textdomain' ),
+			'update_item'       => __( 'Atualizar Etnia', 'textdomain' ),
+			'add_new_item'      => __( 'Adicionar nova Etnia', 'textdomain' ),
+			'new_item_name'     => __( 'Nova Etnia', 'textdomain' ),
+			'menu_name'         => __( 'Etnias', 'textdomain' ),
+		);
+	 
+		$args = array(
+			'hierarchical'      => false,
+			'labels'            => $labels,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'query_var'         => true,
+			'rewrite'           => array( 'slug' => 'etnia' ),
+		);
+	 
+		register_taxonomy( 'etnias', array( 'a2_escort' ), $args );		
+		unset( $args );
+		unset( $labels );
+
+		// Signo
+		$labels = array(
+			'name'              => _x( 'Signos', 'taxonomy general name', 'textdomain' ),
+			'singular_name'     => _x( 'Signo', 'taxonomy singular name', 'textdomain' ),
+			'search_items'      => __( 'Procurar Signos', 'textdomain' ),
+			'all_items'         => __( 'Todos os Signos', 'textdomain' ),
+			'parent_item'       => __( 'Parent Signo', 'textdomain' ),
+			'parent_item_colon' => __( 'Parent Signo:', 'textdomain' ),
+			'edit_item'         => __( 'Editar Signo', 'textdomain' ),
+			'update_item'       => __( 'Atualizar Signo', 'textdomain' ),
+			'add_new_item'      => __( 'Adicionar novo Signo', 'textdomain' ),
+			'new_item_name'     => __( 'Novo Signo', 'textdomain' ),
+			'menu_name'         => __( 'Signos', 'textdomain' ),
+		);
+	 
+		$args = array(
+			'hierarchical'      => false,
+			'labels'            => $labels,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'query_var'         => true,
+			'rewrite'           => array( 'slug' => 'signo' ),
+		);
+	 
+		register_taxonomy( 'signos', array( 'a2_escort' ), $args );
+		unset( $args );
+		unset( $labels );
+		
+		// Locais de atendimento
+		$labels = array(
+			'name'              => _x( 'Locais de atendimento', 'taxonomy general name', 'textdomain' ),
+			'singular_name'     => _x( 'Local de atendimento', 'taxonomy singular name', 'textdomain' ),
+			'search_items'      => __( 'Procurar Local de atendimento', 'textdomain' ),
+			'all_items'         => __( 'Todos os Locais de atendimento', 'textdomain' ),
+			'parent_item'       => __( 'Parent Local de Atendimento', 'textdomain' ),
+			'parent_item_colon' => __( 'Parent Local de atendimento:', 'textdomain' ),
+			'edit_item'         => __( 'Editar Local de atendimento', 'textdomain' ),
+			'update_item'       => __( 'Atualizar Local de atendimento', 'textdomain' ),
+			'add_new_item'      => __( 'Adicionar novo Local de atendimento', 'textdomain' ),
+			'new_item_name'     => __( 'Novo Local de atendimento', 'textdomain' ),
+			'menu_name'         => __( 'Locais de atendimento', 'textdomain' ),
+		);
+	 
+		$args = array(
+			'hierarchical'      => false,
+			'labels'            => $labels,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'query_var'         => true,
+			'rewrite'           => array( 'slug' => 'local-atendimento' ),
+		);
+	 
+		register_taxonomy( 'local-atendimento', array( 'a2_escort' ), $args );
+		unset( $args );
+		unset( $labels );
+		
+		// Especialidades
+		$labels = array(
+			'name'              => _x( 'Especialidades', 'taxonomy general name', 'textdomain' ),
+			'singular_name'     => _x( 'Especialidade', 'taxonomy singular name', 'textdomain' ),
+			'search_items'      => __( 'Procurar Especialidade', 'textdomain' ),
+			'all_items'         => __( 'Todas as Especialidades', 'textdomain' ),
+			'parent_item'       => __( 'Parent Especialidade', 'textdomain' ),
+			'parent_item_colon' => __( 'Parent Especialidade:', 'textdomain' ),
+			'edit_item'         => __( 'Editar Especialidade', 'textdomain' ),
+			'update_item'       => __( 'Atualizar Especialidade', 'textdomain' ),
+			'add_new_item'      => __( 'Adicionar nova Especialidade', 'textdomain' ),
+			'new_item_name'     => __( 'Novo Especialidade', 'textdomain' ),
+			'menu_name'         => __( 'Especialidades', 'textdomain' ),
+		);
+	 
+		$args = array(
+			'hierarchical'      => false,
+			'labels'            => $labels,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'query_var'         => true,
+			'rewrite'           => array( 'slug' => 'especialidade' ),
+		);
+	 
+		register_taxonomy( 'especialidades', array( 'a2_escort' ), $args );
+		unset( $args );
+		unset( $labels );
+		
+		// Serviços
+		$labels = array(
+			'name'              => _x( 'Serviços', 'taxonomy general name', 'textdomain' ),
+			'singular_name'     => _x( 'Serviço', 'taxonomy singular name', 'textdomain' ),
+			'search_items'      => __( 'Procurar Serviço', 'textdomain' ),
+			'all_items'         => __( 'Todos os Serviços', 'textdomain' ),
+			'parent_item'       => __( 'Parent Serviços', 'textdomain' ),
+			'parent_item_colon' => __( 'Parent Serviços:', 'textdomain' ),
+			'edit_item'         => __( 'Editar Serviço', 'textdomain' ),
+			'update_item'       => __( 'Atualizar Serviço', 'textdomain' ),
+			'add_new_item'      => __( 'Adicionar novo Serviço', 'textdomain' ),
+			'new_item_name'     => __( 'Novo Serviço', 'textdomain' ),
+			'menu_name'         => __( 'Serviços', 'textdomain' ),
+		);
+	 
+		$args = array(
+			'hierarchical'      => false,
+			'labels'            => $labels,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'query_var'         => true,
+			'rewrite'           => array( 'slug' => 'servico' ),
+		);
+	 
+		register_taxonomy( 'servicos', array( 'a2_escort' ), $args );
+		unset( $args );
+		unset( $labels );
+
+		// Localização
+		$labels = array(
+			'name'              => _x( 'Localizações', 'taxonomy general name', 'textdomain' ),
+			'singular_name'     => _x( 'Localização', 'taxonomy singular name', 'textdomain' ),
+			'search_items'      => __( 'Procurar Local', 'textdomain' ),
+			'all_items'         => __( 'Todos os Locais', 'textdomain' ),
+			'parent_item'       => __( 'Parent Localização', 'textdomain' ),
+			'parent_item_colon' => __( 'Parent Localizações:', 'textdomain' ),
+			'edit_item'         => __( 'Editar Localização', 'textdomain' ),
+			'update_item'       => __( 'Atualizar Localização', 'textdomain' ),
+			'add_new_item'      => __( 'Adicionar nova Localização', 'textdomain' ),
+			'new_item_name'     => __( 'Novo Localização', 'textdomain' ),
+			'menu_name'         => __( 'Localizações', 'textdomain' ),
+		);
+	 
+		$args = array(
+			'hierarchical'      => true,
+			'labels'            => $labels,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'query_var'         => true,
+			'rewrite'           => array( 'slug' => 'localizacao' ),
+		);
+	 
+		register_taxonomy( 'localizacoes', array( 'a2_escort' ), $args );
+		unset( $args );
+		unset( $labels );
+
+		// Idiomas
+		$labels = array(
+			'name'              => _x( 'Idiomas', 'taxonomy general name', 'textdomain' ),
+			'singular_name'     => _x( 'Idioma', 'taxonomy singular name', 'textdomain' ),
+			'search_items'      => __( 'Procurar Idioma', 'textdomain' ),
+			'all_items'         => __( 'Todos os Idiomas', 'textdomain' ),
+			'parent_item'       => __( 'Parent Idiomas', 'textdomain' ),
+			'parent_item_colon' => __( 'Parent Idiomas:', 'textdomain' ),
+			'edit_item'         => __( 'Editar Idioma', 'textdomain' ),
+			'update_item'       => __( 'Atualizar Idioma', 'textdomain' ),
+			'add_new_item'      => __( 'Adicionar novo Idioma', 'textdomain' ),
+			'new_item_name'     => __( 'Novo Idioma', 'textdomain' ),
+			'menu_name'         => __( 'Idiomas', 'textdomain' ),
+		);
+	 
+		$args = array(
+			'hierarchical'      => false,
+			'labels'            => $labels,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'query_var'         => true,
+			'rewrite'           => array( 'slug' => 'idioma' ),
+		);
+	 
+		register_taxonomy( 'idiomas', array( 'a2_escort' ), $args );
+		unset( $args );
+		unset( $labels );
+
+		// Dias da semana
+		$labels = array(
+			'name'              => _x( 'Dia da semana', 'taxonomy general name', 'textdomain' ),
+			'singular_name'     => _x( 'Dias da semana', 'taxonomy singular name', 'textdomain' ),
+			'search_items'      => __( 'Procurar Dias', 'textdomain' ),
+			'all_items'         => __( 'Todos os Dias', 'textdomain' ),
+			'parent_item'       => __( 'Parent Dias', 'textdomain' ),
+			'parent_item_colon' => __( 'Parent Dias:', 'textdomain' ),
+			'edit_item'         => __( 'Editar Dia', 'textdomain' ),
+			'update_item'       => __( 'Atualizar Dia', 'textdomain' ),
+			'add_new_item'      => __( 'Adicionar novo Dia', 'textdomain' ),
+			'new_item_name'     => __( 'Novo Dia', 'textdomain' ),
+			'menu_name'         => __( 'Dias da semana', 'textdomain' ),
+		);
+	 
+		$args = array(
+			'hierarchical'      => false,
+			'labels'            => $labels,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'query_var'         => true,
+			'rewrite'           => array( 'slug' => 'dias' ),
+		);
+	 
+		register_taxonomy( 'dias-da-semana', array( 'a2_escort' ), $args );
+		unset( $args );
+		unset( $labels );
+
+		// Formas de pagamento
+		$labels = array(
+			'name'              => _x( 'Formas de pagamento', 'taxonomy general name', 'textdomain' ),
+			'singular_name'     => _x( 'Forma de pagamento', 'taxonomy singular name', 'textdomain' ),
+			'search_items'      => __( 'Procurar formas de pagamento', 'textdomain' ),
+			'all_items'         => __( 'Todos as formas de pagamento', 'textdomain' ),
+			'parent_item'       => __( 'Parent formas de pagamento', 'textdomain' ),
+			'parent_item_colon' => __( 'Parent formas de pagamento:', 'textdomain' ),
+			'edit_item'         => __( 'Editar Forma de pagamento', 'textdomain' ),
+			'update_item'       => __( 'Atualizar Formas de pagamento', 'textdomain' ),
+			'add_new_item'      => __( 'Adicionar nova Forma de pagamento', 'textdomain' ),
+			'new_item_name'     => __( 'Nova Formas de pagamento', 'textdomain' ),
+			'menu_name'         => __( 'Formas de pagamento', 'textdomain' ),
+		);
+	 
+		$args = array(
+			'hierarchical'      => false,
+			'labels'            => $labels,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'query_var'         => true,
+			'rewrite'           => array( 'slug' => 'formas-de-pagamento' ),
+		);
+	 
+		register_taxonomy( 'formas-de-pagamento', array( 'a2_escort' ), $args );
+		unset( $args );
+		unset( $labels );
+
+		// Atende/Disponível para/Preferência
+		$labels = array(
+			'name'              => _x( 'Preferências', 'taxonomy general name', 'textdomain' ),
+			'singular_name'     => _x( 'Preferência', 'taxonomy singular name', 'textdomain' ),
+			'search_items'      => __( 'Procurar Preferências', 'textdomain' ),
+			'all_items'         => __( 'Todos as Preferências', 'textdomain' ),
+			'parent_item'       => __( 'Parent Preferências', 'textdomain' ),
+			'parent_item_colon' => __( 'Parent Preferências:', 'textdomain' ),
+			'edit_item'         => __( 'Editar Preferência', 'textdomain' ),
+			'update_item'       => __( 'Atualizar Preferência', 'textdomain' ),
+			'add_new_item'      => __( 'Adicionar Preferência', 'textdomain' ),
+			'new_item_name'     => __( 'Novo Preferência', 'textdomain' ),
+			'menu_name'         => __( 'Preferências', 'textdomain' ),
+		);
+	 
+		$args = array(
+			'hierarchical'      => false,
+			'labels'            => $labels,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'query_var'         => true,
+			'rewrite'           => array( 'slug' => 'dias' ),
+		);
+	 
+		register_taxonomy( 'preferencia', array( 'a2_escort' ), $args );
+		unset( $args );
+		unset( $labels );
+
+		// Perfil de atendimento
+		$labels = array(
+			'name'              => _x( 'Perfil de Atendimento', 'taxonomy general name', 'textdomain' ),
+			'singular_name'     => _x( 'Perfil de Atendimento', 'taxonomy singular name', 'textdomain' ),
+			'search_items'      => __( 'Procurar Perfil de Atendimento', 'textdomain' ),
+			'all_items'         => __( 'Todos os Perfis de Atendimento', 'textdomain' ),
+			'parent_item'       => __( 'Parent Perfil de Atendimento', 'textdomain' ),
+			'parent_item_colon' => __( 'Parent Perfil de Atendimento:', 'textdomain' ),
+			'edit_item'         => __( 'Editar Perfil de Atendimento', 'textdomain' ),
+			'update_item'       => __( 'Atualizar Perfil de Atendimento', 'textdomain' ),
+			'add_new_item'      => __( 'Adicionar Perfil de Atendimento', 'textdomain' ),
+			'new_item_name'     => __( 'Novo Perfil de Atendimento', 'textdomain' ),
+			'menu_name'         => __( 'Perfil de Atendimento', 'textdomain' ),
+		);
+	 
+		$args = array(
+			'hierarchical'      => false,
+			'labels'            => $labels,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'query_var'         => true,
+			'rewrite'           => array( 'slug' => 'perfil' ),
+		);
+	 
+		register_taxonomy( 'perfil-atendimento', array( 'a2_escort' ), $args );
+		unset( $args );
+		unset( $labels );
+
+		// Biotipo
+		$labels = array(
+			'name'              => _x( 'Biotipos', 'taxonomy general name', 'textdomain' ),
+			'singular_name'     => _x( 'Biotipo', 'taxonomy singular name', 'textdomain' ),
+			'search_items'      => __( 'Procurar Biotipo', 'textdomain' ),
+			'all_items'         => __( 'Todos os Biotipos', 'textdomain' ),
+			'parent_item'       => __( 'Parent Biotipo', 'textdomain' ),
+			'parent_item_colon' => __( 'Parent Biotipo:', 'textdomain' ),
+			'edit_item'         => __( 'Editar Biotipo', 'textdomain' ),
+			'update_item'       => __( 'Atualizar Biotipo', 'textdomain' ),
+			'add_new_item'      => __( 'Adicionar Biotipo', 'textdomain' ),
+			'new_item_name'     => __( 'Novo Biotipo', 'textdomain' ),
+			'menu_name'         => __( 'Biotipo', 'textdomain' ),
+		);
+	 
+		$args = array(
+			'hierarchical'      => false,
+			'labels'            => $labels,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'query_var'         => true,
+			'rewrite'           => array( 'slug' => 'biotipo' ),
+		);
+	 
+		register_taxonomy( 'biotipo', array( 'a2_escort' ), $args );
+		unset( $args );
+		unset( $labels );
+
 	}
 }
