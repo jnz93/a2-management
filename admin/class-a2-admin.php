@@ -542,7 +542,7 @@ class A2_Admin {
 			'rewrite'           => array( 'slug' => 'perfil' ),
 		);
 	 
-		register_taxonomy( 'perfil-atendimento', array( 'a2_escort' ), $args );
+		// register_taxonomy( 'perfil-atendimento', array( 'a2_escort' ), $args );
 		unset( $args );
 		unset( $labels );
 
@@ -570,7 +570,7 @@ class A2_Admin {
 			'rewrite'           => array( 'slug' => 'biotipo' ),
 		);
 	 
-		register_taxonomy( 'biotipo', array( 'a2_escort' ), $args );
+		// register_taxonomy( 'biotipo', array( 'a2_escort' ), $args );
 		unset( $args );
 		unset( $labels );
 
