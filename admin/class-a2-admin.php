@@ -49,6 +49,11 @@ class A2_Admin {
 	 * The shortcode Class
 	 */
 	private $shortcodes;
+
+	/**
+	 * The profile Class
+	 */
+	private $profile;
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -62,6 +67,7 @@ class A2_Admin {
 		$this->version 		= $version;
 		$this->register 	= new A2_Register();
 		$this->shortcodes 	= new A2_Shortcodes();
+		$this->profile 		= new A2_Profile();
 
 		/**
 		 * Adição do menu na dashboard admin
@@ -202,7 +208,7 @@ class A2_Admin {
 
 		register_post_type( 'a2_escort', $args );
 	}
-	
+
 	/**
 	 * Custom taxonomies
 	 * Criação de taxonomias para o cpt "a2_escort"
