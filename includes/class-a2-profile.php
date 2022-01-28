@@ -91,4 +91,108 @@ class A2_Profile{
 			}
 		}
 	}
+
+    /**
+     * Este método recebe o ID do usuário e executa ações para publicar um perfil publico da acompanhante.
+     * 
+     * @param int $userId
+     */
+    public function setupPage( $userId = null )
+    {
+		$log = array();
+        if( is_null( $userId ) || !user_can( $userId, 'a2_scort' ) ){
+			$log[] = 'Erro: usuário inválido.';
+			return;
+		}
+
+		$userData 					= array();
+		$user 						= get_userdata( $userId );
+		$userData['id']				= $userId;
+		$userData['first_name'] 	= $user->first_name;
+		$userData['last_name'] 		= $user->last_name;
+		$userData['display_name'] 	= $user->display_name;
+		$userData['full_name']		= $user->first_name . ' ' . $user->last_name;
+		$userData['email']			= $user->user_email;
+
+		# User meta data
+		$metaKeys = array(
+			'account_phone_number',
+			'account_birthday',
+			'account_description',
+			'_profile_height',
+			'_profile_weight',
+			'_profile_eye_color',
+			'_profile_hair_color',
+			'_profile_tits_size',
+			'_profile_bust_size',
+			'_profile_waist_size',
+			'_profile_ethnicity',
+			'_profile_genre',
+			'_profile_sign',
+			'_profile_he_meets',
+			'_profile_services',
+			'_profile_place',
+			'_profile_instagram',
+			'_profile_tiktok',
+			'_profile_onlyfans',
+			'_profile_country',
+			'_profile_state',
+			'_profile_city',
+			'_profile_district',
+			'_profile_address',
+			'_profile_zip_code',
+			'_profile_cache_quickie',
+			'_profile_cache_half_an_hour',
+			'_profile_cache_hour',
+			'_profile_cache_overnight_stay',
+			'_profile_cache_promotion',
+			'_profile_cache_promotion_activated',
+			'_profile_work_days',
+			'_profile_office_hour',
+			'_profile_payment_method_money',
+			'_profile_payment_method_card',
+			'_profile_payment_method_transfer',
+		);
+
+		# Taxonomias
+		// profile meta key => taxonomy
+		$taxonomies = array(
+			'_profile_ethnicity' 	=> 'etnias',
+			'_profile_genre'		=> 'generos',
+			'_profile_sign'			=> 'signos',
+			'_profile_he_meets'		=> 'local-atendimento',
+			'_profile_services'		=> 'servicos',
+			'_profile_place'		=> 'local-atendimento',
+			'_profile_work_days'	=> 'dias-de-trabalho',
+			'_profile_country'		=> 'localizacao',
+			'_profile_state'		=> 'localizacao',
+			'_profile_city'			=> 'localizacao',
+			'_profile_district'		=> 'localizacao'
+		);
+		foreach( $metaKeys as $key ){
+			$userData[$key] = get_user_meta( $userId, $key, true );
+		}
+
+		# Criando a página de perfil
+		$postarr = [
+			'post_title'	=> $userData['display_name'],
+			'post_author'	=> $userId,
+			'post_content'	=> $userData['account_description'],
+			'post_status'	=> 'draft',
+			'post_type'		=> 'a2_escort',
+		];
+		$postid = wp_insert_post( $postarr );
+
+		# Salvando meta-posts e taxonomias
+		if( !is_wp_error( $postid ) ){
+			foreach( $userData as $key => $value ){
+				if( array_key_exists( $key, $taxonomies ) ){
+					$taxonomy = $taxonomies[$key];
+					wp_set_post_terms( $postid, $value, $taxonomy );
+				} else {
+					update_post_meta( $postid, $key, $value );
+				}
+			}
+		}
+    }
 }
