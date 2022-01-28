@@ -22,9 +22,9 @@ class A2_Profile{
     /**
 	 * Salvar dados customs no perfil do usuário 
 	 * 
-	 * @param integer $user_id 
+	 * @param integer $userId 
 	 */
-	public function saveData( $user_id ) {
+	public function saveData( $userId ) {
 
 		$metaKeys = array(
 			'account_phone_number',
@@ -82,14 +82,16 @@ class A2_Profile{
 			if( isset( $_POST[$key] ) ){
 
 				if( in_array($key, ['_profile_he_meets', '_profile_services', '_profile_place', '_profile_work_days']) ){
-					update_user_meta( $user_id, $key, $_POST[$key] );
+					update_user_meta( $userId, $key, $_POST[$key] );
 				} else {
-					update_user_meta( $user_id, $key, sanitize_text_field( $_POST[$key] ) );
+					update_user_meta( $userId, $key, sanitize_text_field( $_POST[$key] ) );
 				}
 
 				$log[$key] = $_POST[$key];
 			}
 		}
+
+		$this->setupPage($userId);
 	}
 
     /**
