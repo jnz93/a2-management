@@ -24,7 +24,8 @@ class A2_Profile{
 	 * 
 	 * @param integer $userId 
 	 */
-	public function saveData( $userId ) {
+	public function saveData( $userId ) 
+	{
 
 		$metaKeys = array(
 			'account_phone_number',
@@ -90,8 +91,15 @@ class A2_Profile{
 				$log[$key] = $_POST[$key];
 			}
 		}
-
-		$this->setupPage($userId);
+		
+		$profileIsReady = $this->validateAccount( $userId, $metaKeys );
+		if( $profileIsReady == true ){
+			$this->setupPage( $userId );
+			$this->markAsComplete( $userId );
+		} else {
+			$this->markAsIncomplete( $userId );
+			$this->saveIncompleteLog( $userId, $profileIsReady );
+		}
 	}
 
 	/**
