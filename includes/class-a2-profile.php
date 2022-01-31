@@ -94,17 +94,20 @@ class A2_Profile{
 		$this->setupPage($userId);
 	}
 
-    /**
-     * Este método recebe o ID do usuário e executa ações para publicar um perfil publico da acompanhante.
-     * 
-     * @param int $userId
-     */
-    public function setupPage( $userId = null )
-    {
-		$log = array();
-        if( is_null( $userId ) || !user_can( $userId, 'a2_scort' ) ){
-			$log[] = 'Erro: usuário inválido.';
-			return;
+	/**
+	 * Este método retorna se o perfil foi marcado como pronto ou não
+	 * 
+	 * @param int $userId
+	 */
+	public function isReady( $userId )
+	{
+		$metaKey	= '_is_ready';
+		$isReady 	= get_user_meta( $userId, $metaKey, true );
+
+		$result 	= false;
+		if( $isReady == 'yes' ){
+			// $result = 'O perfil do usuário #'. $userId .' está pronto.';
+			$result = true;
 		}
 
 		$userData 					= array();
@@ -197,4 +200,95 @@ class A2_Profile{
 			}
 		}
     }
+
+	/**
+	 * Responsável por fazer verificações e validar dados do perfil de um usuário
+	 * Perfil incompleto será rejeitados e deletado em 30 dias.
+	 * Perfil completo passará pela validação.
+	 * Perfil validado terá sua página de perfil publicada no site(ainda aguardando aquisição de algum plano de vantagem)
+	 * 
+	 * @param int $userId		
+	 * @param array $metaKeys 	para retornar os dados gravados na conta
+	 */
+	private function validateAccount( $userId, $metaKeys )
+	{
+        if( is_null( $userId ) || !user_can( $userId, 'a2_scort' ) )
+			return;
+
+		$profileData = array();
+		foreach( $metaKeys as $key ){
+			$profileData[$key] = get_user_meta( $userId, $key, true );
+		}
+
+		# Checagem
+		return $this->checkData( $profileData );
+	}
+
+	/**
+	 * Checagem dos dados de perfil de um usuário
+	 * Dados completos: Retorna True
+	 * Dados incompletos: Retorna um array com as chaves incompletas
+	 * 
+	 * @param array $profileData 	Array com dados que serão testados
+	 * @return bool $result
+	 */
+	private function checkData( $profileData )
+	{
+		if( empty( $profileData ) || is_null( $profileData ) )
+			return false;
+
+		$log 	= array();
+		foreach( $profileData as $key => $value ){
+			if( strlen( $value ) == 0 && !is_array( $value ) ){
+				$log[$key] = $value;
+			} else if( is_array( $value ) && empty($value) ){
+				$log[$key] = $value;
+			}
+		}
+
+		$result = true;
+		if( !empty( $log ) ){
+			$result	= $log;
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Método responsável por marcar o perfil como completo. 
+	 * Este método deve ser chamado após a validação do perfil.
+	 * 
+	 * @param int $userId
+	 * @return bool
+	 */
+	private function markAsComplete( $userId )
+	{
+		$metaKey 	= '_is_ready';
+		return update_user_meta( $userId, $metaKey, 'yes');
+	}
+
+	/**
+	 * Método responsável por marcar o perfil como incompleto.
+	 * Este método deve ser chamado após a validação do perfil.
+	 * 
+	 * @param int $userId
+	 * @return bool
+	 */
+	private function markAsIncomplete( $userId )
+	{
+		$metaKey	= '_is_ready';		
+		return update_user_meta( $userId, $metaKey, 'no' );
+	}
+
+	/**
+	 * Método responsável por salvar o log de informações inválidas ou incompletas em um perfil
+	 *  
+	 * @param int $userId
+	 * @return bool
+	 */
+	private function saveIncompleteLog( $userId, $data )
+	{
+		$metaKeyLog 	= '_incomplete_data';		
+		return update_user_meta( $userId, $metaKeyLog, $log );
+	}
 }
