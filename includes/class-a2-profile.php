@@ -110,6 +110,16 @@ class A2_Profile{
 			$result = true;
 		}
 
+		return $result;
+	}
+
+    /**
+     * Este método recebe o ID do usuário e executa ações para publicar um perfil publico da acompanhante.
+     * 
+     * @param int $userId
+     */
+    private function setupPage( $userId )
+    {
 		$userData 					= array();
 		$user 						= get_userdata( $userId );
 		$userData['id']				= $userId;
