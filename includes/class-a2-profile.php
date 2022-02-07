@@ -65,7 +65,7 @@ class A2_Profile{
 		
 		# Coletando Formas de pagamento
 		$args = array(
-			'taxonomy'		=> 'formas-de-pagamento',
+			'taxonomy'		=> 'profile_payment_methods',
 			'hide_empty'	=> false,
 			'orderby'		=> 'name',
 			'order'			=> 'ASC'
@@ -172,26 +172,43 @@ class A2_Profile{
 			'_profile_cache_promotion_activated',
 			'_profile_work_days',
 			'_profile_office_hour',
-			'_profile_payment_method_money',
-			'_profile_payment_method_card',
-			'_profile_payment_method_transfer',
 		);
 
 		# Taxonomias
 		// profile meta key => taxonomy
 		$taxonomies = array(
-			'_profile_ethnicity' 	=> 'etnias',
-			'_profile_genre'		=> 'generos',
-			'_profile_sign'			=> 'signos',
-			'_profile_he_meets'		=> 'local-atendimento',
-			'_profile_services'		=> 'servicos',
-			'_profile_place'		=> 'local-atendimento',
-			'_profile_work_days'	=> 'dias-de-trabalho',
-			'_profile_country'		=> 'localizacao',
-			'_profile_state'		=> 'localizacao',
-			'_profile_city'			=> 'localizacao',
-			'_profile_district'		=> 'localizacao'
+			'_profile_ethnicity' 		=> 'profile_ethnicity',
+			'_profile_genre'			=> 'profile_genre',
+			'_profile_sign'				=> 'profile_sign',
+			'_profile_he_meets'			=> 'profile_preference',
+			'_profile_services'			=> 'profile_services',
+			'_profile_place'			=> 'profile_place_of_service',
+			'_profile_work_days'		=> 'profile_work_days',
+			'_profile_country'			=> 'profile_localization',
+			'_profile_state'			=> 'profile_localization',
+			'_profile_city'				=> 'profile_localization',
+			'_profile_district'			=> 'profile_localization',
+			'_profile_languages'		=> 'profile_languages',
+			'_profile_specialties'		=> 'profile_specialties',
 		);
+
+		# Coletando Formas de pagamento
+		$args = array(
+			'taxonomy'		=> 'profile_payment_methods',
+			'hide_empty'	=> false,
+			'orderby'		=> 'name',
+			'order'			=> 'ASC'
+		);
+		$formasPagamento = get_terms( $args );
+		if( !empty( $formasPagamento ) ){
+			foreach ($formasPagamento as $pagamento ){
+				$key 				= '_profile_payment_method_' . $pagamento->term_id;
+				$metaKeys[] 		= $key;
+				$taxonomies[$key] 	= 'profile_payment_methods';
+			}
+		}
+
+		# Coletando $userData
 		foreach( $metaKeys as $key ){
 			$userData[$key] = get_user_meta( $userId, $key, true );
 		}
@@ -211,7 +228,19 @@ class A2_Profile{
 			foreach( $userData as $key => $value ){
 				if( array_key_exists( $key, $taxonomies ) ){
 					$taxonomy = $taxonomies[$key];
-					wp_set_post_terms( $postid, $value, $taxonomy );
+					
+					// Se for método de pagamento
+					if( $taxonomy == 'profile_payment_methods' && $value == 'on' ){
+						$arr 		= explode( '_', $key );
+						$termId 	= end( $arr );
+						$term 		= get_term( $termId, $taxonomy );
+						$value 		= $term->name;
+					}
+
+					// Se $value != null salva o termo
+					if ( !is_null( $value ) ){
+						wp_set_post_terms( $postid, $value, $taxonomy );
+					}
 				} else {
 					update_post_meta( $postid, $key, $value );
 				}
