@@ -17,6 +17,7 @@ class A2_Profile{
     {
         /** Action para salvar dados na edição de perfil */
         add_action( 'woocommerce_save_account_details', [ $this, 'saveData' ], 12, 1 );
+		// Actions devem ser movidas para um arquivo único pois não podem ser registradas no __contruct de uma classe que é invocada por outras.
     }
 
     /**
@@ -28,9 +29,9 @@ class A2_Profile{
 	{
 
 		$metaKeys = array(
-			'account_phone_number',
-			'account_birthday',
-			'account_description',
+			'_profile_whatsapp',
+			'_profile_birthday',
+			'_profile_description',
 			'_profile_height',
 			'_profile_weight',
 			'_profile_eye_color',
@@ -52,7 +53,7 @@ class A2_Profile{
 			'_profile_city',
 			'_profile_district',
 			'_profile_address',
-			'_profile_zip_code',
+			'_profile_cep',
 			'_profile_cache_quickie',
 			'_profile_cache_half_an_hour',
 			'_profile_cache_hour',
@@ -62,7 +63,7 @@ class A2_Profile{
 			'_profile_work_days',
 			'_profile_office_hour',
 		);
-		
+
 		# Coletando Formas de pagamento
 		$args = array(
 			'taxonomy'		=> 'profile_payment_methods',
@@ -137,11 +138,11 @@ class A2_Profile{
 		$userData['full_name']		= $user->first_name . ' ' . $user->last_name;
 		$userData['email']			= $user->user_email;
 
-		# User meta data
+		# Meta post
 		$metaKeys = array(
-			'account_phone_number',
-			'account_birthday',
-			'account_description',
+			'_profile_whatsapp',
+			'_profile_birthday',
+			'_profile_description',
 			'_profile_height',
 			'_profile_weight',
 			'_profile_eye_color',
@@ -163,7 +164,7 @@ class A2_Profile{
 			'_profile_city',
 			'_profile_district',
 			'_profile_address',
-			'_profile_zip_code',
+			'_profile_cep',
 			'_profile_cache_quickie',
 			'_profile_cache_half_an_hour',
 			'_profile_cache_hour',
@@ -172,7 +173,7 @@ class A2_Profile{
 			'_profile_cache_promotion_activated',
 			'_profile_work_days',
 			'_profile_office_hour',
-		);
+		);		
 
 		# Taxonomias
 		// profile meta key => taxonomy
@@ -208,7 +209,7 @@ class A2_Profile{
 			}
 		}
 
-		# Coletando $userData
+		# Preenchendo $userData
 		foreach( $metaKeys as $key ){
 			$userData[$key] = get_user_meta( $userId, $key, true );
 		}
@@ -217,7 +218,7 @@ class A2_Profile{
 		$postarr = [
 			'post_title'	=> $userData['display_name'],
 			'post_author'	=> $userId,
-			'post_content'	=> $userData['account_description'],
+			'post_content'	=> $userData['_profile_description'],
 			'post_status'	=> 'draft',
 			'post_type'		=> 'a2_escort',
 		];
@@ -226,10 +227,11 @@ class A2_Profile{
 		# Salvando meta-posts e taxonomias
 		if( !is_wp_error( $postid ) ){
 			foreach( $userData as $key => $value ){
+				# Se for taxonomia
 				if( array_key_exists( $key, $taxonomies ) ){
 					$taxonomy = $taxonomies[$key];
 					
-					// Se for método de pagamento
+					# Se for método de pagamento
 					if( $taxonomy == 'profile_payment_methods' && $value == 'on' ){
 						$arr 		= explode( '_', $key );
 						$termId 	= end( $arr );
@@ -237,7 +239,7 @@ class A2_Profile{
 						$value 		= $term->name;
 					}
 
-					// Se $value != null salva o termo
+					# Se $value != null salva o termo
 					if ( !is_null( $value ) ){
 						wp_set_post_terms( $postid, $value, $taxonomy );
 					}
