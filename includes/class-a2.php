@@ -124,6 +124,12 @@ class A2 {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-a2-shortcodes.php';
 
 		/**
+		 * Classe que recebe métodos e ações referentes ao perfil de usuários
+		 * 
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-a2-profile.php';
+
+		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-a2-admin.php';
