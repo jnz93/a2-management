@@ -69,6 +69,14 @@ class A2_Public {
 
 		/** Action breadcrumbs */
 		add_action( 'theBreadcrumbs', [ $this, 'customBreadcrumb'] );
+
+		/** Registro de novos endpoints */
+		add_action( 'init', [ $this, 'addCustomEndpoints' ] );
+
+		/** Registro de novas $query_vars */
+		add_filter( 'query_vars', [ $this, 'addCustomQueryVars' ], 0 );
+
+		// add_action( 'init', [ $this, 'createCustomTaxonomy' ] );
 	}
 
 	/**
@@ -277,5 +285,38 @@ class A2_Public {
 		elseif (isset($_GET['paged']) && !empty($_GET['paged'])) {echo "<li>Blog Archives"; echo'</li>';}
 		elseif (is_search()) {echo"<li>Search Results"; echo'</li>';}
 		echo '</ul>';
+	}
+
+	/**
+	 * Registro de novo endpoint
+	 * Nota: Resalvar Permalinks se não resultara em erro 404
+	 * 
+	 * @since 1.0.0
+	 */
+	public function addCustomEndpoints()
+	{
+
+		# Array com endpoints a serem adicionados - Modelo: 'endpoint' => places
+		$newEndpoints = array(
+			'gallery'	=> EP_ROOT | EP_PAGES,
+		);
+
+		if( !empty($newEndpoints) ){
+			foreach( $newEndpoints as $endpoint => $places ){
+				add_rewrite_endpoint( $endpoint, $places );
+			}
+		}
+	}
+
+	/**
+	 * Adição de novas $query_vars
+	 * 
+	 * @since v1.0.0
+	 */
+	public function addCustomQueryVars( $vars )
+	{
+		$vars[] = 'gallery';
+
+		return $vars;
 	}
 }
