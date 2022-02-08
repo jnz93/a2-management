@@ -56,18 +56,18 @@ class A2_Public {
 		// add_action( 'init', [ $this, 'redirectLoginPage' ] ); # Funcionando mas desativado em desenvolvimento
 
 		/** Tratamento para quando há falhas no login */
-		add_action( 'wp_login_failed', [ $this, 'loginFailed'] );
+		// add_action( 'wp_login_failed', [ $this, 'loginFailed'] );
 
 		/** Tratamento para quando username ou password estão vazios */
-		add_action( 'authenticate', [ $this, 'verifyUsernamePassword'] );
+		// add_action( 'authenticate', [ $this, 'verifyUsernamePassword'], 10, 3 );
 
 		/** Redirecionamento quando faz logout */
 		// add_action( 'wp_logout', [ $this, 'customLogoutPage'] );
-		
-		/** Filtro para customização do menu do painel */
-		add_filter( 'woocommerce_account_menu_items', [ $this, 'customizeUsersDashboardMenu'] );
 
-		/** Action breadcrumbs */
+		/** Filtro para customização do menu do painel */
+		add_filter( 'woocommerce_account_menu_items', [ $this, 'customizeUsersDashboardMenu' ] );
+
+		/** Action breadcrumbs # Mover para classe apropriada */
 		add_action( 'theBreadcrumbs', [ $this, 'customBreadcrumb'] );
 
 		/** Registro de novos endpoints */
@@ -246,7 +246,8 @@ class A2_Public {
 	 * 
 	 * @since 1.0.0
 	 */
-	public function customBreadcrumb(){
+	public function customBreadcrumb()
+	{
 		global $post;
 		echo '<ul id="breadcrumbs">';
 		if (!is_home()) {
