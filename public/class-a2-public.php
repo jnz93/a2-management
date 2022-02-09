@@ -99,11 +99,19 @@ class A2_Public {
 		 */
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/a2-public.css', array(), $this->version, 'all' );
+		
+	}
 
+	/**
+	 * Register the Materialize CSS for the public-facing side of the site
+	 * 
+	 * @since 	1.0.0
+	 */
+	public function enqueue_materialize_css(){
 		/**
 		 * Enqueue Materialize Front-End Framework
 		 */
-		wp_enqueue_style( 'materialize', 'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css', [], '', 'all' );
+		wp_enqueue_style( 'materialize', 'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css', [], '1.0.0', 'all' );
 
 		/**
 		 * Enqueue Materialize Icons Font
