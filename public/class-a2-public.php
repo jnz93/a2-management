@@ -144,6 +144,7 @@ class A2_Public {
 		 * Enqueue Materialize Front-End Framework
 		 */
 		wp_enqueue_script( 'materialize', 'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js', [], '', true );
+		wp_enqueue_script( 'jquery-mask', plugin_dir_url( __FILE__ ) . 'js/jquery.mask.min.js', [], '', true );
 	}
 	
 	/**
@@ -257,7 +258,7 @@ class A2_Public {
 	public function customBreadcrumb()
 	{
 		global $post;
-		echo '<ul id="breadcrumbs">';
+		echo '<ul id="breadcrumbs" class="d-flex">';
 		if (!is_home()) {
 			echo '<li><a href="';
 			echo get_option('home');
