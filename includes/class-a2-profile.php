@@ -45,6 +45,8 @@ class A2_Profile{
 			'_profile_he_meets',
 			'_profile_services',
 			'_profile_place',
+			'_profile_specialties',
+			'_profile_languages',
 			'_profile_instagram',
 			'_profile_tiktok',
 			'_profile_onlyfans',
@@ -83,7 +85,7 @@ class A2_Profile{
 		foreach( $metaKeys as $key ){
 			if( isset( $_POST[$key] ) ){
 
-				if( in_array($key, ['_profile_he_meets', '_profile_services', '_profile_place', '_profile_work_days']) ){
+				if( in_array($key, ['_profile_he_meets', '_profile_services', '_profile_place', '_profile_work_days', '_profile_specialties', '_profile_languages']) ){
 					update_user_meta( $userId, $key, $_POST[$key] );
 				} else {
 					update_user_meta( $userId, $key, sanitize_text_field( $_POST[$key] ) );
@@ -156,6 +158,8 @@ class A2_Profile{
 			'_profile_he_meets',
 			'_profile_services',
 			'_profile_place',
+			'_profile_specialties',
+			'_profile_languages',
 			'_profile_instagram',
 			'_profile_tiktok',
 			'_profile_onlyfans',
