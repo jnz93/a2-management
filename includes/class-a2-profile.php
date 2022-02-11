@@ -83,16 +83,13 @@ class A2_Profile{
 		# Salvando meta-campos
 		$log = array();
 		foreach( $metaKeys as $key ){
-			if( isset( $_POST[$key] ) ){
-
-				if( in_array($key, ['_profile_he_meets', '_profile_services', '_profile_place', '_profile_work_days', '_profile_specialties', '_profile_languages']) ){
-					update_user_meta( $userId, $key, $_POST[$key] );
-				} else {
-					update_user_meta( $userId, $key, sanitize_text_field( $_POST[$key] ) );
-				}
-
-				$log[$key] = $_POST[$key];
+			if( in_array($key, ['_profile_he_meets', '_profile_services', '_profile_place', '_profile_work_days', '_profile_specialties', '_profile_languages']) ){
+				update_user_meta( $userId, $key, $_POST[$key] );
+			} else {
+				update_user_meta( $userId, $key, sanitize_text_field( $_POST[$key] ) );
 			}
+
+			$log[$key] = $_POST[$key];
 		}
 		
 		$profileIsReady = $this->validateAccount( $userId, $metaKeys );
