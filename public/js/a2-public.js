@@ -46,3 +46,77 @@ function profileActivateMasks()
 	jQuery('#_profile_cache_overnight_stay').mask('000.000.000.000.000,00', {reverse: true});
 	jQuery('#_profile_cache_promotion').mask('000.000.000.000.000,00', {reverse: true});
 }
+
+/**
+ * Função responsável por buscar children terms via ajax
+ * segundo o ID do elemento recebido como parâmetro;
+ * 
+ * @param element el 
+ */
+function getLocalizationChildrenTerms( el ){;
+	let options = el.children();
+
+	options.each( function( index, element ) {
+		if( element.selected === true ){
+			let _self = jQuery(this),
+				term = _self.attr('term-id')
+				type = _self.attr('children-type');
+	
+				console.log(  );
+			dataSend = {
+				action: 'listChildrenTerms',
+				nonce: publicAjax.nonce,
+				termId: term,
+			}
+			
+			jQuery.ajax({
+				type: "POST",
+				url: publicAjax.url,
+				data: dataSend,
+			})
+			.done( function( data ){
+				fillLocalizationOptions(data, type);
+			});
+		}
+	});
+}
+
+/**
+ * Função responsável por preencher as opções conforme o type do select
+ * Opções referentes a localização na edição do perfil
+ * 
+ * @param string options
+ * @param strig type
+ */
+function fillLocalizationOptions( options, type ){
+	let _items = JSON.parse(options),
+		_select = '';
+
+	switch ( type ) {
+		case 'states':
+			_select 	= jQuery('#_profile_state');
+			_childType 	= 'cities';
+			break;
+		case 'cities':
+			_select 	= jQuery('#_profile_city');
+			_childType 	= 'districts';
+			break;
+		case 'districts':
+			_select 	= jQuery('#_profile_district');
+			_childType 	= '';
+			break;	
+		default:
+			break;
+	}
+	if( _items.length !== 0 ){
+		let elements = '<option value="" disabled selected>Selecione uma opção</option>';
+
+		jQuery.each( _items, function( index, item ){
+			elements += '<option value="'+ item.name +'" term-id="'+ item.id +'" children-type="'+ _childType +'">'+ item.name +'</option>'
+		});
+
+		_select.html(elements);
+		_select.attr('disabled', false);
+		_select.formSelect();
+	}
+}

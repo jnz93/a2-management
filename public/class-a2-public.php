@@ -77,6 +77,9 @@ class A2_Public {
 		add_filter( 'query_vars', [ $this, 'addCustomQueryVars' ], 0 );
 
 		// add_action( 'init', [ $this, 'createCustomTaxonomy' ] );
+
+		/** Action ajax p/ retorno dos children terms */
+		add_action( 'wp_ajax_listChildrenTerms', [ $this, 'getDescendantTerms' ] );
 	}
 
 	/**
@@ -138,8 +141,11 @@ class A2_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/a2-public.js', array( 'jquery' ), $this->version, false );
-
+		wp_enqueue_script( 'a2-public', plugin_dir_url( __FILE__ ) . 'js/a2-public.js', array( 'jquery' ), $this->version, false );
+		wp_localize_script( 'a2-public', 'publicAjax', array(
+			'nonce'     => wp_create_nonce( 'public-nonce' ),
+			'url'		=> admin_url( 'admin-ajax.php' )
+		) );
 		/**
 		 * Enqueue Materialize Front-End Framework
 		 */
@@ -328,5 +334,37 @@ class A2_Public {
 		$vars[] = 'gallery';
 
 		return $vars;
+	}
+
+	/**
+	 * Retorna descendentes diretos do termo recebido via ajax
+	 * Este método deve ser movido para outra classe mais tarde
+	 * 
+	 */
+	public function getDescendantTerms()
+	{
+		if( empty( $_POST ) ) die();
+
+		$termId 	= $_POST['termId'];		
+		$args 		= array(
+			'taxonomy'		=> 'profile_localization',
+			'parent'		=> $termId,
+			'hide_empty'	=> false,
+			'orderby'		=> 'name',
+			'order'			=> 'ASC'
+		);
+		$terms = get_terms( $args );
+
+		$data = array();
+		if( !empty( $terms ) ){
+			foreach( $terms as $term ){
+				if( $term->parent != 0 ){
+					$data[] = [ 'id' => $term->term_id, 'name' => $term->name ];
+				}
+			}
+		}
+		$data = json_encode( $data, JSON_PRETTY_PRINT );
+
+		die($data);
 	}
 }
