@@ -80,6 +80,9 @@ class A2_Public {
 
 		/** Action ajax p/ retorno dos children terms */
 		add_action( 'wp_ajax_listChildrenTerms', [ $this, 'getDescendantTerms' ] );
+
+		/** Inserir o modal de termos de condições no rodapé */
+		add_action( 'wp_footer', [ $this, 'modalTermsAndConditionsOfUse' ] );
 	}
 
 	/**
@@ -338,7 +341,8 @@ class A2_Public {
 
 	/**
 	 * Retorna descendentes diretos do termo recebido via ajax
-	 * Este método deve ser movido para outra classe mais tarde
+	 * Este método é utilizado na edição do perfil para seleção das opções de localização
+	 * e deve ser movido para outra classe que faça mais sentido.
 	 * 
 	 */
 	public function getDescendantTerms()
@@ -366,5 +370,16 @@ class A2_Public {
 		$data = json_encode( $data, JSON_PRETTY_PRINT );
 
 		die($data);
+	}
+
+	/**
+	 * Esté método insere o modal de condições, termos de uso e confirmação de idade
+	 * no rodapé do site quando identifica que o cookie de confirmação de uso não existe
+	 * ou expirou.
+	 * 
+	 */
+	public function modalTermsAndConditionsOfUse()
+	{
+		require_once plugin_dir_path( __FILE__ ) . 'partials/tpl-modal-terms-and-conditions.php';
 	}
 }
