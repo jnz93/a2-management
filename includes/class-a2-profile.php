@@ -215,15 +215,23 @@ class A2_Profile{
 			$userData[$key] = get_user_meta( $userId, $key, true );
 		}
 
-		# Criando a página de perfil
-		$postarr = [
-			'post_title'	=> $userData['display_name'],
-			'post_author'	=> $userId,
-			'post_content'	=> $userData['_profile_description'],
-			'post_status'	=> 'draft',
-			'post_type'		=> 'a2_escort',
-		];
-		$postid = wp_insert_post( $postarr );
+		# Checar se a página de perfil já existe
+		$foundProfile = $this->checkProfilePageExists( $userId );
+		$postid = '';
+		if( $foundProfile ){
+			# Pegar o ID da página de perfil
+			$postid = $this->getProfilePageId( $userId );
+		} else {
+			# Criando a página de perfil
+			$postarr = [
+				'post_title'	=> $userData['display_name'],
+				'post_author'	=> $userId,
+				'post_content'	=> $userData['_profile_description'],
+				'post_status'	=> 'draft',
+				'post_type'		=> 'a2_escort',
+			];
+			$postid = wp_insert_post( $postarr );
+		}
 
 		# Salvando meta-posts e taxonomias
 		if( !is_wp_error( $postid ) ){
@@ -248,6 +256,9 @@ class A2_Profile{
 					update_post_meta( $postid, $key, $value );
 				}
 			}
+
+			// Método para marcar o $postid da página no user meta
+			$this->saveIdOfProfilePage( $userId, $postid );
 		}
     }
 
@@ -340,5 +351,52 @@ class A2_Profile{
 	{
 		$metaKeyLog 	= '_incomplete_data';		
 		return update_user_meta( $userId, $metaKeyLog, $log );
+	}
+
+	/**
+	 * Método responsável por salvar o ID do post de perfil criado em um meta campo do usuário
+	 * 
+	 * @param int $userId
+	 * @param int $postId
+	 * @return bool
+	 */
+	private function saveIdOfProfilePage( $userId, $postId )
+	{
+		$metaKey 	= '_profile_page_id';
+		return update_user_meta( $userId, $metaKey, $postId );
+	}
+
+	/**
+	 * Método responsável por retornar o ID da página de perfil do usuário
+	 * 
+	 * @param int $userId
+	 * @return int $pageId
+	 */
+	private function getProfilePageId( $userId )
+	{
+		$metaKey 		= '_profile_page_id';
+		$pageId 		= get_user_meta( $userId, $metaKey, true );
+
+		return $pageId;
+	}
+
+	/**
+	 * Método responsável por verificar a existência de uma página de perfil daquele usuário
+	 * 
+	 * @param int $userId
+	 * @return bool
+	 */
+	private function checkProfilePageExists( $userId )
+	{
+		$metaKey 		= '_profile_page_id';
+		$pageId 		= get_user_meta( $userId, $metaKey, true );
+		$foundProfile 	= get_post_status( $pageId );
+		$profileExists 	= false;
+
+		if( $foundProfile ){
+			$profileExists = true;
+		}
+
+		return $profileExists;
 	}
 }
