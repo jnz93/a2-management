@@ -235,7 +235,8 @@ class A2_Profile{
 
 		# Salvando meta-posts e taxonomias
 		if( !is_wp_error( $postid ) ){
-			$selectedPayments = array();
+			$selectedPayments 		= array();
+			$selectedLocalization 	= array();
 			foreach( $userData as $key => $value ){
 				# Se for taxonomia
 				if( array_key_exists( $key, $taxonomies ) ){
@@ -247,6 +248,12 @@ class A2_Profile{
 						$termId 			= end( $arr );
 						$term 				= get_term( $termId, $taxonomy );
 						$selectedPayments[] = $term->name;
+						continue;
+					}
+
+					# Coletando localizações
+					if( $taxonomy == 'profile_localization' && strlen( $value ) > 0 ){
+						$selectedLocalization[] = $value;
 						continue;
 					}
 
@@ -262,6 +269,11 @@ class A2_Profile{
 			# Salvando métodos de pagamento selecionados
 			if( !empty( $selectedPayments ) ){
 				wp_set_post_terms( $postid, $selectedPayments, 'profile_payment_methods' );
+			}
+
+			# Salvando Localizações
+			if( !empty( $selectedLocalization ) ){
+				wp_set_post_terms( $postid, $selectedLocalization, 'profile_localization' );
 			}
 
 			# Salvar o $postid da página no user meta
