@@ -235,17 +235,19 @@ class A2_Profile{
 
 		# Salvando meta-posts e taxonomias
 		if( !is_wp_error( $postid ) ){
+			$selectedPayments = array();
 			foreach( $userData as $key => $value ){
 				# Se for taxonomia
 				if( array_key_exists( $key, $taxonomies ) ){
 					$taxonomy = $taxonomies[$key];
 					
-					# Se for método de pagamento
+					# Coletando métodos de pagamento
 					if( $taxonomy == 'profile_payment_methods' && $value == 'on' ){
-						$arr 		= explode( '_', $key );
-						$termId 	= end( $arr );
-						$term 		= get_term( $termId, $taxonomy );
-						$value 		= $term->name;
+						$arr 				= explode( '_', $key );
+						$termId 			= end( $arr );
+						$term 				= get_term( $termId, $taxonomy );
+						$selectedPayments[] = $term->name;
+						continue;
 					}
 
 					# Se $value != null salva o termo
@@ -257,7 +259,12 @@ class A2_Profile{
 				}
 			}
 
-			// Método para marcar o $postid da página no user meta
+			# Salvando métodos de pagamento selecionados
+			if( !empty( $selectedPayments ) ){
+				wp_set_post_terms( $postid, $selectedPayments, 'profile_payment_methods' );
+			}
+
+			# Salvar o $postid da página no user meta
 			$this->saveIdOfProfilePage( $userId, $postid );
 		}
     }
