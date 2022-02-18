@@ -112,7 +112,7 @@ function fillLocalizationOptions( options, type ){
 		let elements = '<option value="" disabled selected>Selecione uma opção</option>';
 
 		jQuery.each( _items, function( index, item ){
-			elements += '<option value="'+ item.name +'" term-id="'+ item.id +'" children-type="'+ _childType +'">'+ item.name +'</option>'
+			elements += '<option value="'+ item.id +'" term-id="'+ item.id +'" children-type="'+ _childType +'">'+ item.name +'</option>'
 		});
 
 		_select.html(elements);
