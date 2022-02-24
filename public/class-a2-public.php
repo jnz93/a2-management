@@ -83,6 +83,9 @@ class A2_Public {
 
 		/** Inserir o modal de termos de condições no rodapé */
 		add_action( 'wp_footer', [ $this, 'modalTermsAndConditionsOfUse' ] );
+		
+		/** Action ajax p/ retorno dos children terms */
+		add_action( 'wp_ajax_upload_attachment', [ $this, 'uploadAttachment' ] );
 	}
 
 	/**
