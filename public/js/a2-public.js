@@ -120,3 +120,77 @@ function fillLocalizationOptions( options, type ){
 		_select.formSelect();
 	}
 }
+
+/**
+ * Função responsável pelo upload de arquivos via ajax
+ * Utilizada principalmente no upload da foto de perfil e capa
+ * 
+ * @param {*} el 
+ */
+function uploadImage(el){
+
+	let formData 	= new FormData(),
+		fileList 	= el[0].files,
+		img 		= fileList[0],
+		viewEl 		= el.parents('div.mb-3').siblings('div.thumbnail-view'),
+		inputId 	= el.parent().siblings('input'),
+		spinner 	= viewEl.children('div.spinner-border');
+
+	formData.append('action', 'upload_attachment');
+	formData.append('file', img);
+	
+	if (fileList.length > 0) {
+		jQuery.ajax({
+			type: 'POST',
+			url: publicAjax.url,
+			processData: false,
+			contentType: false,
+			data: formData,
+			beforeSend: function () {
+				spinner.removeClass('d-none');
+			},
+			success: function(response) {
+				spinner.addClass('d-none');
+			},
+			error: function( request, status, error ) {
+				console.log(status);
+				console.log(request);
+			},
+		})
+		.done(function( data ){
+			data = JSON.parse(data);
+			applyAttachOnElement( data.attachUrl, viewEl );
+			inputId.val(data.attachId);
+		});
+	}
+}
+
+/**
+ * Está função recebe uma URL de imagem e aplica ela no elemento destino
+ * Está função deve ser chamada após o upload de uma imagem
+ * 
+ * @param {*} attachUrl
+ * @param {*} viewEl
+ */
+function applyAttachOnElement( attachUrl, viewEl ){
+	if( attachUrl.length < 55 ){
+		console.log('Url Inválida.')
+		console.log(attachUrl);
+		return;
+	}
+	viewEl.css({
+		'background-image': 'url('+ attachUrl +')'
+	});
+}
+
+jQuery(document).ready( function(){
+	// Manipulando o upload da foto de perfil
+	jQuery('#_select_profile_photo').change( function(){
+		uploadImage(jQuery(this));
+	});
+	
+	// Manipulando o upload da foto de capa
+	jQuery('#_select_profile_cover').change( function(){
+		uploadImage(jQuery(this));
+	});
+});

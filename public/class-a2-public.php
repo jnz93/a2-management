@@ -380,4 +380,43 @@ class A2_Public {
 	{
 		require_once plugin_dir_path( __FILE__ ) . 'partials/tpl-modal-terms-and-conditions.php';
 	}
+
+	/**
+	 * Método responsável pelo upload de fotos via ajax
+	 * 
+	 * @return JSON $attachData
+	 */
+	public function uploadAttachment()
+    {
+        # Checking if media_handle_sideload exists
+        if( !function_exists( 'media_handle_sideload' ) ){
+            require_once( plugin_dir_path( ABSPATH ) . 'public_html/wp-admin/includes/file.php' );
+            require_once( plugin_dir_path( ABSPATH ) . 'public_html/wp-admin/includes/image.php' );
+            require_once( plugin_dir_path( ABSPATH ) . 'public_html/wp-admin/includes/media.php' ); 
+        }
+		
+		$postId 			= 0;
+        $file               = $_FILES['file'];
+        $desc               = '';
+		$attachData			= [];
+        $allowedMimeTypes   = array(
+            'jpg|jpeg|jpe'  => 'image/jpeg',
+            'png'           => 'image/png',
+            'webp'          => 'image/webp',
+        );
+        $overrides          = array(
+            'test_form'     => false,
+            'mimes'         => $allowedMimeTypes,
+        );
+        $attachId 			= media_handle_sideload( $file, $postId, $desc, $overrides );
+
+		if( !is_wp_error( $attachId ) ){
+			$attachData['attachId'] 	= $attachId;
+			$attachData['attachUrl'] 	= wp_get_attachment_url( $attachId );
+		}
+		$attachData = json_encode( $attachData );
+
+		echo $attachData;
+		die();
+    }
 }
