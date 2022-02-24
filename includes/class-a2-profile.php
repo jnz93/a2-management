@@ -408,12 +408,15 @@ class A2_Profile{
 	private function checkProfilePageExists( $userId )
 	{
 		$metaKey 		= '_profile_page_id';
-		$pageId 		= get_user_meta( $userId, $metaKey, true );
-		$foundProfile 	= get_post_status( $pageId );
 		$profileExists 	= false;
+		$pageId 		= get_user_meta( $userId, $metaKey, true );
 
-		if( $foundProfile ){
-			$profileExists = true;
+		if( strlen( $pageId ) > 0 ){
+			$foundProfile 	= get_post_status( $pageId );
+			
+			if( $foundProfile ){
+				$profileExists = true;
+			}
 		}
 
 		return $profileExists;
