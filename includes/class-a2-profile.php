@@ -64,6 +64,8 @@ class A2_Profile{
 			'_profile_cache_promotion_activated',
 			'_profile_work_days',
 			'_profile_office_hour',
+			'_profile_photo',
+			'_profile_cover'
 		);
 
 		# Coletando Formas de pagamento
@@ -174,6 +176,8 @@ class A2_Profile{
 			'_profile_cache_promotion_activated',
 			'_profile_work_days',
 			'_profile_office_hour',
+			'_profile_photo',
+			'_profile_cover'
 		);		
 
 		# Taxonomias
@@ -261,6 +265,8 @@ class A2_Profile{
 					if ( !is_null( $value ) ){
 						wp_set_post_terms( $postid, $value, $taxonomy );
 					}
+				} elseif( $key == '_profile_photo' ){
+					set_post_thumbnail( $postid, $value );
 				} else {
 					update_post_meta( $postid, $key, $value );
 				}
