@@ -148,6 +148,8 @@ class A2_Public {
 			'nonce'     => wp_create_nonce( 'public-nonce' ),
 			'url'		=> admin_url( 'admin-ajax.php' )
 		) );
+		wp_enqueue_script( 'a2-terms-and-conditions', plugin_dir_url( __FILE__ ) . 'js/terms-and-conditions.js', array( 'jquery' ), $this->version, false );
+		
 		/**
 		 * Enqueue Bootstrap, fontaweson e jquery mask
 		 */		
