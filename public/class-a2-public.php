@@ -84,8 +84,11 @@ class A2_Public {
 		/** Inserir o modal de termos de condições no rodapé */
 		add_action( 'wp_footer', [ $this, 'modalTermsAndConditionsOfUse' ] );
 		
-		/** Action ajax p/ retorno dos children terms */
+		/** Action ajax p/ upload de arquivo único(foto perfi e capa) */
 		add_action( 'wp_ajax_upload_attachment', [ $this, 'uploadAttachment' ] );
+
+		/** Action ajax p/ upload de fotos para a galeria de perfil */
+		add_action( 'wp_ajax_upload_gallery', [ $this, 'uploadGallery' ] );
 	}
 
 	/**
@@ -422,6 +425,70 @@ class A2_Public {
 		$attachData = json_encode( $attachData );
 
 		echo $attachData;
+		die();
+    }
+
+	/**
+	 * Método responsável pelo upload de fotos e vídeos via ajax
+	 * 
+	 * @return JSON $attachData
+	 */
+	public function uploadGallery()
+    {
+        # Checking if media_handle_sideload exists
+        if( !function_exists( 'media_handle_sideload' ) ){
+            require_once( plugin_dir_path( ABSPATH ) . 'public_html/wp-admin/includes/file.php' );
+            require_once( plugin_dir_path( ABSPATH ) . 'public_html/wp-admin/includes/image.php' );
+            require_once( plugin_dir_path( ABSPATH ) . 'public_html/wp-admin/includes/media.php' ); 
+        }
+        $files	= $_FILES['files'];
+		if( empty( $files ) || is_null( $files ) ) die();
+
+		$fNames = $files['name'];
+		$tNames = $files['tmp_name'];
+		$fToUpload = array();
+		foreach( $fNames as $i => $name ){
+			$fToUpload[] = [
+				'name'		=> $name,
+				'tmp_name'	=> $tNames[$i]
+			];
+		}
+
+		$userId 			= get_current_user_id();
+		$postId 			= $this->profile->getProfilePageId( $userId );
+        $desc               = '';
+		$attachData			= [];
+		$attachmentList		= [];
+		$filesList 			= [];
+		$allowedMimeTypes   = array(
+			'jpg|jpeg|jpe'  => 'image/jpeg',
+			'png'           => 'image/png',
+		);
+		$overrides          = array(
+			'test_form'     => false,
+			'mimes'         => $allowedMimeTypes,
+		);
+
+		if( true ){
+			foreach( $fToUpload as $file ){
+				# $file = ['name' => '....', 'tmp_name' => '...' ];
+				$attachId 			= media_handle_sideload( $file, $postId, $desc, $overrides );
+		
+				if( !is_wp_error( $attachId ) ){
+					$attachData[]	= [
+						'attachId'	=> $attachId,
+						'attachUrl'	=> wp_get_attachment_url( $attachId )
+					];
+					$attachmentList[] = $attachId;
+				}
+			}
+
+			# Update na galeria
+			$this->gallery->update( $postId, $attachmentList );
+
+			$json = json_encode( $attachData );
+			echo $json;
+		}
 		die();
     }
 }

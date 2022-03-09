@@ -183,6 +183,121 @@ function applyAttachOnElement( attachUrl, viewEl ){
 	});
 }
 
+/**
+ * Função responsável pelo upload de fotos e vídeos da galeria do acompanhante
+ * @param {*} el 
+ */
+function uploadGallery(el){
+
+	let formData 		= new FormData(),
+		fileList 		= el[0].files;
+
+	formData.append('action', 'upload_gallery');
+
+	if (fileList.length > 0 ) {
+		var payload = galleryPayload( fileList, formData );
+		
+		jQuery.ajax({
+			type: 'POST',
+			url: publicAjax.url,
+			processData: false,
+			contentType: false,
+			data: payload,
+			beforeSend: function () {
+				
+			},
+			success: function(response) {
+				// spinner.addClass('d-none');
+			},
+			error: function( request, status, error ) {
+				console.log(status);
+				console.log(request);
+			},
+		})
+		.done(function( data ){
+			jQuery(".galleryItemLoad").remove();
+			let listGallery = JSON.parse( data );
+			listGallery.forEach( function(item){
+				addItemGallery(item);
+			});
+		});
+	}
+}
+
+/**
+ * Recebe a lista de arquivos que serão enviados e o objeto formData
+ * monta e retorna o payload para que será passado no ajax
+ * @returns payload
+ */
+function galleryPayload( files, formData ){
+	jQuery.each( files, function( i, file ){
+		formData.append('files['+ i +']', file);
+		addItemSpinner();
+	});
+
+	return formData;
+}
+
+/**
+ * Função responsável por inserir "spinner" em itens da galeria
+ * enquanto os arquivos estão sendo enviados.
+ * 
+ * @returns html
+ */
+function addItemSpinner(){
+	galleryWrapper 	= jQuery('#galleryList'),
+	galleryWrapper.prepend( 
+		`<li id="" data-attachment="" class="galleryItemLoad col-4">
+			<div class="spinner-border text-secondary" role="status">
+				<span class="visually-hidden">Loading...</span>
+			</div>
+		</li>`
+	);
+}
+
+/**
+ * Está função recebe um objeto json e retorna o template de item da galeria a mídia upada
+ *  
+ * @param {*} attachData
+ * @returns html
+ */
+function addItemGallery( data ){
+	galleryWrapper 	= jQuery('#galleryList');
+	galleryWrapper.prepend(
+		`<li id="${data.attachId}" data-attachment="${data.attachId}" class="galleryItem col-4">
+			<div class="thumbActions py-2 row">
+				<span class="col-8">
+					<input class="form-check-input" type="checkbox" id="" data-attachment="${data.attachId}">
+				</span>
+				<div class="col-4 d-flex justify-content-end">
+					<span class="me-3" id="close" data-attachment="${data.attachId}">
+						<i class="bi bi-pencil-square"></i>
+					</span>
+					<span class="" id="edit" data-attachment="${data.attachId}">
+						<i class="bi bi-trash3-fill"></i>
+					</span>
+				</div>
+			</div>
+			<div class="thumbnail">
+				<img src="${data.attachUrl}" alt="${data.title}" class="">
+			</div>
+			<div class="caption">
+				<span class="thumb-title">${data.title}</span>
+			</div>
+		</li>`
+	);
+};
+
+/**
+ * Na seleção em massa: Coletar os ids dos itens selecionados para exclusão 
+ * Adiciona os valores em formato string no input#_profile_gallery_remove_list
+ * Invoca a função de ativação do botão de exclusão quando algum check for selecionado
+ * Invoca a função de desativação do botão de exclusão quando não há check selecionado
+ * 
+ * @param {*} self
+ * @return void
+ */
+
 jQuery(document).ready( function(){
 	// Manipulando o upload da foto de perfil
 	jQuery('#_select_profile_photo').change( function(){
@@ -192,5 +307,10 @@ jQuery(document).ready( function(){
 	// Manipulando o upload da foto de capa
 	jQuery('#_select_profile_cover').change( function(){
 		uploadImage(jQuery(this));
+	});
+
+	// Manipulando o upload da galeria
+	jQuery('#_profile_gallery_upload').change( function(){
+		uploadGallery(jQuery(this));
 	});
 });
