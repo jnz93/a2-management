@@ -89,6 +89,9 @@ class A2_Public {
 
 		/** Action ajax p/ upload de fotos para a galeria de perfil */
 		add_action( 'wp_ajax_upload_gallery', [ $this, 'uploadGallery' ] );
+		
+		/** Action ajax p/ retorno dos children terms */
+		add_action( 'wp_ajax_remove_gallery_items', [ $this, 'removeItemsFromGallery' ] );
 	}
 
 	/**
@@ -491,4 +494,28 @@ class A2_Public {
 		}
 		die();
     }
+
+	/**
+	 * Método chamado para exclusão de um ou mais arquivos da galeria
+	 * de acompanhante
+	 * 
+	 * @return bool
+	 */
+	public function removeItemsFromGallery()
+	{
+		$excludeList 	= $_POST['excludeList'];
+		if( is_null($excludeList) ) die();
+
+		$result 		= false;
+		$userId			= get_current_user_id();
+		$postId			= $this->profile->getProfilePageId( $userId );
+		$update 		= $this->gallery->remove( $postId, $excludeList );
+
+		if( is_array($update)) {
+			$result = true;
+		}
+		echo $result;
+		
+		die();
+	}
 }

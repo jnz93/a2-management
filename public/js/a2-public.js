@@ -289,7 +289,7 @@ function addItemGallery( data ){
 };
 
 /**
- * Na seleção em massa: Coletar os ids dos itens selecionados para exclusão 
+ * Na seleção em massa: Faz a coleta dos ids dos itens selecionados para exclusão 
  * Adiciona os valores em formato string no input#_profile_gallery_remove_list
  * Invoca a função de ativação do botão de exclusão quando algum check for selecionado
  * Invoca a função de desativação do botão de exclusão quando não há check selecionado
@@ -297,6 +297,96 @@ function addItemGallery( data ){
  * @param {*} self
  * @return void
  */
+function collectItemsToRemoveFromGallery( self ){
+	let excludeActionBar 	= jQuery('#excludeActionBar')
+		countBadge 			= excludeActionBar.find('span.badge'),
+		inputRemove			= jQuery('#_profile_gallery_remove_list'),
+		currExcludeList		= inputRemove.val(),
+		excludeList 		= [],
+		attachID 			= self.attr('data-attachment');
+
+	if( currExcludeList.length > 0 ){
+		excludeList = currExcludeList.split(',');
+	}
+
+	if( self.is(':checked') ){
+		excludeList.push(attachID);
+	} else {
+		let index = excludeList.indexOf( attachID );
+
+		if( index > -1 ){
+			excludeList.splice(index, 1);
+		}
+	}
+
+	/** Adicionar lista de exclusão no input */
+	let countExcludeList 	= excludeList.length,
+		excludeListStr 		= excludeList.join(',');
+
+	/** Ativando #excludeActionBar */
+	if( excludeListStr.length > 0 ){
+		countBadge.text(countExcludeList);
+		excludeActionBar.removeClass('d-none').addClass('d-flex');
+	} else {
+		countBadge.text(countExcludeList);
+		excludeActionBar.removeClass('d-flex').addClass('d-none');
+	}
+	inputRemove.val(excludeListStr);
+}
+
+/**
+ * Está função é responsável por fazer a requisição ajax de exclusão de itens da galeria
+ * Chamada no click do botão "#btnSubmitItemsToRemoveFromGallery"
+ * Pega a lista de Id's no input "#_profile_gallery_remove_list"
+ * 
+ */
+function submitItemsToRemoveFromGallery(){
+	let excludeList 		= jQuery('#_profile_gallery_remove_list').val(),
+		excludeActionBar 	= jQuery('#excludeActionBar'),
+		excludeListArr;
+
+	if( excludeList.length > 0 ){
+		excludeListArr = excludeList.split(',');
+	}
+
+	if ( excludeListArr.length > 0 && excludeListArr != 'undefined' ) {
+		var payload = {
+			'action': 'remove_gallery_items',
+			'excludeList': excludeListArr
+		};
+		
+		jQuery.ajax({
+			type: 'POST',
+			url: publicAjax.url,
+			data: payload,
+			beforeSend: function () {
+				excludeListArr.forEach( function( id ){
+					let item = '#'+id;
+					jQuery(item).prepend(`
+						<div class="spinner-border text-secondary" role="status">
+							<span class="visually-hidden">Loading...</span>
+						</div>`
+					);
+				});
+			},
+			success: function(response) {
+				// spinner.addClass('d-none');
+			},
+			error: function( request, status, error ) {
+				console.log(status);
+				console.log(request);
+			},
+		})
+		.done(function( data ){
+			console.log(data);
+			excludeListArr.forEach( function( id ){
+				let item = '#'+id;
+				jQuery(item).remove();
+			});
+			excludeActionBar.addClass('d-none').removeClass('d-flex');
+		});
+	}
+}
 
 jQuery(document).ready( function(){
 	// Manipulando o upload da foto de perfil
@@ -312,5 +402,15 @@ jQuery(document).ready( function(){
 	// Manipulando o upload da galeria
 	jQuery('#_profile_gallery_upload').change( function(){
 		uploadGallery(jQuery(this));
+	});
+
+	// Manipulando selectbox p/ criar a lista de exclusao de itens na galeria
+	jQuery('#galleryList input[type="checkbox"]').click( function(){
+		collectItemsToRemoveFromGallery(jQuery(this));
+	});
+
+	// Submetendo a lista p/ exclusão da galeria
+	jQuery('#btnSubmitItemsToRemoveFromGallery').click( function(){
+		submitItemsToRemoveFromGallery();
 	});
 });
