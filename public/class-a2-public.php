@@ -41,6 +41,17 @@ class A2_Public {
 	private $version;
 
 	/**
+	 * The A2_Profile instantiate class
+	 * 
+	 */
+	private $profile;
+
+	/**
+	 * The A2_Gallery instantiate class
+	 */
+	private $gallery;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
@@ -51,6 +62,8 @@ class A2_Public {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
+		$this->profile = new A2_Profile();
+		$this->gallery = new A2_Gallery();
 
 		/** Redirect para página de login Custom */
 		// add_action( 'init', [ $this, 'redirectLoginPage' ] ); # Funcionando mas desativado em desenvolvimento
