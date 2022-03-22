@@ -397,7 +397,7 @@ class A2_Profile{
 	 * @param int $userId
 	 * @return int $pageId
 	 */
-	private function getProfilePageId( $userId )
+	public function getProfilePageId( $userId )
 	{
 		$metaKey 		= '_profile_page_id';
 		$pageId 		= get_user_meta( $userId, $metaKey, true );
