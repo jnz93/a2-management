@@ -283,7 +283,7 @@ class A2_Admin {
 			'query_var'         => true,
 			'rewrite'           => array( 'slug' => 'genero' ),
 		);	 
-		register_taxonomy( 'profile_genre', array( 'a2_escort' ), $args );		
+		register_taxonomy( 'profile_genre', array( 'a2_escort', 'a2_advertisement' ), $args );		
 		
 		unset( $args );
 		unset( $labels );
@@ -311,7 +311,7 @@ class A2_Admin {
 			'query_var'         => true,
 			'rewrite'           => array( 'slug' => 'etnia' ),
 		);
-		register_taxonomy( 'profile_ethnicity', array( 'a2_escort' ), $args );
+		register_taxonomy( 'profile_ethnicity', array( 'a2_escort', 'a2_advertisement' ), $args );
 
 		unset( $args );
 		unset( $labels );
@@ -339,7 +339,7 @@ class A2_Admin {
 			'query_var'         => true,
 			'rewrite'           => array( 'slug' => 'signo' ),
 		);	 
-		register_taxonomy( 'profile_sign', array( 'a2_escort' ), $args );
+		register_taxonomy( 'profile_sign', array( 'a2_escort', 'a2_advertisement' ), $args );
 		
 		unset( $args );
 		unset( $labels );
@@ -367,7 +367,7 @@ class A2_Admin {
 			'query_var'         => true,
 			'rewrite'           => array( 'slug' => 'local' ),
 		);	 
-		register_taxonomy( 'profile_place_of_service', array( 'a2_escort' ), $args );
+		register_taxonomy( 'profile_place_of_service', array( 'a2_escort', 'a2_advertisement' ), $args );
 
 		unset( $args );
 		unset( $labels );
@@ -395,7 +395,7 @@ class A2_Admin {
 			'query_var'         => true,
 			'rewrite'           => array( 'slug' => 'especialidade' ),
 		);
-	 	register_taxonomy( 'profile_specialties', array( 'a2_escort' ), $args );
+	 	register_taxonomy( 'profile_specialties', array( 'a2_escort', 'a2_advertisement' ), $args );
 
 		unset( $args );
 		unset( $labels );
@@ -423,7 +423,7 @@ class A2_Admin {
 			'query_var'         => true,
 			'rewrite'           => array( 'slug' => 'servico' ),
 		);
-		register_taxonomy( 'profile_services', array( 'a2_escort' ), $args );
+		register_taxonomy( 'profile_services', array( 'a2_escort', 'a2_advertisement' ), $args );
 
 		unset( $args );
 		unset( $labels );
@@ -451,7 +451,7 @@ class A2_Admin {
 			'query_var'         => true,
 			'rewrite'           => array( 'slug' => 'localizacao' ),
 		);
-		register_taxonomy( 'profile_localization', array( 'a2_escort' ), $args );
+		register_taxonomy( 'profile_localization', array( 'a2_escort', 'a2_advertisement' ), $args );
 		
 		unset( $args );
 		unset( $labels );
@@ -479,7 +479,7 @@ class A2_Admin {
 			'query_var'         => true,
 			'rewrite'           => array( 'slug' => 'idioma' ),
 		);
-		register_taxonomy( 'profile_languages', array( 'a2_escort' ), $args );
+		register_taxonomy( 'profile_languages', array( 'a2_escort', 'a2_advertisement' ), $args );
 		
 		unset( $args );
 		unset( $labels );
@@ -508,7 +508,7 @@ class A2_Admin {
 			'rewrite'           => array( 'slug' => 'dias' ),
 		);
 	 
-		register_taxonomy( 'profile_work_days', array( 'a2_escort' ), $args );
+		register_taxonomy( 'profile_work_days', array( 'a2_escort', 'a2_advertisement' ), $args );
 		unset( $args );
 		unset( $labels );
 
@@ -535,7 +535,7 @@ class A2_Admin {
 			'query_var'         => true,
 			'rewrite'           => array( 'slug' => 'formas-de-pagamento' ),
 		);
-		register_taxonomy( 'profile_payment_methods', array( 'a2_escort' ), $args );
+		register_taxonomy( 'profile_payment_methods', array( 'a2_escort', 'a2_advertisement' ), $args );
 		
 		unset( $args );
 		unset( $labels );
@@ -563,6 +563,6 @@ class A2_Admin {
 			'query_var'         => true,
 			'rewrite'           => array( 'slug' => 'preferencia' ),
 		);
-		register_taxonomy( 'profile_preference', array( 'a2_escort' ), $args );
+		register_taxonomy( 'profile_preference', array( 'a2_escort', 'a2_advertisement' ), $args );
 	}
 }
