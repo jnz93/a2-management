@@ -564,5 +564,22 @@ class A2_Admin {
 			'rewrite'           => array( 'slug' => 'preferencia' ),
 		);
 		register_taxonomy( 'profile_preference', array( 'a2_escort', 'a2_advertisement' ), $args );
+
+		// Nível de anúncios / Exclusivo: a2_advertisement
+		$labels = array(
+			'name'              => _x( 'Niveis', 'taxonomy general name', 'textdomain' ),
+			'singular_name'     => _x( 'Nível', 'taxonomy singular name', 'textdomain' ),
+			'menu_name'         => __( 'Nível', 'textdomain' ),
+		);
+	 
+		$args = array(
+			'hierarchical'      => false,
+			'labels'            => $labels,
+			'show_ui'           => true,
+			'show_admin_column' => false,
+			'query_var'         => true,
+			'rewrite'           => array( 'slug' => 'nivel' ),
+		);
+		register_taxonomy( 'advertisement_level', array( 'a2_advertisement' ), $args );
 	}
 }
