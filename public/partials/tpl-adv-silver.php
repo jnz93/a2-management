@@ -29,6 +29,6 @@
             </div>
             <!-- /End .advCard__body -->
         </div>
-        <!-- /End .adv--silver -->
     </a>
 </div>
+<!-- /End .advCard -->
