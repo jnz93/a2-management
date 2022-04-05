@@ -19,7 +19,7 @@
 
         <div class="card-footer p-0">
             <div class="d-grid gap-2">
-                <a href="" class="btn advCard__btn p-0 pt-2 pb-2"><?php _e( 'Visitar perfil', 'textdomain' ); ?> <i class="bi bi-link-45deg"></i></a>
+                <a href="" class="btn advCard__btn advCard__btn--default p-0 pt-2 pb-2"><?php _e( 'Visitar perfil', 'textdomain' ); ?> <i class="bi bi-link-45deg"></i></a>
             </div>
         </div>
     </div>
