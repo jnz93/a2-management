@@ -12,7 +12,7 @@
             </div>
             <!-- /End .advCard__thumb -->
 
-            <div class="advCard__body card-body">
+            <div class="advCard__textColor--default card-body">
                 <h6 class="card-title fw-bold"><?php echo $title; ?></h6>
                 <p class="advCard__text card-text" style="opacity: .8"><?php echo wp_trim_words( $content, 8, '...' ); ?></p>
             
