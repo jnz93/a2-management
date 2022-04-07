@@ -1,4 +1,102 @@
 /**
  * All of the CSS for your public-facing functionality should be
  * included in this file.
+ * CSS Style pattern: BEM(block, element & modifier
  */
+
+/* Card Adv Default */
+.advCard{
+    opacity: .7;
+    transition: 1s;
+}
+.advCard:hover{
+    opacity: 1;
+    transition: 1s;
+}
+
+/* Card Modificadores de cores/tipos */
+.advCard--bgNone{
+    background: none;
+}
+.advCard--silver{
+    background: rgba(0, 0, 0, .1);
+}
+.advCard--gold{
+    background: #FFE4E4;
+    border: none;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.advCard--diamond{
+    background: #FFE4E4;
+    border: none;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+/* Card Tags */
+.advCard__tag{
+    margin: 12px;
+    padding: 4px 8px;
+    border-radius: 2px;
+    color: #fff;
+    font-size: .9rem;
+    text-transform: capitalize;
+}
+.advCard__tag--verified{
+    background: #00E676;
+}
+
+/* Card Images */
+.advCard__image{
+    height: 245px; 
+    background-repeat: no-repeat; 
+    background-position: center; 
+    background-size: cover;
+}
+
+/* Card textColor's */
+.advCard__textColor--default{
+    color: #fff;
+}
+.advCard__textColor--primary{
+    color: #F2134F;
+}
+
+/* Card text */
+.advCard__text{
+    opacity: .8;
+}
+
+/* Card Btn */
+.advCard__btn{
+    text-transform: capitalize;
+    font-weight: 500;
+}
+.advCard__btn--default{
+    background: #12243B;
+    color: #fff;
+}
+.advCard__btn--whatsapp{
+    background: #25d366;
+    color: #fff !important;
+
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+}
+
+/* Card icons */
+.advCard__icon{
+    padding: 3px 6px;
+    border-radius: 3px;
+}
+.advCard__icon--default{
+    background: #fff;
+    color: #0c1827;
+}
+.advCard__icon--gold{
+    background: #F2134F;
+    color: #fff;
+    opacity: .8;
+}
