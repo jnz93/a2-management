@@ -134,6 +134,11 @@ class A2 {
 		 * de fotos e vídeos de acompanhante 
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-a2-gallery.php';
+		
+		/**
+		 * Classe responsável pelos anúncios
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-a2-advertisement.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
