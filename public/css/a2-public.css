@@ -104,3 +104,12 @@
     color: #fff;
     opacity: .8;
 }
+
+/* Card Borders */
+.advCard__border--default{
+    border: 1px solid rgba(0,0,0,0);
+    transition: .4s ease-in-out;
+}
+.advCard__border--default:hover{
+    border-color: rgba(0,0,0,.5);
+}
