@@ -6,12 +6,12 @@
 
 /* Card Adv Default */
 .advCard{
-    opacity: .7;
-    transition: 1s;
+    opacity: .8;
+    transition: .4s ease-in-out;
 }
 .advCard:hover{
     opacity: 1;
-    transition: 1s;
+    transition: .4s ease-in-out;
 }
 
 /* Card Modificadores de cores/tipos */
@@ -74,6 +74,10 @@
     text-transform: capitalize;
     font-weight: 500;
 }
+.advCard__btn:hover{
+    color: #fff;
+}
+
 .advCard__btn--default{
     background: #12243B;
     color: #fff;
