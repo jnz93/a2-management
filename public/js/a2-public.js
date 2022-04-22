@@ -418,5 +418,27 @@ jQuery(document).ready( function(){
 	var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
 	var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 		return new bootstrap.Tooltip(tooltipTriggerEl)
-	})
+	});
+
+	// Inicializando .carousel-advertisement
+	jQuery('.carousel-advertisement').owlCarousel({
+		margin: 16,
+		nav: true,
+		dots: true,
+		lazyLoad: true,
+		autoplay: true,
+		autoplayHoverPause: true,
+		responsive:{
+			0:{
+				items:1,
+				stagePadding: 32
+			},
+			600:{
+				items:3,
+			},
+			1000:{
+				items:4,
+			}
+		}
+	});
 });
