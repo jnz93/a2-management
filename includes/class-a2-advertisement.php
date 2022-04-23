@@ -39,7 +39,7 @@ class A2_Advertisement{
     public function __construct()
     {
 		$this->postType 				= 'a2_advertisement';
-		$this->postStatus				= 'draft';
+		$this->postStatus				= 'publish';
 		$this->metaKeyActivatedItems 	= '_activated_advertisements';
 		$this->metaKeyPlanDuration 		= '_plan_duration';
 		$this->metaKeyExpirateDate		= '_expiration_date';

@@ -32,6 +32,9 @@ class A2_Shortcodes{
 
         /** Formulário de login */
         add_shortcode( 'loginForm', [ $this, 'loginForm'] );
+
+        /** Lista de anúncios por localidade */
+        add_shortcode( 'advCarousel', [ $this, 'listCarouselAdvertisement'] );
     }
 
     /**
@@ -87,6 +90,104 @@ class A2_Shortcodes{
 
         wp_login_form( $args );
 
+        return ob_get_clean();
+    }
+
+    /**
+     * Carousel de anúncios
+     * 
+     * Retorna o carousel de anúncios padrão
+     * Pode receber atributos como país, estado ou cidade para filtrar os resultados
+     * Ex: [advCarousel pais="" estado="" cidade="" qtd=""]
+     */
+    public function listCarouselAdvertisement( $atts )
+    {
+        $a = shortcode_atts( 
+            [
+                'pais'      => 'br',
+                'estado'    => null,
+                'cidade'    => null,
+                'qtd'       => 8,
+			], 
+            $atts
+        );
+        $query = $this->a2Query->advByLocation($a['pais'], $a['estado'], $a['cidade'], $a['qtd']);
+        
+        $titleCarousel      = '';
+        $subtitleCarousel   = '';
+        $showWhat           = '';
+        $pageLocationLink   = '';
+        $totalPosts         = $query->found_posts;
+        $paises = [
+            'ar' => 'argentina',
+            'bo' => 'bolívia',
+            'br' => 'brasil',
+            'cl' => 'chile',
+            'co' => 'colômbia',
+            'ec' => 'equador',
+            'gy' => 'guiana',
+            'fr' => 'guiana francesa',
+            'py' => 'paraguai',
+            'pe' => 'peru',
+            'sr' => 'suriname',
+            'uy' => 'uruguai',
+            've' => 'venezuela',
+        ];
+        $estados = [
+            'ac'    => 'acre',
+            'al'    => 'alagoas',
+            'ap'    => 'amapá',
+            'am'    => 'amazonas',
+            'ba'    => 'bahia',
+            'ce'    => 'ceará',
+            'df'    => 'distrito federal',
+            'es'    => 'espirito santo',
+            'go'    => 'goiás',
+            'ma'    => 'maranhão',
+            'mt'    => 'mato grosso',
+            'ms'    => 'mato grosso do sul',
+            'mg'    => 'minas gerais',
+            'pa'    => 'pará',
+            'pb'    => 'paraíba',
+            'pr'    => 'paraná',
+            'pe'    => 'pernambuco',
+            'pi'    => 'piauí',
+            'rj'    => 'rio de janeiro',
+            'rn'    => 'rio grande do norte',
+            'rs'    => 'rio grande do sul',
+            'ro'    => 'rondônia',
+            'rr'    => 'roraima',
+            'sc'    => 'santa catarina',
+            'sp'    => 'são paulo',
+            'se'    => 'sergipe',
+            'to'    => 'tocantins'
+        ];
+
+        if( !is_null($a['cidade']) ){
+            $titleCarousel      = $a['cidade'];
+            $subtitleCarousel   = $a['estado'];
+            $showWhat           = 'last-lvl';
+        }
+
+        if( is_null($a['cidade']) && !is_null($a['estado']) ){
+            $titleCarousel      = $estados[$a['estado']];
+            $subtitleCarousel   = $a['pais'];
+            $showWhat           = 'third-lvl';
+        }
+
+        if( is_null($a['cidade']) && is_null($a['estado']) ){
+            $titleCarousel      = $paises[$a['pais']];
+            $showWhat           = 'second-lvl';
+        }
+
+        $pageLocation   = get_page_by_title( 'Acompanhantes em ' . $titleCarousel, OBJECT, 'post' );
+        if( $pageLocation ){
+            $pageId = $pageLocation->ID;
+            $pageLocationLink = get_permalink( $pageId );
+        }
+
+        ob_start();
+        require plugin_dir_path( __DIR__ ) . 'public/partials/carousel/tpl-carousel-default.php';
         return ob_get_clean();
     }
 }
