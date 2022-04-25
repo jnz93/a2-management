@@ -36,6 +36,11 @@ class A2_Advertisement{
 	 */
 	private $metaKeyExpirateDate;
 
+	/**
+	 * Meta to save plan level
+	 */
+	private $metaKeyPlanLevel;
+
     public function __construct()
     {
 		$this->postType 				= 'a2_advertisement';
@@ -43,6 +48,7 @@ class A2_Advertisement{
 		$this->metaKeyActivatedItems 	= '_activated_advertisements';
 		$this->metaKeyPlanDuration 		= '_plan_duration';
 		$this->metaKeyExpirateDate		= '_expiration_date';
+		$this->metaKeyPlanLevel 		= '_plan_level';
     }
 
 	/**
@@ -159,7 +165,22 @@ class A2_Advertisement{
             # Salvando tag do plano adquirido
             if( strlen($dataOrder['product_name'] > 0 ) ){
                 $sanitizePlan  = strtolower(str_replace( ' ', '-', $dataOrder['product_name'] ));
-                wp_set_post_terms( $postid, $sanitizePlan, 'advertisement_level' );
+				$planLevel = null;
+				switch($sanitizePlan){
+					case 'plano-prata':
+						$planLevel = 0;
+						break;
+					case 'plano-ouro':
+						$planLevel = 1;
+						break;
+					case 'plano-diamante':
+						$planLevel = 2;
+						break;
+					default:
+						$planLevel = -1;
+						break;
+				}
+                update_post_meta( $postid, $this->metaKeyPlanLevel, $planLevel );
             }
 
 			# Salvar o tempo de duração do plano adquirido
