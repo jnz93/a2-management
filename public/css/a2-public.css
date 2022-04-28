@@ -43,6 +43,7 @@
     color: #fff;
     font-size: .9rem;
     text-transform: capitalize;
+    z-index: 999;
 }
 .advCard__tag--verified{
     background: #00E676;
