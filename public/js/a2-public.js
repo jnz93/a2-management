@@ -441,4 +441,15 @@ jQuery(document).ready( function(){
 			}
 		}
 	});
+
+	// Inicializando .carousel-gallery (Anúncios diamante)
+	jQuery('.carousel-gallery').owlCarousel({
+		items: 3,
+		margin: 3,
+		nav: false,
+		dots: false,
+		lazyLoad: true,
+		autoplay: true,
+		autoplayHoverPause: true,
+	});
 });
