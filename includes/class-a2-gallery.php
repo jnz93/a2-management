@@ -94,4 +94,26 @@ class A2_Gallery{
 
         return $currentGallery;
     }
+
+    /**
+     * Retorna um array de url's das imagens da galeria. Retornar `false` case seja um array vazio;
+     * 
+     * @return array/bool
+     */
+    public function getUrls($postId)
+    {
+        if( is_null($postId) ) return;
+
+        $gallery    = [];
+        $ids        = $this->get($postId);
+        if( empty($ids) ){
+            $gallery = false;
+        } else{
+            foreach( $ids as $id ){
+                $gallery[] = wp_get_attachment_url( $id );
+            }
+        }
+
+        return $gallery;
+    }
 }
