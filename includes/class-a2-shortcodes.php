@@ -54,6 +54,10 @@ class A2_Shortcodes{
 
         /** Lista de anúncios por localidade */
         add_shortcode( 'advCarousel', [ $this, 'listCarouselAdvertisement'] );
+
+        /** Lista de anúncios genérica  */
+        add_shortcode( 'listAdvertisement', [ $this, 'listAdvertisement' ] );
+
     }
 
     /**
@@ -207,6 +211,30 @@ class A2_Shortcodes{
 
         ob_start();
         require plugin_dir_path( __DIR__ ) . 'public/partials/carousel/tpl-carousel-default.php';
+        return ob_get_clean();
+    }
+    
+    /**
+     * Lista de anúncios
+     * 
+     * Retorna uma lista com cards de anúncios
+     * O usuário pode passar atributos correspondentes a taxonomias disponíveis ao cpt
+     */
+    public function listAdvertisement( $atts )
+    {
+        $a = shortcode_atts( 
+            [
+                'pais'      => 'br',
+                'estado'    => null,
+                'cidade'    => null,
+                'qtd'       => 12,
+			], 
+            $atts
+        );
+        $query = $this->a2Query->advByPlanLevel($a['pais'], $a['estado'], $a['cidade'], $a['qtd']);
+        
+        ob_start();
+        require plugin_dir_path( __DIR__ ) . 'public/partials/tpl-adv-list.php';
         return ob_get_clean();
     }
 }
