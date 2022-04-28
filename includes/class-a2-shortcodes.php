@@ -19,6 +19,22 @@ class A2_Shortcodes{
     private $register;
 
     /**
+     * Instância da classe A2_Query
+     */
+    private $a2Query;
+
+    /**
+     * Instância da classe A2_Gallery
+     */
+    private $gallery;
+
+    /**
+     * Instância da classe A2_Profile
+     * Temporário para utilizaro método "getAge()"
+     */
+    private $profile;
+
+    /**
 	 * Inicialização da classe e configurações de hooks, filtros e propriedades.
 	 *
 	 * @since    1.0.0
@@ -26,7 +42,10 @@ class A2_Shortcodes{
     public function __construct()
     {
         $this->register = new A2_Register();
-
+        $this->a2Query  = new A2_Query();
+        $this->gallery  = new A2_Gallery();
+        $this->profile  = new A2_Profile();
+        
         /** Formulário de cadastro */
         add_shortcode( 'registerForm', [ $this, 'registerForm'] );
 
