@@ -427,4 +427,41 @@ class A2_Profile{
 
 		return $profileExists;
 	}
+
+	/**
+	 * Contagem da idade - Este método deve ser movido para uma nova classe chamada "A2_Profile_Helper()"
+	 * Coleta a idade salva no $post, formata o timestamp em data e faz a contagem
+	 * 
+	 * @param $postId 		Id da página de perfil ou anúncio
+	 * 
+	 * @return string/bool
+	 */
+	public function getAge( $postId )
+	{
+		if( is_null($postId) ) return;
+
+		$birthday 	= get_post_meta( $postId, '_profile_birthday', true );
+		$age 		= null;
+		if( $birthday ){
+			// Coletando datas atuais
+			$currDay 	= date ('d');
+			$currMonth 	= date ('m');
+			$currYear 	= date ('Y');
+
+			// Coletando data do perfil
+			$arr 	= explode('-', $birthday);
+			$bYear 	= $arr[0];
+			$bMonth = $arr[1];
+			$bDay 	= $arr[2];
+
+			$age 	= $currYear - $bYear;
+			if( $currMonth < $bMonth ){
+				$age--;
+			}elseif( $currMonth == $bMonth && $currDay <= $bDay ){
+				$age--;
+			}
+		}
+
+		return $age;
+	}
 }
