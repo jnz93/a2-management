@@ -68,9 +68,8 @@ class A2_Advertisement{
         $dataProfile    = $this->getDataProfile( $customerId );
 
 		# Pegar URL da página de perfil
-		$metaKeyProfilePage	= '_profile_page_id';
-		$profilePageId		= get_user_meta( $customerId, $metaKeyProfilePage, true );
-		$profilePageUrl		= '';
+		$profilePageId	= $dataProfile['_profile_page_id'];
+		$profilePageUrl	= null;
 		if( !is_wp_error($profilePageId) ){
 			$profilePageUrl = get_permalink( $profilePageId );
 		}
@@ -148,7 +147,13 @@ class A2_Advertisement{
 				} elseif( $key == '_profile_photo' ){
 					set_post_thumbnail( $postid, $value );
 				} else {
-					update_post_meta( $postid, $key, $value );
+					$notAllowed = [
+						'_profile_description',
+						'display_name'
+					];
+					if( !in_array( $key, $notAllowed ) ){
+						update_post_meta( $postid, $key, $value );
+					}
 				}
 			}
 
@@ -168,16 +173,16 @@ class A2_Advertisement{
 				$planLevel = null;
 				switch($sanitizePlan){
 					case 'plano-prata':
-						$planLevel = 0;
-						break;
-					case 'plano-ouro':
 						$planLevel = 1;
 						break;
-					case 'plano-diamante':
+					case 'plano-ouro':
 						$planLevel = 2;
 						break;
+					case 'plano-diamante':
+						$planLevel = 3;
+						break;
 					default:
-						$planLevel = -1;
+						$planLevel = 0;
 						break;
 				}
                 update_post_meta( $postid, $this->metaKeyPlanLevel, $planLevel );
@@ -190,6 +195,9 @@ class A2_Advertisement{
 
 			# Salvar a URL da página de perfil
 			update_post_meta( $postid, '_profile_url', $profilePageUrl );
+
+			$this->saveActivatedItem( $postid, $customerId );
+			$this->saveExpirationDate( $postid );
 		}
     }
 
@@ -262,6 +270,7 @@ class A2_Advertisement{
 
 		# Meta post
 		$metaKeys = array(
+			'_profile_page_id',
 			'_profile_whatsapp',
 			'_profile_birthday',
 			'_profile_description',
