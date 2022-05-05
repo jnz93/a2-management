@@ -111,6 +111,9 @@ class A2_Public {
 		
 		/** Action ajax p/ verificação de perfil */
 		add_action( 'wp_ajax_request_profile_evaluation', [ $this, 'requestProfileEvaluation' ] );
+
+		/** Action ajax p/ verificação de perfil */
+		add_action( 'wp_ajax_save_profile_evaluation_result', [ $this, 'saveProfileEvaluationResult' ] );
 	}
 
 	/**
@@ -649,4 +652,26 @@ class A2_Public {
 		die();
 	}
 
+	/**
+	 * Este método é responsável por salvar o resultado da avaliação
+	 * em uma requisição ajax
+	 * 
+	 */
+	public function saveProfileEvaluationResult()
+	{
+		// wp_verify_nonce( $nonce, $action ); # Verificar validade do código nonce
+		if( empty($_POST) ) die();
+		$nonce 		= $_POST['nonce'];
+		$adminId 	= $_POST['adminId'];
+		$result 	= $_POST['result'];
+		$profileId 	= $_POST['profile'];
+
+		# 0=reprovado / 1=aprovado
+		if($result == '1'){
+			$this->profile->markAsValid($profileId, $adminId);
+		} else {
+			$this->profile->markAsInvalid($profileId, $adminId);
+		}
+		die();
+	}
 }

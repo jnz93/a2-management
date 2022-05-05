@@ -479,6 +479,39 @@ function requestProfileEvaluation(){
 		});
 	}
 }
+
+/**
+ * Função que submete o resultado da verificação de perfil
+ * Esta função é chamada ao clicar em um dos botões 
+ * @param {*} document 
+ */
+function submitVerificationResult(el){
+
+	let result 	= el.attr('data-value'),
+		profile = el.attr('data-profile'),
+		adminId = el.attr('data-admin'),
+		payload = {
+			'action': 'save_profile_evaluation_result',
+			'nonce': publicAjax.nonce,
+			'adminId': adminId,
+			'profile': profile,
+			'result': result,
+		};
+
+	jQuery.ajax({
+		type: 'POST',
+		url: publicAjax.url,
+		data: payload,
+		error: function( request, status, error ) {
+			console.log(error);
+		},
+	})
+	.done( function(data){
+		console.log(data);
+		location.reload();
+	});
+}
+
 /**
  * Inicialização de funções e monitoramento de elementos
  * */
@@ -509,6 +542,12 @@ jQuery(document).ready( function(){
 	jQuery('#_verification_media').change( function(){
 		console.log('Upload da vídeo');
 		uploadMedia(jQuery(this));
+	});
+
+	// Manipulando o envio do resultado da avaliação de perfil
+	jQuery('#validationActionBar .btn').click( function(){
+		console.log('Enviar resultado');
+		submitVerificationResult(jQuery(this));
 	});
 
 	// Manipulando o upload da galeria
