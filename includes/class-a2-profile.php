@@ -464,4 +464,101 @@ class A2_Profile{
 
 		return $age;
 	}
+
+	/**
+	 * Método responsável por marcar o perfil sob análise
+	 * 
+	 * @param int 	$userId
+	 */
+	public function underAnalysis( $userId )
+	{
+		$key 	= '_verified_profile';
+		$value 	= 'under-analisys';
+		update_user_meta( $userId, $key, $value );
+	}
+
+	/**
+	 * Método responsável por marcar o perfil como verificado
+	 * 
+	 * @param int 	$userId
+	 * @param int 	$adminId
+	 */
+	public function markAsValid( $userId, $adminId )
+	{
+		$key 	= '_verified_profile';
+		$value 	= 'verified';
+		update_user_meta( $userId, $key, $value );
+		update_user_meta( $userId, '_rated_by', $adminId); # Salvar ID de avaliou
+	}
+
+	/**
+	 * Método responsável por marcar o perfil como reprovado
+	 * 
+	 * @param int 	$userId
+	 * @param int 	$adminId
+	 */
+	public function markAsInvalid( $userId, $adminId )
+	{
+		$key 	= '_verified_profile';
+		$value 	= 'invalid';
+		update_user_meta( $userId, $key, $value );
+		update_user_meta( $userId, '_rated_by', $adminId); # Salvar ID de avaliou
+	}
+
+	/**
+	 * Método retorna o status da verificação de perfil
+	 * 
+	 * @param int 	$userId
+	 */
+	public function validationStatus( $userId )
+	{
+		$key 	= '_verified_profile';
+		$value 	= get_user_meta( $userId, $key, true );
+
+		return $value;
+	}
+
+	/**
+	 * Método retorna a bagde conforme o resultado da verificação de perfil
+	 * 
+	 * @param int 	$userId
+	 * @return mixed $badge
+	 */
+	public function getCheckMark( $userId )
+	{
+		$key 	= '_verified_profile';
+		$value  = get_user_meta( $userId, $key, true );
+		$class 	= '';
+		$classIcon = '';
+		$sealText = '';
+		
+		switch($value){
+			case 'under-analisys':
+				$class = 'profile__seal--underAnalisys';
+				$classIcon = 'bi-clock-history';
+				$sealText = 'Perfil em Análise';
+				break;
+			case 'valid':
+				$class = 'profile__seal--verified';
+				$classIcon = 'bi-shield-check';
+				$sealText = 'Perfil Verificado';
+				break;
+			case 'invalid':
+				$class = 'profile__seal--invalid';
+				$classIcon = 'bi-exclamation-diamond';
+				$sealText = 'Perfil Reprovado';
+				break;
+			default:
+				$value = 'reprovado';
+		}
+		
+		$badge = '<div class="profile__stamps mb-2">
+					<span class="profile__seal '. $class .' d-inline-flex align-items-center">
+						<i class="bi '. $classIcon .' me-1"></i>
+						<span class="">'. __($sealText, 'textdomain') .'</span>
+					</span>	
+				</div>';
+
+		return $badge;
+	}
 }

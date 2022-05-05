@@ -638,7 +638,7 @@ class A2_Public {
 					update_post_meta( $postId, $key, wp_get_attachment_url($attach) );
 				}
 
-				$this->profile->underAnalisys($author);
+				$this->profile->underAnalysis($author);
 				$result = $postId;
 			}
 		} else {
