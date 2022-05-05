@@ -250,6 +250,51 @@ class A2_Admin {
 			'supports'           => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt' ),
 		);
 		register_post_type( 'a2_advertisement', $args );
+
+		unset($labels);
+		unset($args);
+
+		$labels = array(
+			'name'                  => _x( 'Solicitações de Análise de Perfil', 'Post type general name', 'textdomain' ),
+			'singular_name'         => _x( 'Solicitação de Análise de Perfil', 'Post type singular name', 'textdomain' ),
+			'menu_name'             => _x( 'Solicitações de Análise de Peril', 'Admin Menu text', 'textdomain' ),
+			'name_admin_bar'        => _x( 'Solicitações de Análise de Peril', 'Add New on Toolbar', 'textdomain' ),
+			'add_new'               => __( 'Adicionar nova(o)', 'textdomain' ),
+			'add_new_item'          => __( 'Adicionar nova(o)', 'textdomain' ),
+			'new_item'              => __( 'Nova(o) Análise', 'textdomain' ),
+			'edit_item'             => __( 'Editar Análise', 'textdomain' ),
+			'view_item'             => __( 'Visualizar Solicitação', 'textdomain' ),
+			'all_items'             => __( 'Todas as Solicitações', 'textdomain' ),
+			'search_items'          => __( 'Procurar Solicitações', 'textdomain' ),
+			'parent_item_colon'     => __( 'Parent Solicitações:', 'textdomain' ),
+			'not_found'             => __( 'Nenhuma Solicitação encontrada(o).', 'textdomain' ),
+			'not_found_in_trash'    => __( 'Nenhuma Solicitação encontrada(o) na lixeira.', 'textdomain' ),
+			'featured_image'        => _x( 'Thumb da Análise', 'Overrides the “Featured Image” phrase for this post type. Added in 4.3', 'textdomain' ),
+			'set_featured_image'    => _x( 'Definir Capa do Análise', 'Overrides the “Set featured image” phrase for this post type. Added in 4.3', 'textdomain' ),
+			'remove_featured_image' => _x( 'Remover Capa do Análise', 'Overrides the “Remove featured image” phrase for this post type. Added in 4.3', 'textdomain' ),
+			'use_featured_image'    => _x( 'Usar como Capa do Análise', 'Overrides the “Use as featured image” phrase for this post type. Added in 4.3', 'textdomain' ),
+			'archives'              => _x( 'Arquivos de Análises', 'The post type archive label used in nav menus. Default “Post Archives”. Added in 4.4', 'textdomain' ),
+			'insert_into_item'      => _x( 'Inserir Análise', 'Overrides the “Insert into post”/”Insert into page” phrase (used when inserting media into a post). Added in 4.4', 'textdomain' ),
+			'uploaded_to_this_item' => _x( 'Carregado para este Análise', 'Overrides the “Uploaded to this post”/”Uploaded to this page” phrase (used when viewing media attached to a post). Added in 4.4', 'textdomain' ),
+			'filter_items_list'     => _x( 'Filtrar lista de Análises', 'Screen reader text for the filter links heading on the post type listing screen. Default “Filter posts list”/”Filter pages list”. Added in 4.4', 'textdomain' ),
+			'items_list_navigation' => _x( 'Navegação da lista de Análises', 'Screen reader text for the pagination heading on the post type listing screen. Default “Posts list navigation”/”Pages list navigation”. Added in 4.4', 'textdomain' ),
+			'items_list'            => _x( 'Lista de Análises', 'Screen reader text for the items list heading on the post type listing screen. Default “Posts list”/”Pages list”. Added in 4.4', 'textdomain' ),
+		);
+		$args = array(
+			'labels'             => $labels,
+			'public'             => false,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => true,
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'analise' ),
+			'capability_type'    => 'post',
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'editor', 'author' ),
+		);
+		register_post_type( 'a2_analysis', $args );
 		
 	}
 
