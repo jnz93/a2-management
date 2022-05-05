@@ -108,6 +108,9 @@ class A2_Public {
 		
 		/** Action ajax p/ upload de vídeo */
 		add_action( 'wp_ajax_upload_video', [ $this, 'uploadMedia' ] );
+		
+		/** Action ajax p/ verificação de perfil */
+		add_action( 'wp_ajax_request_profile_evaluation', [ $this, 'requestProfileEvaluation' ] );
 	}
 
 	/**
@@ -585,4 +588,65 @@ class A2_Public {
 		echo $attachData;
 		die();
     }
+
+	/**
+	 * Este método recebe os documentos de validação de perfil via ajax
+	 * e cria uma nova solicitação de avaliação
+	 * 
+	 */
+	public function requestProfileEvaluation()
+	{
+		// wp_verify_nonce( $nonce, $action ); # Verificar validade do código nonce
+		if( empty($_POST) ) die();
+
+		$attachFrontDoc = $_POST['frontDoc'];
+		$attachBackDoc 	= $_POST['backDoc'];
+		$attachMedia	= $_POST['media'];
+
+		$result 		= null;
+		if( strlen($attachFrontDoc) > 0 && strlen($attachBackDoc) > 0 && strlen($attachMedia) > 0 ){
+			$attachments = [
+				'_front_doc' 			=> $attachFrontDoc,
+				'_back_doc'				=> $attachBackDoc,
+				'_verification_media' 	=> $attachMedia
+			];
+
+			$postType	= 'a2_analysis';
+			$status		= 'publish';
+			$author 	= get_current_user_id();
+			$profileName= get_user_meta( $author, 'first_name', true ) . ' ' . get_user_meta( $author, 'last_name', true );
+			$title 		= 'Análise perfil - ' . $profileName;
+			$content	= 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed varius velit vulputate risus pellentesque, id consectetur urna egestas';
+			$postarr	= [
+				'post_type'		=> $postType,
+				'post_status'	=> $status,
+				'post_title'	=> $title,
+				'post_author'	=> $author,
+				'post_content'	=> $content,
+			];
+			$postId = wp_insert_post( $postarr );
+
+			if( !is_wp_error($postId) ){
+				foreach( $attachments as $key => $attach ){
+					# Setando o 'post_parent' do arquivo
+					wp_update_post([
+						'ID'			=> $attach,
+						'post_parent'	=> $postId,
+					]);
+
+					# Salvando a URL dos arquivos no $postId
+					update_post_meta( $postId, $key, wp_get_attachment_url($attach) );
+				}
+
+				$this->profile->underAnalisys($author);
+				$result = $postId;
+			}
+		} else {
+			$result = 'Documentos inválidos. Tente novamente';
+		}
+
+		echo $result;
+		die();
+	}
+
 }

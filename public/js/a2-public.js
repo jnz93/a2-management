@@ -431,6 +431,54 @@ function submitItemsToRemoveFromGallery(){
 	}
 }
 
+
+/**
+ * Função responsável por criar o payload de verificação
+ * e submter os dados via ajax;
+ * 
+ * @param {*} el
+ */
+function requestProfileEvaluation(){
+
+	let frontDocId 	= jQuery('#_front_of_document_id').val(),
+		backDocId 	= jQuery('#_back_of_document_id').val(),
+		media 		= jQuery('#_verification_media_id').val(),
+		payload 	= {
+			'action': 'request_profile_evaluation',
+			'frontDoc': frontDocId,
+			'backDoc': backDocId,
+			'media': media
+		};
+
+	// var modal = document.getElementById('exampleModal');
+	var myModalEl 	= document.getElementById('exampleModal'),
+		modal 		= bootstrap.Modal.getInstance(myModalEl);
+	
+	var toastSuccess = document.getElementById('toast-success'),
+		toast = new bootstrap.Toast(toastSuccess);
+
+	// Call ajax
+	if( Object.values(payload).length > 0 ){
+		jQuery.ajax({
+			type: 'POST',
+			url: publicAjax.url,
+			data: payload,
+			error: function( request, status, error ) {
+				console.log(error);
+			},
+		})
+		.done( function(data){
+			console.log(data);
+
+			if(data){
+				modal.remove();
+				toast.show();
+			} else {
+
+			}
+		});
+	}
+}
 /**
  * Inicialização de funções e monitoramento de elementos
  * */
@@ -478,6 +526,10 @@ jQuery(document).ready( function(){
 		submitItemsToRemoveFromGallery();
 	});
 
+	// Submetendo a solicitação de verificação de perfil
+	jQuery('#submitVerificationProfile').click( function(){
+		requestProfileEvaluation();
+	});
 	// Inicializando Tooltips
 	var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
 	var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
