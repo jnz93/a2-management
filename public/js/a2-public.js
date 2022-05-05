@@ -388,6 +388,52 @@ function submitItemsToRemoveFromGallery(){
 	}
 }
 
+/**
+ * Função responsável por upload de arquivos de vídeo via ajax
+ * 
+ * @param {*} el 
+ */
+ function uploadMedia(el){
+
+	let formData 	= new FormData(),
+		fileList 	= el[0].files,
+		img 		= fileList[0],
+		viewEl 		= el.parents('div.mb-3').siblings('div.thumbnail-view'),
+		inputId 	= el.parent().siblings('input'),
+		spinner 	= viewEl.children('div.spinner-border');
+
+	formData.append('action', 'upload_video');
+	formData.append('file', img);
+	
+	if (fileList.length > 0) {
+		jQuery.ajax({
+			type: 'POST',
+			url: publicAjax.url,
+			processData: false,
+			contentType: false,
+			data: formData,
+			beforeSend: function () {
+				spinner.removeClass('d-none');
+			},
+			success: function(response) {
+				spinner.addClass('d-none');
+			},
+			error: function( request, status, error ) {
+				console.log(status);
+				console.log(request);
+			},
+		})
+		.done(function( data ){
+			data = JSON.parse(data);
+			applyAttachOnElement( data.attachUrl, viewEl );
+			inputId.val(data.attachId);
+		});
+	}
+}
+
+/**
+ * Inicialização de funções e monitoramento de elementos
+ * */
 jQuery(document).ready( function(){
 	// Manipulando o upload da foto de perfil
 	jQuery('#_select_profile_photo').change( function(){
@@ -397,6 +443,24 @@ jQuery(document).ready( function(){
 	// Manipulando o upload da foto de capa
 	jQuery('#_select_profile_cover').change( function(){
 		uploadImage(jQuery(this));
+	});
+	
+	// Manipulando o upload da frente do documento
+	jQuery('#_front_of_document').change( function(){
+		console.log('Upload da foto');
+		uploadImage(jQuery(this));
+	});
+
+	// Manipulando o upload do verso do documento
+	jQuery('#_back_of_document').change( function(){
+		console.log('Upload da foto');
+		uploadImage(jQuery(this));
+	});
+	
+	// Manipulando o upload do verso do documento
+	jQuery('#_verification_media').change( function(){
+		console.log('Upload da vídeo');
+		uploadMedia(jQuery(this));
 	});
 
 	// Manipulando o upload da galeria

@@ -105,6 +105,9 @@ class A2_Public {
 		
 		/** Action ajax p/ retorno dos children terms */
 		add_action( 'wp_ajax_remove_gallery_items', [ $this, 'removeItemsFromGallery' ] );
+		
+		/** Action ajax p/ upload de vídeo */
+		add_action( 'wp_ajax_upload_video', [ $this, 'uploadMedia' ] );
 	}
 
 	/**
@@ -543,4 +546,43 @@ class A2_Public {
 		
 		die();
 	}
+
+	/**
+	 * Método responsável pelo upload de vídeo via ajax
+	 * 
+	 * @return JSON $attachData
+	 */
+	public function uploadMedia()
+    {
+        # Checking if media_handle_sideload exists
+        if( !function_exists( 'media_handle_sideload' ) ){
+            require_once( plugin_dir_path( ABSPATH ) . 'public_html/wp-admin/includes/file.php' );
+            require_once( plugin_dir_path( ABSPATH ) . 'public_html/wp-admin/includes/image.php' );
+            require_once( plugin_dir_path( ABSPATH ) . 'public_html/wp-admin/includes/media.php' ); 
+        }
+		
+		$postId 			= 0;
+        $file               = $_FILES['file'];
+        $desc               = '';
+		$attachData			= [];
+        $allowedMimeTypes   = array(
+            'mpeg'  		=> 'video/mpeg',
+            'ogv'  			=> 'video/ogg',
+            'webm'			=> 'video/webm',
+        );
+        $overrides          = array(
+            'test_form'     => false,
+            'mimes'         => $allowedMimeTypes,
+        );
+        $attachId 			= media_handle_sideload( $file, $postId, $desc, $overrides );
+
+		if( !is_wp_error( $attachId ) ){
+			$attachData['attachId'] 	= $attachId;
+			$attachData['attachUrl'] 	= wp_get_attachment_url( $attachId );
+		}
+		$attachData = json_encode( $attachData );
+
+		echo $attachData;
+		die();
+    }
 }
