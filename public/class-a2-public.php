@@ -290,8 +290,9 @@ class A2_Public {
 
 			# Adição de novos
 			$newLinks = [
-				'gallery'			=> 'Galeria',
 				'edit-account'		=> 'Editar Perfil',
+				'gallery'			=> 'Galeria',
+				'advertisements'	=> 'Anúncios',
 				'orders'			=> 'Faturas',
 				'change-password' 	=> 'Alterar Senha',
 			];
@@ -360,7 +361,8 @@ class A2_Public {
 
 		# Array com endpoints a serem adicionados - Modelo: 'endpoint' => places
 		$newEndpoints = array(
-			'gallery'	=> EP_ROOT | EP_PAGES,
+			'gallery'			=> EP_ROOT | EP_PAGES,
+			'advertisements'	=> EP_ROOT | EP_PAGES,
 		);
 
 		if( !empty($newEndpoints) ){
@@ -378,6 +380,7 @@ class A2_Public {
 	public function addCustomQueryVars( $vars )
 	{
 		$vars[] = 'gallery';
+		$vars[] = 'advertisements';
 
 		return $vars;
 	}
