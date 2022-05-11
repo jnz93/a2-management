@@ -513,6 +513,57 @@ function submitVerificationResult(el){
 }
 
 /**
+ * Filtro para a lista de cidades ao digitar no input de busca
+ * 
+ */
+function filterList() {
+    var input 	= document.getElementById('citiesFilter'),
+		filter 	= input.value.toUpperCase(),
+		ul		= document.getElementById("citiesList"),
+		li 	 	= ul.getElementsByTagName('a'),
+		citiesList 	= jQuery('#citiesList'),
+		fakeList 	= jQuery('#fakeList'),
+		a, i, txtValue;
+
+	if( filter.length > 2 ){
+		citiesList.removeClass('d-none');
+		fakeList.addClass('d-none');
+	} else {
+		citiesList.addClass('d-none');
+	}
+
+    for (i = 0; i < li.length; i++) {
+		a 			= li[i];
+		txtValue 	= a.textContent || a.innerText;
+      
+		// split filter by spaces, gives ["app", "MN"] in your example  
+		let filters = filter.split(" ") 
+
+		// remove the empty filters (if your filter string 
+		// starts or ends by a space) since they are source of errors
+
+		// Array.filter takes in parameter a function returning a boolean
+		// it create a new array containing only element where 
+		// the function returned truthy value
+
+		// here we return the length of the string which is falsy (== 0) for "" 
+		// and truthy for every other string (!= 0)
+		filters = filters.filter(f => f.length)   
+
+		let shouldDisplay = true
+		// test each filter and store true only if string contains all filter
+		filters.forEach(filt => {
+			shouldDisplay = shouldDisplay && txtValue.toUpperCase().includes(filt)
+		})
+		
+		// update visibility
+		// set visible if the string include all filters
+		// or if there is no filter
+		li[i].style.display = (shouldDisplay || filters.length === 0) ? "" : "none";
+    }
+}
+
+/**
  * Inicialização de funções e monitoramento de elementos
  * */
 jQuery(document).ready( function(){
@@ -607,4 +658,9 @@ jQuery(document).ready( function(){
 		autoplay: true,
 		autoplayHoverPause: true,
 	});
+
+	/** Habilitando Filtro de cidades no campo de busca */
+	jQuery('#citiesFilter').keyup( function() {
+		filterList(); 
+	})
 });

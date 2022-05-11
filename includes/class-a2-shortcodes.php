@@ -58,6 +58,8 @@ class A2_Shortcodes{
         /** Lista de anúncios genérica  */
         add_shortcode( 'listAdvertisement', [ $this, 'listAdvertisement' ] );
 
+        /** Componente de busca */
+        add_shortcode( 'buscaCidade', [ $this, 'searchComponent' ] );
     }
 
     /**
@@ -235,6 +237,29 @@ class A2_Shortcodes{
         
         ob_start();
         require plugin_dir_path( __DIR__ ) . 'public/partials/tpl-adv-list.php';
+        return ob_get_clean();
+    }
+
+    /**
+     * Componente de busca
+     * 
+     * Retorna um componente html de busca por cidades
+     */
+    public function searchComponent( $atts )
+    {
+        $a = shortcode_atts(
+            [
+                'tipo'  => 'cidade',
+                'qtd'   => 5
+            ],
+            $atts
+        );
+
+        $terms = $this->a2Query->getCities();
+
+        ob_start();
+        require plugin_dir_path( __DIR__ ) . 'public/partials/tpl-search-component.php';
+        
         return ob_get_clean();
     }
 }
