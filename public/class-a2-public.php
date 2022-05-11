@@ -114,10 +114,24 @@ class A2_Public {
 
 		/** Action ajax p/ verificação de perfil */
 		add_action( 'wp_ajax_save_profile_evaluation_result', [ $this, 'saveProfileEvaluationResult' ] );
-		
+
+		/** Action para atualizar a lista de anúncios ativos */
+		add_action( 'publish_to_draft', [ $this, 'removeActivatedAdvertisement' ], 10, 1 );
+
 		/** Alterando a main query para remover anúncios expirados */
 		add_action( 'pre_get_posts', [ $this, 'filterExpiredAdvertisement' ], 10, 1 );
 	}
+
+	// Remover anúncio da lista de ativados
+	public function removeActivatedAdvertisement( $post )
+	{
+		if( $post->post_type !== 'a2_advertisement' ) return;
+
+		$customerId	= $post->post_author;
+		$postId 	= $post->ID;
+		$this->Advertisement->removeActivatedItem( $postId, $customerId );
+	}
+
 
 	// Manipulando a consulta para remover anúncios expirados
 	public function filterExpiredAdvertisement( $query )
