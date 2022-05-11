@@ -54,6 +54,12 @@ class A2_Admin {
 	 * The profile Class
 	 */
 	private $profile;
+
+	/**
+	 * The advertisement Class
+	 */
+	private $advertisement;
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -68,6 +74,7 @@ class A2_Admin {
 		$this->register 	= new A2_Register();
 		$this->shortcodes 	= new A2_Shortcodes();
 		$this->profile 		= new A2_Profile();
+		$this->advertisement = new A2_Advertisement();
 
 		/**
 		 * Adição do menu na dashboard admin
