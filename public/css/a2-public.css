@@ -156,3 +156,14 @@
 .carousel-advertisement .owl-dots .active{
     background: rgba(255, 255, 255, .7);
 }
+
+/* Hack puxar header pra frente */
+.elementor-element-4992af6{
+    z-index: 9999 !important;
+}
+
+/* Hack remover background de inputs focados */
+.form-control:focus{
+    background: none;
+    background-image: none !important;
+}
