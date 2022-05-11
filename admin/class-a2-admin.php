@@ -90,6 +90,13 @@ class A2_Admin {
 		 * Custom taxonomies
 		 */
 		add_action( 'init', [ $this, 'registerCustomTaxonomies' ] );
+
+		/** 
+		 * Action para criação do anúncio 
+		 * Atualmente estamos utilizando o status "completed", mas o ideal é que seja o "processing"
+		 */
+		add_action( 'woocommerce_order_status_changed', [ $this, 'paymentComplete' ], 10, 4 );
+
 	}
 
 	/**
@@ -633,5 +640,21 @@ class A2_Admin {
 			'rewrite'           => array( 'slug' => 'nivel' ),
 		);
 		register_taxonomy( 'advertisement_level', array( 'a2_advertisement' ), $args );
+	}
+
+	/**
+	 * Se o status de pedido for alterado para "processing" automaticamente é setado para "completed"
+	 * Esse é um hack útil para executar a publicação de anúncios. Uma vez que o hook "woocommerce_order_status_processing" não funcionava para isso
+	 * 
+	 * @param int 		$order_id
+	 * @param string	$old_status
+	 * @param string 	$new_status
+	 * @param object 	$order
+	 */
+	public function paymentComplete( $order_id, $old_status, $new_status, $order )
+	{
+		if( $new_status == 'processing' ){
+			$order->update_status( 'completed' );
+		}
 	}
 }
