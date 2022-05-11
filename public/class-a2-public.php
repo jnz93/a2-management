@@ -72,16 +72,16 @@ class A2_Public {
 		$this->Advertisement = new A2_Advertisement();
 
 		/** Redirect para página de login Custom */
-		// add_action( 'init', [ $this, 'redirectLoginPage' ] ); # Funcionando mas desativado em desenvolvimento
+		add_action( 'init', [ $this, 'redirectLoginPage' ] ); # Funcionando mas desativado em desenvolvimento
 
 		/** Tratamento para quando há falhas no login */
-		// add_action( 'wp_login_failed', [ $this, 'loginFailed'] );
+		add_action( 'wp_login_failed', [ $this, 'loginFailed'] );
 
 		/** Tratamento para quando username ou password estão vazios */
-		// add_action( 'authenticate', [ $this, 'verifyUsernamePassword'], 10, 3 );
+		add_action( 'authenticate', [ $this, 'verifyUsernamePassword'], 10, 3 );
 
 		/** Redirecionamento quando faz logout */
-		// add_action( 'wp_logout', [ $this, 'customLogoutPage'] );
+		add_action( 'wp_logout', [ $this, 'customLogoutPage'] );
 
 		/** Filtro para customização do menu do painel */
 		add_filter( 'woocommerce_account_menu_items', [ $this, 'customizeUsersDashboardMenu' ] );
