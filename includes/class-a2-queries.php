@@ -181,4 +181,57 @@ class A2_Query{
 
         return $query;
     }
+
+    /**
+     * Retorna a lista de cidades registradas no site
+     * 
+     * @param
+     * @return  array       lista de cidades
+     */
+    public function getCities()
+    {
+        $taxonomy   = 'profile_localization';
+        $statesBRObj   = get_terms(
+            [
+                'taxonomy'      => $taxonomy,
+                'hide_empty'    => false,
+                'orderby'       => 'name',
+                'order'         => 'ASC',
+                'parent'        => 195, # ID Brasil(depois vamos precisar organizar por países assim como por estado);
+            ]
+        );
+        
+        // Pegar as cidades filhas dos $statesBR
+        $citiesBRObj = array();
+        if( !empty($statesBR) ){
+            foreach( $statesBR as $state ){
+                $slug   = $state['slug'];
+                $parent = $state['id'];
+
+                $citiesBRObj[$slug] = get_terms(
+                    [
+                        'taxonomy'      => $taxonomy,
+                        'hide_empty'    => false,
+                        'orderby'       => 'name',
+                        'order'         => 'ASC',
+                        'parent'        => $parent
+                    ]
+                );
+            }
+        }
+
+        // Tratamento das cidades
+        $citiesBR = array();
+        if( !empty($citiesBRObj) ){
+            foreach( $citiesBRObj as $state => $cities ){
+                if( !empty($cities) ){
+                    foreach( $cities as $cityObj ){
+                        $citiesBR[] = $cityObj->name . ' - ' . strtoupper($state);
+                    }
+                }
+            }
+        }
+
+        return $citiesBR;
+    }
 }

@@ -115,6 +115,12 @@ class A2 {
 		 * Classe reponsável por definir métodos que fazem tratativas de cadsatro de usuários 
 		 * e novos tipos de usuários
 		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-a2-queries.php';
+
+		/**
+		 * Classe reponsável por definir métodos que fazem tratativas de cadsatro de usuários 
+		 * e novos tipos de usuários
+		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-a2-register.php';
 
 		/**
