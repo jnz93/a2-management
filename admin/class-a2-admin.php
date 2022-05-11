@@ -96,6 +96,7 @@ class A2_Admin {
 		 * Atualmente estamos utilizando o status "completed", mas o ideal é que seja o "processing"
 		 */
 		add_action( 'woocommerce_order_status_changed', [ $this, 'paymentComplete' ], 10, 4 );
+		add_action( 'woocommerce_order_status_completed', [ $this, 'createAdvertisement' ], 10, 1 );
 
 	}
 
@@ -656,5 +657,15 @@ class A2_Admin {
 		if( $new_status == 'processing' ){
 			$order->update_status( 'completed' );
 		}
+	}
+	
+	/**
+	 * Chamada do método de criação de anúncio
+	 * 
+	 * @param int 	$order_id
+	 */
+	public function createAdvertisement( $order_id )
+	{
+		$this->advertisement->create( $order_id );
 	}
 }
