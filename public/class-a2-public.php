@@ -114,8 +114,31 @@ class A2_Public {
 
 		/** Action ajax p/ verificação de perfil */
 		add_action( 'wp_ajax_save_profile_evaluation_result', [ $this, 'saveProfileEvaluationResult' ] );
+		
+		/** Alterando a main query para remover anúncios expirados */
+		add_action( 'pre_get_posts', [ $this, 'filterExpiredAdvertisement' ], 10, 1 );
 	}
 
+	// Manipulando a consulta para remover anúncios expirados
+	public function filterExpiredAdvertisement( $query )
+	{
+		if( is_admin() ) return;
+
+		if( $query->is_main_query() && is_post_type_archive( 'a2_advertisement' ) ){
+			date_default_timezone_set('America/Sao_Paulo'); # Setando GMT padrão
+
+			$now = time();
+			$metaquery = array(
+				array(
+					 'key' 		=> '_expiration_date',
+					 'value' 	=> $now,
+					 'type' 	=> 'NUMERIC',
+					 'compare' 	=> '<'
+				)
+			);
+			$query->set( 'meta_query', $metaquery );
+		}
+	}
 	/**
 	 * Register the stylesheets for the public-facing side of the site.
 	 *
