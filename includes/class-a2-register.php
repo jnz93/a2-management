@@ -125,7 +125,7 @@ class A2_Register{
                 # Disparo do e-mail
                 retrieve_password($firstName);
                 
-                echo 'Pré-cadastro completo! Enviamos um e-mail com instruções para configuração da senha. Acesse seu ' . $email . ' e clique no link enviado para finalizar o cadastro.'; 
+                echo '<p>Pré-cadastro completo! Enviamos um e-mail com instruções para configuração da senha. Acesse seu ' . $email . ' e clique no link enviado para finalizar o cadastro.</p>'; 
             } else {
                 echo 'Erro ao cadastrar </br>';
                 var_dump($userId);
@@ -146,53 +146,49 @@ class A2_Register{
     {
         $form = '
         <div id="selectPerfil" class="">
-            <h3>Selecione seu perfil</h3>
-            <a class="waves-effect waves-light btn-large" onclick="showFormScort()">Sou Acompanhante</a>
-            <a class="waves-effect waves-light btn-large" onclick="showFormFollower()">Sou Seguidor</a>
+            <h4 class="mb-1">'. __('Selecione o perfil', 'textdomain') .'</h4>
+            <p class="text-black-50">'. __('Escolha qual tipo de perfil deseja criar na plataforma.') .'</p>
+            <div class="row mt-2">
+                <div class="col-6">
+                    <a class="btn btn-outline-secondary" style="width: 100%" onclick="showFormScort()">'. __( 'Quero ser </b>Acompanhante</b>', 'textdomain' ) .'</a>
+                </div>
+                <div class="col-6">
+                    <a class="btn btn-outline-secondary" style="width: 100%" onclick="showFormFollower()"> '. __( 'Quero ser </b>Seguidor(a)</b>', 'textdomain' ).'</a>
+                </div>
+            </div>
         </div>
 
-        <div id="registrationForm" class="row hide">
-            <form class="col s12" action="'. $_SERVER['REQUEST_URI'] .'" method="post">
+        <div id="registrationForm" class="row mt-5 mb-5 d-none">
+            <form class="col-12" action="'. $_SERVER['REQUEST_URI'] .'" method="post">
                 <div class="row">
-                    <div class="input-field col s6">
-                        <input id="first_name" name="first_name" class="validate" type="text" value="'. ( isset( $_POST['first_name'] ) ? $firstName : null  ) .'">
-                        <label for="first_name">Nome</label>
+                    <div class="col-6 mb-3">
+                        <label for="first_name" class="form-label">Nome</label>
+                        <input id="first_name" name="first_name" class="form-control" type="text" value="'. ( isset( $_POST['first_name'] ) ? $firstName : null  ) .'">
                     </div>
-                    <div class="input-field col s6">
-                        <input id="last_name" name="last_name" class="validate" type="text"  value="'. ( isset( $_POST['last_name'] ) ? $lastName : null  ) .'">
-                        <label for="last_name">Sobrenome</label>
+                    <div class="col-6 mb-3">
+                        <label for="last_name" class="form-label">Sobrenome</label>
+                        <input id="last_name" name="last_name" class="form-control" type="text"  value="'. ( isset( $_POST['last_name'] ) ? $lastName : null  ) .'">
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input id="email" name="email" class="validate" type="email" value="'. ( isset( $_POST['email'] ) ? $email : null  ) .'">
-                        <label for="email">E-mail</label>
+                    <div class="col-6 mb-3">
+                        <label for="email" class="form-label">E-mail</label>
+                        <input id="email" name="email" class="form-control" type="email" value="'. ( isset( $_POST['email'] ) ? $email : null  ) .'">
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="input-field col s12">
-                        <label>
-                            <input id="terms_agree" name="terms_agree" class="validate" type="checkbox"/>
-                            <span><b>Concordo com os <a href="#">termos de uso e políticas de privacidade</a> da plataforma A2 Acompanhantes.</b></span>
-                        </label>
+                <div class="row mb-3">
+                    <div class="form-check form-switch ms-2 col-12">
+                        <input class="form-check-input" type="checkbox" role="switch" name="terms_agree" id="terms_agree">
+                        <label class="form-check-label" for="terms_agree">'. __('Concordo com os <b><a href="#">termos de uso e políticas de privacidade</a></b> da plataforma A2 Acompanhantes.', 'textdomain') .'</label>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="input-field col s12">
-                        <label>
-                            <input id="age_confirm" name="age_confirm" class="validate" type="checkbox"/>
-                            <span>Declaro que <b>sou maior de 18 anos.</b></span>
-                        </label>
+                    <div class="form-check form-switch ms-2 col-12">
+                        <input class="form-check-input" type="checkbox" role="switch" name="age_confirm" id="age_confirm">
+                        <label class="form-check-label" for="age_confirm">'. __('Declaro que <b>sou maior de 18 anos</b>.', 'textdomain') .'</label>
                     </div>
                 </div>
 
                 <input id="user_type" name="user_type" type="hidden" value="'. ( isset( $_POST['user_type'] ) ? $userType : null ) .'">
-                <button class="waves-effect waves-light btn-large" type="submit" name="submit" value="registerUser">Cadastrar
-                    <i class="material-icons right">send</i>
-                </button>
+                <button class="btn btn-primary btn-lg" type="submit" name="submit" value="registerUser">'. __('Cadastrar', 'textdomain') .'<i class="bi bi-send-fill ms-2"></i></button>
             </form>
         </div>
 
@@ -202,7 +198,7 @@ class A2_Register{
                     buttonsWrapper  = jQuery("#selectPerfil"),
                     typeUser        = jQuery("#user_type");
 
-                formWrapper.removeClass("hide");
+                formWrapper.removeClass("d-none");
                 buttonsWrapper.hide();
                 typeUser.val("a2_scort");
             }
@@ -212,7 +208,7 @@ class A2_Register{
                     buttonsWrapper = jQuery("#selectPerfil"),
                     typeUser        = jQuery("#user_type");
 
-                formWrapper.removeClass("hide");
+                formWrapper.removeClass("d-none");
                 buttonsWrapper.hide();
                 typeUser.val("a2_follower");
             }
