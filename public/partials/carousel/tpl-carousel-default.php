@@ -1,10 +1,10 @@
 <div class="container mb-5">
     <div class="row mb-4">
-        <div class="carousel__title col-8" style="color: #fff; opacity: .8">
+        <div class="carousel__title col-xs-12 col-sm-12 col-md-8 col-lg-8 mb-2 mb-md-0" style="color: #fff; opacity: .8">
             <span class="fs-1 text-capitalize"><?php echo $titleCarousel; echo strlen($subtitleCarousel) > 1 ? ',' : '' ; ?></span>
             <span class="fs-6 fw-bold text-uppercase"><?php echo $subtitleCarousel ?></span>
         </div>
-        <div class="d-flex justify-content-end col-4">
+        <div class="d-flex justify-content-md-end col-xs-12 col-sm-12 col-md-4 col-lg-4">
             <?php if( $totalPosts > 0 ): ?>
                 <a href="<?php echo $pageLocationLink; ?>" class="btn btn-outline-danger position-relative">
                     <?php echo __( 'Acompanhantes em', 'textdomain' ) .' <b>'. ucwords($titleCarousel) .'</b>'; ?>
