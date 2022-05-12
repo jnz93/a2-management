@@ -24,12 +24,12 @@
         <div class="advCard__textColor--primary card-body">
             <a href="<?php echo $pageProfileUrl; ?>" class="text-decoration-none">
                 <div class="row d-flex justify-content-center">
-                    <div class="col-9">
+                    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9">
                         <h6 class="card-title fs-3 fw-bold"><?php echo $title; ?></h6>
                         <p class="advCard__text card-text" style="opacity: .8"><?php echo wp_trim_words( $content, 16, '...' ); ?></p>
                         <span class="col-7 fs-3 fw-bold text-center p-0"><?php echo __('R$ ', 'textdomain' ) . $dataProfile['_profile_cache_hour']; ?><span class="fs-6 fw-regular">/h</span></span>
                     </div>
-                    <div class="col-3 ps-0 d-flex flex-column align-items-start">
+                    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 ps-0 d-flex flex-column align-items-start">
                         <?php if( $havePlace == 'yes' ) : ?>
                             <span class="p-0 mt-1 mb-1 text-capitalize" data-bs-toggle="tooltip" data-bs-placement="left" title="<?php _e( 'Com local', 'textdomain' ); ?>"><i class="advCard__icon advCard__icon--gold bi bi-house-heart-fill"></i> <?php _e( 'com local', 'textdomain' );?></span>
                         <?php endif; ?>
