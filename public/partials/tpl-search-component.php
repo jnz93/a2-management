@@ -1,7 +1,7 @@
 <script>
     var cities = <?php echo json_encode($terms); ?>;
 </script>
-<div class="bg-light rounded-3 shadow-lg p-5 mb-5" id="searchComponent">
+<div class="searchComponent__container bg-light rounded-3 shadow-lg p-lg-5 mb-lg-5" id="searchComponent">
     <div class="container">
         <div class="row">
             <div class="searchHeader">
@@ -10,7 +10,7 @@
             </div>
             <div class="searchBody position-relative">
                 <div class="input-group input-group-lg">
-                    <input type="text" class="form-control form-control-lg" id="citiesFilter" placeholder="<?php _e('Digite 3 caracteres para encontrar sua Cidade', 'textdomain'); ?>" style="width: 680px;" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+                    <input type="text" class="searchInput form-control form-control-lg" id="citiesFilter" placeholder="<?php _e('Digite 3 caracteres para encontrar sua Cidade', 'textdomain'); ?>" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
                     <span class="input-group-text"><i class="bi bi-search-heart-fill"></i></span>
                 </div>
             

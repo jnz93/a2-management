@@ -178,3 +178,22 @@ body.woocommerce-account nav.woocommerce-MyAccount-navigation ul li.woocommerce-
 body.woocommerce-account nav.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link--change-password a:before{
     content: "\f181";
 }
+
+/* CSS RULES FOR DESKTOP */
+@media only screen and (min-width: 601px) {
+    /* Search Component */
+    .searchInput{
+        width: 680px;
+    }
+}
+
+/* CSS RULES FOR MOBILE */
+@media only screen and (max-width: 600px) {
+    /* Search Component */
+    .searchComponent__container{
+        padding: 24px 8px;
+    }
+    .searchInput{
+        width: auto;
+    }
+}
