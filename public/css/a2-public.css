@@ -167,3 +167,14 @@
     background: none;
     background-image: none !important;
 }
+
+/* Adicionando ícones aos menus do painel */
+body.woocommerce-account nav.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link--gallery a:before{
+    content: "\f161";
+}
+body.woocommerce-account nav.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link--advertisements a:before{
+    content: "\f181";
+}
+body.woocommerce-account nav.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link--change-password a:before{
+    content: "\f181";
+}
