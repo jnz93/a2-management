@@ -158,8 +158,8 @@
 }
 
 /* Hack puxar header pra frente */
-.elementor-element-4992af6{
-    z-index: 9999 !important;
+.elementor-sticky--active{
+    z-index: 99 !important;
 }
 
 /* Hack remover background de inputs focados */
