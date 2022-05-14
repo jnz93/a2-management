@@ -125,7 +125,7 @@ class A2_Register{
                 # Disparo do e-mail
                 retrieve_password($firstName);
                 
-                echo '<p>Pré-cadastro completo! Enviamos um e-mail com instruções para configuração da senha. Acesse seu ' . $email . ' e clique no link enviado para finalizar o cadastro.</p>'; 
+                echo '<div class="alert alert-success" role="alert">'. __('Cadastro efetuado com <b>SUCESSO</b>! Enviamos um e-mail com instruções para configuração da senha de acesso. Basta clicar no link enviado para o endereço <b>'. $email .'</b> e configurar a senha desejada. Após isso basta acessar a página de login para acessar o painel da sua conta. <span>Verifique a <b>Caixa de entrada</b> e também a <b>Lixeira</b></span>', 'textdomain'). '</div> <script>jQuery("#selectPerfil").addClass("d-none")</script>'; 
             } else {
                 echo 'Erro ao cadastrar </br>';
                 var_dump($userId);
