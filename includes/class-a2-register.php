@@ -150,10 +150,10 @@ class A2_Register{
             <p class="text-black-50">'. __('Escolha qual tipo de perfil deseja criar na plataforma.') .'</p>
             <div class="row mt-2">
                 <div class="col-6">
-                    <a class="btn btn-outline-secondary" style="width: 100%" onclick="showFormScort()">'. __( 'Quero ser </b>Acompanhante</b>', 'textdomain' ) .'</a>
+                    <a class="btn btn-primary" style="width: 100%" onclick="showFormScort()">'. __( 'Quero ser </b>Acompanhante</b>', 'textdomain' ) .'</a>
                 </div>
                 <div class="col-6">
-                    <a class="btn btn-outline-secondary" style="width: 100%" onclick="showFormFollower()"> '. __( 'Quero ser </b>Seguidor(a)</b>', 'textdomain' ).'</a>
+                    <a class="btn btn-primary" style="width: 100%" onclick="showFormFollower()"> '. __( 'Quero ser </b>Seguidor(a)</b>', 'textdomain' ).'</a>
                 </div>
             </div>
         </div>
