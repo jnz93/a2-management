@@ -145,9 +145,7 @@ class A2_Register{
     private function form( $firstName, $lastName, $email, $userType )
     {
         $form = '
-        <div id="selectPerfil" class="">
-            <h4 class="mb-1">'. __('Selecione o perfil', 'textdomain') .'</h4>
-            <p class="text-black-50">'. __('Escolha qual tipo de perfil deseja criar na plataforma.') .'</p>
+        <div id="selectPerfil" class="">            
             <div class="row mt-2">
                 <div class="col-6">
                     <a class="btn btn-primary" style="width: 100%" onclick="showFormScort()">'. __( 'Quero ser </b>Acompanhante</b>', 'textdomain' ) .'</a>
@@ -156,9 +154,20 @@ class A2_Register{
                     <a class="btn btn-primary" style="width: 100%" onclick="showFormFollower()"> '. __( 'Quero ser </b>Seguidor(a)</b>', 'textdomain' ).'</a>
                 </div>
             </div>
+            <p class="text-black-50 mt-2">'. __('Escolha qual tipo de perfil deseja criar na plataforma.', 'textdomain') .'</p>
         </div>
 
-        <div id="registrationForm" class="row mt-5 mb-5 d-none">
+        <div id="registrationForm" class="row mb-5 d-none">
+            <div id="h-follower" class="d-none">
+                <h5 class="">'. __('Pré-cadastro Seguidor', 'textdomain') .'</h5>
+                <p class="">'. __('Se você deseja seguir perfis de acompanhantes e ficar sempre por dentro das novidades preencha o formulário. Para concluir o cadastro acesse o e-mail e clique no link que nós enviaremos(verifique a lixeira também).', 'textdomain') .'</p>
+            </div>
+            
+            <div id="h-escort" class="d-none">
+                <h5 class="">'. __('Pré-cadastro Acompanhante', 'textdomain') .'</h5>
+                <p class="">'. __('Se você é uma acompanhante e deseja anunciar na plataforma <b>Acompanhantes A2</b> preencha o formulário. Para concluir o cadastro acesse o e-mail e clique no link que nós enviaremos(verifique a lixeira também).', 'textdomain') .'</p>
+            </div>
+            
             <form class="col-12" action="'. $_SERVER['REQUEST_URI'] .'" method="post">
                 <div class="row">
                     <div class="col-6 mb-3">
@@ -196,19 +205,23 @@ class A2_Register{
             function showFormScort(){
                 var formWrapper     = jQuery("#registrationForm"),
                     buttonsWrapper  = jQuery("#selectPerfil"),
+                    formHeader      = jQuery("#h-escort"),
                     typeUser        = jQuery("#user_type");
 
                 formWrapper.removeClass("d-none");
+                formHeader.removeClass("d-none");
                 buttonsWrapper.hide();
                 typeUser.val("a2_scort");
             }
 
             function showFormFollower(){
-                var formWrapper = jQuery("#registrationForm"),
-                    buttonsWrapper = jQuery("#selectPerfil"),
+                var formWrapper     = jQuery("#registrationForm"),
+                    buttonsWrapper  = jQuery("#selectPerfil"),
+                    formHeader      = jQuery("#h-follower"), 
                     typeUser        = jQuery("#user_type");
 
                 formWrapper.removeClass("d-none");
+                formHeader.removeClass("d-none");
                 buttonsWrapper.hide();
                 typeUser.val("a2_follower");
             }
