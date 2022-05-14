@@ -179,6 +179,23 @@ body.woocommerce-account nav.woocommerce-MyAccount-navigation ul li.woocommerce-
     content: "\f181";
 }
 
+/* Hack esconder .product_meta */
+div.product .entry-summary div.product_meta{
+	display: none !important;
+}
+
+/* Hack para alterar a cor de mensagens do woocommerce */
+.woocommerce-message{
+    background: #e91e63 !important;
+    color: #fff !important;
+}
+.woocommerce-message::before{
+    color: #fff !important;
+}
+.woocommerce-message a{
+    color: #fff !important;
+}
+
 /* CSS RULES FOR DESKTOP */
 @media only screen and (min-width: 601px) {
     /* Search Component */
