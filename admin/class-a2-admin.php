@@ -341,7 +341,7 @@ class A2_Admin {
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'query_var'         => true,
-			'rewrite'           => array( 'slug' => 'genero' ),
+			'rewrite'           => array( 'slug' => 'generos' ),
 		);	 
 		register_taxonomy( 'profile_genre', array( 'a2_escort', 'a2_advertisement' ), $args );		
 		
@@ -369,7 +369,7 @@ class A2_Admin {
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'query_var'         => true,
-			'rewrite'           => array( 'slug' => 'etnia' ),
+			'rewrite'           => array( 'slug' => 'etnias' ),
 		);
 		register_taxonomy( 'profile_ethnicity', array( 'a2_escort', 'a2_advertisement' ), $args );
 
@@ -397,7 +397,7 @@ class A2_Admin {
 			'show_ui'           => true,
 			'show_admin_column' => false,
 			'query_var'         => true,
-			'rewrite'           => array( 'slug' => 'signo' ),
+			'rewrite'           => array( 'slug' => 'signos' ),
 		);	 
 		register_taxonomy( 'profile_sign', array( 'a2_escort', 'a2_advertisement' ), $args );
 		
@@ -425,7 +425,7 @@ class A2_Admin {
 			'show_ui'           => true,
 			'show_admin_column' => false,
 			'query_var'         => true,
-			'rewrite'           => array( 'slug' => 'local' ),
+			'rewrite'           => array( 'slug' => 'locais' ),
 		);	 
 		register_taxonomy( 'profile_place_of_service', array( 'a2_escort', 'a2_advertisement' ), $args );
 
@@ -453,7 +453,7 @@ class A2_Admin {
 			'show_ui'           => true,
 			'show_admin_column' => false,
 			'query_var'         => true,
-			'rewrite'           => array( 'slug' => 'especialidade' ),
+			'rewrite'           => array( 'slug' => 'especialidades' ),
 		);
 	 	register_taxonomy( 'profile_specialties', array( 'a2_escort', 'a2_advertisement' ), $args );
 
@@ -481,7 +481,7 @@ class A2_Admin {
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'query_var'         => true,
-			'rewrite'           => array( 'slug' => 'servico' ),
+			'rewrite'           => array( 'slug' => 'servicos' ),
 		);
 		register_taxonomy( 'profile_services', array( 'a2_escort', 'a2_advertisement' ), $args );
 
@@ -537,7 +537,7 @@ class A2_Admin {
 			'show_ui'           => true,
 			'show_admin_column' => false,
 			'query_var'         => true,
-			'rewrite'           => array( 'slug' => 'idioma' ),
+			'rewrite'           => array( 'slug' => 'idiomas' ),
 		);
 		register_taxonomy( 'profile_languages', array( 'a2_escort', 'a2_advertisement' ), $args );
 		
@@ -593,7 +593,7 @@ class A2_Admin {
 			'show_ui'           => true,
 			'show_admin_column' => false,
 			'query_var'         => true,
-			'rewrite'           => array( 'slug' => 'formas-de-pagamento' ),
+			'rewrite'           => array( 'slug' => 'pagar-com' ),
 		);
 		register_taxonomy( 'profile_payment_methods', array( 'a2_escort', 'a2_advertisement' ), $args );
 		
@@ -621,7 +621,7 @@ class A2_Admin {
 			'show_ui'           => true,
 			'show_admin_column' => false,
 			'query_var'         => true,
-			'rewrite'           => array( 'slug' => 'preferencia' ),
+			'rewrite'           => array( 'slug' => 'preferencias' ),
 		);
 		register_taxonomy( 'profile_preference', array( 'a2_escort', 'a2_advertisement' ), $args );
 
