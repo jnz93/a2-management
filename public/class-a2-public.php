@@ -420,12 +420,17 @@ class A2_Public {
 	/**
 	 * Adição de novas $query_vars
 	 * 
+	 * @link https://developer.wordpress.org/reference/hooks/query_vars/
 	 * @since v1.0.0
 	 */
 	public function addCustomQueryVars( $vars )
 	{
 		$vars[] = 'gallery';
 		$vars[] = 'advertisements';
+		$vars[] = '_age_min';
+		$vars[] = '_age_max';
+		$vars[] = '_cache_min';
+		$vars[] = '_cache_max';
 
 		return $vars;
 	}
