@@ -95,7 +95,8 @@ class A2_Public {
 		/** Registro de novas $query_vars */
 		add_filter( 'query_vars', [ $this, 'addCustomQueryVars' ], 0 );
 
-		// add_action( 'init', [ $this, 'createCustomTaxonomy' ] );
+		/** Customizando $query para anúncios */
+		add_action( 'pre_get_posts', [$this, 'advertisementPreGetPosts'], 1 );
 
 		/** Action ajax p/ retorno dos children terms */
 		add_action( 'wp_ajax_listChildrenTerms', [ $this, 'getDescendantTerms' ] );
@@ -433,6 +434,75 @@ class A2_Public {
 		$vars[] = '_cache_max';
 
 		return $vars;
+	}
+
+	/**
+	 * Construindo uma query customizada para busca e filtro de anúncios baseada em várias condições
+	 * A action "pre_get_posts" da ao desenvolvedor acesso ao objeto $query por referência
+	 * ou seja, qualquer alteração aqui afetara diretamente o objeto original
+	 * 
+	 * @link https://codex.wordpress.org/Plugin_API/Action_Reference/pre_get_posts
+	 * 
+	 * @return void
+	 */
+	public function advertisementPreGetPosts( $query )
+	{
+		if( is_admin() || !$query->is_main_query() ) return;
+
+		// Checa se é o post type correto, se não for retorna
+		// if( !is_post_type_archive('a2_advertisement') ) return;
+
+
+		$metaQuery = [];
+
+		// Idade
+		if( !empty(get_query_var('_age_min')) ){
+			$metaQuery[] = [
+				'key'		=> '_profile_birthday', # Substituir por um novo meta_campo "_profile_age"
+				'value'		=> get_query_var('_age_min'),
+				'compare'	=> '>=',
+				'type'		=> 'NUMERIC'
+			];
+		}
+
+		// Idade
+		if( !empty(get_query_var('_age_max')) ){
+			$metaQuery[] = [
+				'key'		=> '_profile_birthday', # Substituir por um novo meta_campo "_profile_age"
+				'value'		=> get_query_var('_age_max'),
+				'compare'	=> '<=',
+				'type'		=> 'NUMERIC'
+			];
+		}
+
+		// Cache/h
+		if( !empty(get_query_var('_cache_min')) ){
+			$metaQuery[] = [
+				'key'		=> '_profile_cache_hour',
+				'value'		=> get_query_var('_cache_min'),
+				'compare'	=> '>=',
+				'type'		=> 'NUMERIC'
+			];
+		}
+
+		// cache/h
+		if( !empty(get_query_var('_cache_max')) ){
+			$metaQuery[] = [
+				'key'		=> '_profile_cache_hour',
+				'value'		=> get_query_var('_cache_max'),
+				'compare'	=> '<=',
+				'type'		=> 'NUMERIC'
+			];
+		}
+
+		if( count($metaQuery) > 1 ){
+			$metaQuery['relation'] = 'AND';
+		}
+
+		if( count($metaQuery) > 0 ){
+			$query->set( 'meta_query', $metaQuery );
+		}
+
 	}
 
 	/**
