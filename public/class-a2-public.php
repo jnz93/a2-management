@@ -74,6 +74,9 @@ class A2_Public {
 		/** Redirect para página de login Custom */
 		add_action( 'init', [ $this, 'redirectLoginPage' ] ); # Funcionando mas desativado em desenvolvimento
 
+		/** Connect Google Analytics */
+		add_action( 'wp_head', [ $this, 'connectGoogleAnalytics' ] );
+		
 		/** Tratamento para quando há falhas no login */
 		add_action( 'wp_login_failed', [ $this, 'loginFailed'] );
 
@@ -245,6 +248,27 @@ class A2_Public {
 		}
 	}
 	
+	/**
+	 * Conectando o google analytics via Gtag no head
+	 * 
+	 * @hook 	wp_head
+	 */
+	public function connectGoogleAnalytics()
+	{
+		?>
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-9WJK86PJZ4"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){
+				dataLayer.push(arguments);
+			}
+			gtag('js', new Date());
+			gtag('config', 'G-9WJK86PJZ4');
+		</script>
+		<?php
+	}
+
 	/**
 	 * Redirecionar acessos a página "/wp-login.php" para "/login"
 	 * 
