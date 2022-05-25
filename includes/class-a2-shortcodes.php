@@ -60,6 +60,9 @@ class A2_Shortcodes{
 
         /** Componente de busca */
         add_shortcode( 'buscaCidade', [ $this, 'searchComponent' ] );
+
+        /** Componente de filtro */
+        add_shortcode( 'filtroAnuncios', [ $this, 'filterComponent' ] );
     }
 
     /**
@@ -259,6 +262,47 @@ class A2_Shortcodes{
 
         ob_start();
         require plugin_dir_path( __DIR__ ) . 'public/partials/tpl-search-component.php';
+        
+        return ob_get_clean();
+    }
+
+    /**
+     * Componente de Filtro
+     * Retorna um componente html com opções de filtros para anúncios
+     * 
+     */
+    public function filterComponent( $atts )
+    {
+        $a = shortcode_atts(
+            [
+                'tipo'  => 'cidade',
+            ],
+            $atts
+        );
+        $taxonomies = [
+            'profile_genre',
+            'profile_ethnicity',
+            'profile_sign',
+            'profile_specialties',
+            'profile_services',
+            'profile_place_of_service',
+            'profile_languages',
+            'profile_work_days',
+            'profile_payment_methods',
+            'profile_preference',
+        ];
+        $terms = [];
+        foreach( $taxonomies as $tax ){
+            $terms[$tax] = get_terms([
+                'taxonomy'      => $tax,
+                'orderby'       => 'name',
+                'order'         => 'ASC',
+                'hide_empty'    => false,
+            ]);
+        }
+
+        ob_start();
+        require plugin_dir_path( __DIR__ ) . 'public/partials/tpl-filter-component.php';
         
         return ob_get_clean();
     }
