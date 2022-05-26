@@ -231,7 +231,7 @@ class A2_Profile{
 				'post_title'	=> $userData['display_name'],
 				'post_author'	=> $userId,
 				'post_content'	=> $userData['_profile_description'],
-				'post_status'	=> 'draft',
+				'post_status'	=> 'publish',
 				'post_type'		=> 'a2_escort',
 			];
 			$postid = wp_insert_post( $postarr );
