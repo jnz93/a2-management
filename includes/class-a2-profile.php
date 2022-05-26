@@ -130,6 +130,8 @@ class A2_Profile{
      */
     private function setupPage( $userId )
     {
+		if( !current_user_can('a2_scort') ) return;
+
 		$userData 					= array();
 		$user 						= get_userdata( $userId );
 		$userData['id']				= $userId;
