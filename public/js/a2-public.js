@@ -442,11 +442,13 @@ function requestProfileEvaluation(){
 
 	let frontDocId 	= jQuery('#_front_of_document_id').val(),
 		backDocId 	= jQuery('#_back_of_document_id').val(),
+		holdingDoc	= jQuery('#_holding_doc_id').val(),
 		media 		= jQuery('#_verification_media_id').val(),
 		payload 	= {
 			'action': 'request_profile_evaluation',
 			'frontDoc': frontDocId,
 			'backDoc': backDocId,
+			'holdingDoc': holdingDoc,
 			'media': media
 		};
 
@@ -588,8 +590,14 @@ jQuery(document).ready( function(){
 		console.log('Upload da foto');
 		uploadImage(jQuery(this));
 	});
+
+	// Manipulando o upload segurando o documento
+	jQuery('#_holding_doc').change( function(){
+		console.log('Upload da foto');
+		uploadImage(jQuery(this));
+	});
 	
-	// Manipulando o upload do verso do documento
+	// Manipulando o upload da mídia de verificação
 	jQuery('#_verification_media').change( function(){
 		console.log('Upload da vídeo');
 		uploadMedia(jQuery(this));

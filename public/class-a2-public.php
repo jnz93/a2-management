@@ -749,15 +749,17 @@ class A2_Public {
 		// wp_verify_nonce( $nonce, $action ); # Verificar validade do código nonce
 		if( empty($_POST) ) die();
 
-		$attachFrontDoc = $_POST['frontDoc'];
-		$attachBackDoc 	= $_POST['backDoc'];
-		$attachMedia	= $_POST['media'];
+		$attachFrontDoc 	= $_POST['frontDoc'];
+		$attachBackDoc 		= $_POST['backDoc'];
+		$attachHoldingDoc 	= $_POST['holdingDoc'];
+		$attachMedia		= $_POST['media'];
 
 		$result 		= null;
-		if( strlen($attachFrontDoc) > 0 && strlen($attachBackDoc) > 0 && strlen($attachMedia) > 0 ){
+		if( strlen($attachFrontDoc) > 0 && strlen($attachBackDoc) > 0 && strlen($attachHoldingDoc) > 0 && strlen($attachMedia) > 0 ){
 			$attachments = [
 				'_front_doc' 			=> $attachFrontDoc,
 				'_back_doc'				=> $attachBackDoc,
+				'_holding_doc'			=> $attachHoldingDoc,
 				'_verification_media' 	=> $attachMedia
 			];
 
