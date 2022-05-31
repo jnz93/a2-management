@@ -63,6 +63,9 @@ class A2_Shortcodes{
 
         /** Componente de filtro */
         add_shortcode( 'filtroAnuncios', [ $this, 'filterComponent' ] );
+
+        /** Checkmark de verificação */
+        add_action( 'profileCheckmark', [ $this, 'getProfileCheckmark' ] );
     }
 
     /**
@@ -306,4 +309,48 @@ class A2_Shortcodes{
         
         return ob_get_clean();
     }
+
+    /**
+	 * Método retorna a bagde conforme o resultado da verificação de perfil
+	 * 
+	 * @param int 	    $userId
+	 * @return mixed    $badge
+	 */
+	public function getProfileCheckmark( $userId )
+	{
+		$key 	= '_verified_profile';
+		$value  = get_user_meta( $userId, $key, true );
+		$class 	= '';
+		$classIcon = '';
+		$sealText = '';
+		
+		switch($value){
+			case 'under-analisys':
+				$class = 'profile__seal--underAnalysis';
+				$classIcon = 'bi-clock-history';
+				$sealText = 'Perfil em Análise';
+				break;
+			case 'verified':
+				$class = 'profile__seal--verified';
+				$classIcon = 'bi-shield-check';
+				$sealText = 'Perfil Verificado';
+				break;
+			case 'invalid':
+				$class = 'profile__seal--invalid';
+				$classIcon = 'bi-exclamation-diamond';
+				$sealText = 'Perfil Reprovado';
+				break;
+			default:
+				$value = 'reprovado';
+		}
+		
+		$badge = '<div class="profile__stamps mb-2">
+					<span class="profile__seal '. $class .' d-inline-flex align-items-center">
+						<i class="bi '. $classIcon .' me-1"></i>
+						<span class="">'. __($sealText, 'textdomain') .'</span>
+					</span>	
+				</div>';
+
+		echo $badge;
+	}
 }
