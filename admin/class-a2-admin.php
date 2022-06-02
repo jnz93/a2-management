@@ -95,7 +95,7 @@ class A2_Admin {
 		 * Action para criação do anúncio 
 		 * Atualmente estamos utilizando o status "completed", mas o ideal é que seja o "processing"
 		 */
-		add_action( 'woocommerce_order_status_changed', [ $this, 'paymentComplete' ], 10, 4 );
+		// add_action( 'woocommerce_order_status_changed', [ $this, 'paymentComplete' ], 10, 4 );
 		add_action( 'woocommerce_order_status_completed', [ $this, 'createAdvertisement' ], 10, 1 );
 
 	}
