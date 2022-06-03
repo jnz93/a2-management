@@ -452,13 +452,6 @@ function requestProfileEvaluation(){
 			'media': media
 		};
 
-	// var modal = document.getElementById('exampleModal');
-	var myModalEl 	= document.getElementById('exampleModal'),
-		modal 		= bootstrap.Modal.getInstance(myModalEl);
-	
-	var toastSuccess = document.getElementById('toast-success'),
-		toast = new bootstrap.Toast(toastSuccess);
-
 	// Call ajax
 	if( Object.values(payload).length > 0 ){
 		jQuery.ajax({
@@ -470,11 +463,16 @@ function requestProfileEvaluation(){
 			},
 		})
 		.done( function(data){
-			console.log(data);
+			let	myModalEl 	= document.querySelector('#validationProfileModal'),
+				modal 		= bootstrap.Modal.getInstance(myModalEl);
+	
+			let	toastSuccess = document.querySelector('#toastSuccess'),
+				toast 		= new bootstrap.Toast(toastSuccess);
 
 			if(data){
-				modal.remove();
+				modal.hide();
 				toast.show();
+				jQuery('#noticeBox').addClass('d-none');
 			} else {
 
 			}
