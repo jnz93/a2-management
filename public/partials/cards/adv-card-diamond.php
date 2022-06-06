@@ -1,10 +1,6 @@
 <div class="advCard col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
     <div class="advCard--diamond card position-relative p-0">
-        <?php if( $isVerified == 'yes'): ?>
-            <div class="advCard__tag advCard__tag--verified position-absolute top-0 start-0">
-                <span class=""><i class="bi bi-shield-check"></i> <?php _e( 'perfil verificado', 'textdomain'); ?></span>
-            </div>
-        <?php endif; ?>
+        <?php do_action( 'profileCheckmark', $authorId ); ?>
 
         <div class="advCard__thumb d-flex">
             <?php

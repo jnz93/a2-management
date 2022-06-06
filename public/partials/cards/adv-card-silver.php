@@ -1,11 +1,7 @@
 <div class="advCard col-xs-6 col-sm-6 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
     <a href="<?php echo $pageProfileUrl; ?>" class="link-secondary text-decoration-none">
         <div class="advCard--silver card position-relative p-0">
-            <?php if( $isVerified == 'yes'): ?>
-                <div class="advCard__tag advCard__tag--verified position-absolute top-0 start-0">
-                    <span class=""><i class="bi bi-shield-check"></i> <?php _e( 'perfil verificado', 'textdomain'); ?></span>
-                </div>
-            <?php endif; ?>
+            <?php do_action( 'profileCheckmark', $authorId ); ?>
 
             <div class="advCard__thumb">
                 <div class="advCard__image card-img-top" style="background-image: url('<?php echo $thumbUrl; ?>');"></div>
