@@ -343,12 +343,12 @@ class A2_Public {
 			unset( $menu_links['downloads'] );
 			unset( $menu_links['edit-address'] );
 			unset( $menu_links['edit-account'] );
+			unset( $menu_links['change-password'] );
 			
 			# Adição de novos
 			$newLinks = [
 				'followed-profiles' => 'Favoritos',
 				'edit-account'		=> 'Editar Perfil',
-				'change-password' 	=> 'Alterar Senha',
 			];
 		} elseif( current_user_can( 'a2_scort') ){
 
@@ -357,6 +357,7 @@ class A2_Public {
 			unset( $menu_links['orders'] );
 			unset( $menu_links['edit-address'] );
 			unset( $menu_links['edit-account'] );
+			unset( $menu_links['change-password'] );
 
 			# Adição de novos
 			$newLinks = [
@@ -364,7 +365,6 @@ class A2_Public {
 				'gallery'			=> 'Galeria',
 				'advertisements'	=> 'Anúncios',
 				'orders'			=> 'Faturas',
-				'change-password' 	=> 'Alterar Senha',
 			];
 		}
 
