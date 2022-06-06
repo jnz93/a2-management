@@ -247,7 +247,7 @@ function galleryPayload( files, formData ){
 function addItemSpinner(){
 	galleryWrapper 	= jQuery('#galleryList'),
 	galleryWrapper.prepend( 
-		`<li id="" data-attachment="" class="galleryItemLoad col-4">
+		`<li id="" data-attachment="" class="galleryItemLoad position-relative col-6 col-sm-6 col-md-4 col-lg-4 p-1 mb-2 rounded">
 			<div class="spinner-border text-secondary" role="status">
 				<span class="visually-hidden">Loading...</span>
 			</div>
@@ -264,28 +264,19 @@ function addItemSpinner(){
 function addItemGallery( data ){
 	galleryWrapper 	= jQuery('#galleryList');
 	galleryWrapper.prepend(
-		`<li id="${data.attachId}" data-attachment="${data.attachId}" class="galleryItem col-4">
-			<div class="thumbActions py-2 row">
-				<span class="col-8">
+		`<li id="${data.attachId}" data-attachment="${data.attachId}" class="galleryItem position-relative col-6 col-sm-6 col-md-4 col-lg-4 p-1 mb-2 rounded">
+			<div class="thumbActions py-2 d-flex position-absolute" style="background: rgba(0, 0, 0, .5); width: 92%; left: 4%; top: 2%;">
+				<span class="ms-1">
 					<input class="form-check-input" type="checkbox" id="" data-attachment="${data.attachId}">
 				</span>
-				<div class="col-4 d-flex justify-content-end">
-					<span class="me-3" id="close" data-attachment="${data.attachId}">
-						<i class="bi bi-pencil-square"></i>
-					</span>
-					<span class="" id="edit" data-attachment="${data.attachId}">
-						<i class="bi bi-trash3-fill"></i>
-					</span>
-				</div>
 			</div>
-			<div class="thumbnail">
-				<img src="${data.attachUrl}" alt="${data.title}" class="">
+			<div class="thumbnail img-thumbnail">
+				<img src="${data.attachUrl}" alt="'. $attachCaption .'" class="">
 			</div>
-			<div class="caption">
+			<div class="caption d-none">
 				<span class="thumb-title">${data.title}</span>
 			</div>
-		</li>`
-	);
+		</li>`);
 };
 
 /**
