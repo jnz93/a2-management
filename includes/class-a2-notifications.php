@@ -32,4 +32,29 @@ class A2_Notifications{
         $this->attachments  = [$this->siteLogo];
     }
 
+    /**
+     * Enviar notificação quando uma verificação de perfil é solicitada
+     * 
+     * @param int   $profileId      Id do usuário que solicitou
+     * @param int   $postId         Id do post de validação criado
+     */
+    public function submitProfileValidation( $profileId, $postId )
+    {
+        if( is_null($profileId) ) return;
+
+        $subject    = '['. $this->siteName .'] Solicitação de Validação de Perfil';
+        $user       = get_user_meta( $profileId, 'first_name', true) . ' ' . get_user_meta( $profileId, 'last_name', true );
+        $editLink   = get_edit_post_link( $postId );
+        $template   = file_get_contents( plugin_dir_path( __FILE__ ) . 'emails/tpl-profile-validation.php', true );
+
+        $replaceArr = [
+            '::logo'        => $this->siteLogo,
+            '::user'        => $user,
+            '::postLink'    => $editLink,
+        ];
+        $message = strtr( $template, $replaceArr );        
+
+        wp_mail( $this->sendTo, $subject, $message, $this->headers, $this->attachments );        
+    }
+
 }
