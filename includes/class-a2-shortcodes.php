@@ -66,6 +66,9 @@ class A2_Shortcodes{
 
         /** Checkmark de verificação */
         add_action( 'profileCheckmark', [ $this, 'getProfileCheckmark' ] );
+
+        /** Rest Uploader */
+        add_shortcode( 'restUploader', [ $this, 'restUploaderForm'] );
     }
 
     /**
@@ -353,4 +356,41 @@ class A2_Shortcodes{
 
 		echo $badge;
 	}
+
+    public function restUploaderForm()
+    {
+        wp_enqueue_script( 'rest-uploader' );
+        ob_start();
+        ?>
+        <div class="" style="margin: 150px auto; background: gray;">
+            <h2><?php esc_html_e( 'Upload a file', 'rest-uploader' ); ?></h2>
+            <form method="post">
+                <p>
+                    <label for="uploader-title">
+                        <?php esc_html_e( 'Title', 'rest-uploader' ); ?>:
+                    </label>
+                    <input id="uploader-title">
+    
+                </p>
+                <p>
+                    <label for="uploader-caption">
+                        <?php esc_html_e( 'Caption', 'rest-uploader' ); ?>:
+                    </label>
+                    <input id="uploader-caption">
+    
+                </p>
+                <p>
+                    <label for="uploader-file">
+                        <?php esc_html_e( 'File', 'rest-uploader' ); ?>:
+                    </label>
+                    <input id="uploader-file" type="file">
+                </p>
+                <button id="uploader-send"><?php esc_html_e( 'Send', 'rest-uploader' ); ?></button>
+            </form>
+        </div>
+        <?php
+        $content = ob_get_contents();
+        ob_end_clean();
+        return $content;
+    }
 }

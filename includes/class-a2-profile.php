@@ -93,8 +93,9 @@ class A2_Profile{
 
 			$log[$key] = $_POST[$key];
 		}
-		
-		$profileIsReady = $this->validateAccount( $userId, $metaKeys );
+
+		// $profileIsReady = $this->validateAccount( $userId, $metaKeys ); Desativado métdo "checkData" está com problema
+		$profileIsReady = true;
 		if( $profileIsReady == true ){
 			$this->setupPage( $userId );
 			$this->markAsComplete( $userId );
@@ -327,9 +328,10 @@ class A2_Profile{
 
 		$log 	= array();
 		foreach( $profileData as $key => $value ){
+			// Este pedaço de código está com erro.
 			if( strlen( $value ) == 0 && !is_array( $value ) ){
 				$log[$key] = $value;
-			} else if( is_array( $value ) && empty($value) ){
+			}elseif( is_array( $value ) && empty($value) ){
 				$log[$key] = $value;
 			}
 		}
@@ -520,4 +522,45 @@ class A2_Profile{
 		return $value;
 	}
 	
+	/**
+	 * Payload de dados do usuário.
+	 * Este payload vai ser largamente utilizado nos cards dos anúncios.
+	 * Ao invés de coletarmos os dados do $post no loop vamos coletar dados direto da conta.
+	 * 
+	 * @param int 		$authorId
+	 * @return array 	$payload
+	 */
+	public function getUserData( $userId ){
+		if( is_null($userId) ) return;
+		
+		$metaKeys = array(
+			'id',
+			'first_name',
+			'last_name',
+			'_plan_level',
+			'_profile_url',
+			'_expiration_date',
+			'_profile_whatsapp',
+			'_profile_birthday',
+			'_profile_height',
+			'_profile_weight',
+			'_profile_eye_color',
+			'_profile_hair_color',
+			'_profile_tits_size',
+			'_profile_bust_size',
+			'_profile_waist_size',
+			'_profile_instagram',
+			'_profile_tiktok',
+			'_profile_onlyfans',
+			'_profile_address',
+			'_profile_cep',
+			'_profile_cache_quickie',
+			'_profile_cache_half_an_hour',
+			'_profile_cache_hour',
+			'_profile_cache_overnight_stay',
+			'_profile_cache_promotion',
+			'_profile_cache_promotion_activated',
+		);
+		
+	}
 }
