@@ -765,15 +765,15 @@ class A2_Public {
 
 			$postType	= 'a2_analysis';
 			$status		= 'publish';
-			$author 	= get_current_user_id();
-			$profileName= get_user_meta( $author, 'first_name', true ) . ' ' . get_user_meta( $author, 'last_name', true );
+			$profileId 	= get_current_user_id();
+			$profileName= get_user_meta( $profileId, 'first_name', true ) . ' ' . get_user_meta( $profileId, 'last_name', true );
 			$title 		= 'Análise perfil - ' . $profileName;
 			$content	= 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed varius velit vulputate risus pellentesque, id consectetur urna egestas';
 			$postarr	= [
 				'post_type'		=> $postType,
 				'post_status'	=> $status,
 				'post_title'	=> $title,
-				'post_author'	=> $author,
+				'post_author'	=> $profileId,
 				'post_content'	=> $content,
 			];
 			$postId = wp_insert_post( $postarr );
@@ -790,7 +790,9 @@ class A2_Public {
 					update_post_meta( $postId, $key, wp_get_attachment_url($attach) );
 				}
 
-				$this->profile->underAnalysis($author);
+				$this->profile->underAnalysis($profileId);
+				$this->notifications->submitProfileValidation($profileId, $postId);
+
 				$result = $postId;
 			}
 		} else {
