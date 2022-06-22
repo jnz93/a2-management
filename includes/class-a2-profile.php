@@ -146,6 +146,7 @@ class A2_Profile{
 		$metaKeys = array(
 			'_profile_whatsapp',
 			'_profile_birthday',
+			'_profile_age',
 			'_profile_description',
 			'_profile_height',
 			'_profile_weight',
