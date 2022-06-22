@@ -85,10 +85,16 @@ class A2_Profile{
 		# Salvando meta-campos
 		$log = array();
 		foreach( $metaKeys as $key ){
+			$value = $_POST[$key];
 			if( in_array($key, ['_profile_he_meets', '_profile_services', '_profile_place', '_profile_work_days', '_profile_specialties', '_profile_languages']) ){
-				update_user_meta( $userId, $key, $_POST[$key] );
+				update_user_meta( $userId, $key, $value );
 			} else {
-				update_user_meta( $userId, $key, sanitize_text_field( $_POST[$key] ) );
+				// Cálculando a idade
+				if( $key == '_profile_birthday' ){
+					$value 	= $this->calculateAge($value);
+					$key 	= '_profile_age';
+				}
+				update_user_meta( $userId, $key, sanitize_text_field($value) );
 			}
 
 			$log[$key] = $_POST[$key];
