@@ -470,6 +470,35 @@ class A2_Profile{
 	}
 
 	/**
+	 * Método que retorna a idade conforme a data de entrada
+	 * 
+	 * @param string 	$date 	uma data no padrão yyyy/mm/dd
+	 */
+	public function calculateAge( $date )
+	{
+		if( !$date ) return;
+
+		$age 		= null;
+		$currDay 	= date ('d');
+		$currMonth 	= date ('m');
+		$currYear 	= date ('Y');
+
+		// Coletando data do perfil
+		$arr 	= explode('-', $date);
+		$bYear 	= $arr[0];
+		$bMonth = $arr[1];
+		$bDay 	= $arr[2];
+
+		$age 	= $currYear - $bYear;
+		if( $currMonth < $bMonth ){
+			$age--;
+		}elseif( $currMonth == $bMonth && $currDay <= $bDay ){
+			$age--;
+		}
+
+		return $age;
+	}
+	/**
 	 * Método responsável por marcar o perfil sob análise
 	 * 
 	 * @param int 	$userId
