@@ -128,4 +128,77 @@ class A2_Gallery{
         add_image_size( 'o-vr', 900, 1200, true );
     }
 
+    /**
+     * Definição do diretório de upload
+     * Chamada do método que vai manipular a imagem e inserir a marca d'água
+     * 
+     * @param array    $meta    Array que representa os metadados do arquivo
+     * @return array   $meta    Array que representa os metadados do arquivo modificados
+     */
+    public function generateWatermarkedImage( $meta )
+    {
+        $time       = substr( $meta['file'], 0, 7); # Extract the date in form "2015/04"
+        $uploadDir  = wp_upload_dir( $time );
+        $guidelines = ['o-hr', 'o-vr']; # Images Guidelines
+
+        foreach( $guidelines as $guideline ){
+            $filename                           = $meta['sizes'][$guideline]['file'];
+            $meta['sizes'][$guideline]['file']  = $this->applyWatermark( $filename, $uploadDir );
+        }
+
+        return $meta;
+    }
+
+    /**
+     * Manipulando imagens para inserir a marca d'água
+     * Utilizando a biblioteca ImageMagick
+     * 
+     * @param string    $filename   nome do arquivo manipulado
+     * @param string    $uploadDir  caminho para o local de upload
+     */
+    public function applyWatermark( $filename, $uploadDir )
+    {
+        $originalImagePath  = trailingslashit( $uploadDir['path'] ) . $filename;
+        $imageResource      = new Imagick( $originalImagePath );
+        list( $imgW, $imgH ) = getimagesize( $originalImagePath );
+
+        # Setup watermark
+        $tempWatermarkUrl   = 'https://acompanhantesa2.com/wp-content/uploads/2022/06/logotipo-transparente.png';
+        $watermarkResource  = new Imagick( $tempWatermarkUrl );
+        list( $wmW, $wmH ) = getimagesize( $tempWatermarkUrl );
+        
+        # Setup $coords to insert watermark
+        $coords =  [
+            'top-left'      =>'25, 25', 
+            'top-right'     => ($imgW-$wmW) - 25 . ', 25', 
+            'middle'        => ($imgW - $wmW) / 2 . ', ' . ($imgH - $wmH) / 2, 
+            'bottom-left'   => '25, ' . ($imgH - $wmH) - 25,
+            'bottom-right'  => ($imgW - $wmW) - 25 . ', ' . ($imgH - $wmH) - 25
+        ];
+        
+        foreach( $coords as $key => $value ){
+            $coord = explode(',', $value);
+            $imageResource->compositeImage( $watermarkResource, Imagick::COMPOSITE_DEFAULT, $coord[0], $coord[1] );
+        }
+       
+        return $this->saveWatermarkedImage( $imageResource, $originalImagePath );
+    }
+
+    /**
+     * Salvando o arquivo com a marca d'água e excluindo o antigo
+     * 
+     * 
+     */
+    public function saveWatermarkedImage( $imageResource, $originalImagePath )
+    {
+        $imageData              = pathinfo( $originalImagePath );
+        $newFilename            = $imageData['filename'] . '-wm.' . $imageData['extension'];
+        $watermarkedImagePath   = str_replace($imageData['basename'], $newFilename, $originalImagePath);
+
+        if ( !$imageResource->writeImage( $watermarkedImagePath ) ) return $imageData['basename'];
+
+        unlink( $originalImagePath );
+
+        return $newFilename;
+    }
 }

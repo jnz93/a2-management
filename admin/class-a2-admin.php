@@ -96,6 +96,11 @@ class A2_Admin {
 		 */
 		add_action( 'init', [ $this->gallery, 'registerCustomImageSizes' ] );
 
+		/**
+		 * Filtro para manipular o upload de imagens
+		 */
+		add_filter( 'wp_generate_attachment_metadata', [ $this->gallery, 'generateWatermarkedImage' ] );
+
 		/** 
 		 * Action para criação do anúncio 
 		 * Atualmente estamos utilizando o status "completed", mas o ideal é que seja o "processing"
