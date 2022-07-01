@@ -61,6 +61,11 @@ class A2_Admin {
 	private $advertisement;
 
 	/**
+	 * The Gallery Class
+	 */
+	private $gallery;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
@@ -75,6 +80,7 @@ class A2_Admin {
 		$this->shortcodes 	= new A2_Shortcodes();
 		$this->profile 		= new A2_Profile();
 		$this->advertisement = new A2_Advertisement();
+		$this->gallery 		= new A2_Gallery();
 
 		/**
 		 * Adição do menu na dashboard admin
