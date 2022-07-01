@@ -91,6 +91,11 @@ class A2_Admin {
 		 */
 		add_action( 'init', [ $this, 'registerCustomTaxonomies' ] );
 
+		/**
+		 * Registro de novos tamanhos e imagens
+		 */
+		add_action( 'init', [ $this->gallery, 'registerCustomImageSizes' ] );
+
 		/** 
 		 * Action para criação do anúncio 
 		 * Atualmente estamos utilizando o status "completed", mas o ideal é que seja o "processing"

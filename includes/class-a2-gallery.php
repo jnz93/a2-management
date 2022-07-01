@@ -116,4 +116,16 @@ class A2_Gallery{
 
         return $gallery;
     }
+
+    /**
+     * Adicionar tamanhos customs de imagens enviadas
+     * Para isso vamos levar me consideração as melhores práticas
+     * @link https://www.strikingly.com/content/blog/website-image-size-guidelines/
+     */
+    public function registerCustomImageSizes()
+    {
+        add_image_size( 'o-hr', 1200, 900, true );
+        add_image_size( 'o-vr', 900, 1200, true );
+    }
+
 }
