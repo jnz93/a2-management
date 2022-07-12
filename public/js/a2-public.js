@@ -661,3 +661,26 @@ jQuery(document).ready( function(){
 		filterList(); 
 	})
 });
+
+/**
+ * Função responsável por esconder o formulário
+ * e mostrar o resultado da criação do cadastro
+ * 
+ */
+function showMessageForRegisterSuccess(){
+
+	let regForm 		= jQuery('.register__form'),
+		regCompleted 	= jQuery('.register__completed');
+	console.log(regForm, regCompleted);
+	if(regForm){
+		regForm.addClass('d-none');
+	} else {
+		console.log(regForm +'[regForm] - Não encontrado' );
+	}
+
+	if(regCompleted){
+		regCompleted.removeClass('d-none');
+	} else {
+		console.log(regCompleted +'[regCompleted] - Não encontrado' );
+	}
+}

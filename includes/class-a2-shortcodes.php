@@ -69,6 +69,9 @@ class A2_Shortcodes{
 
         /** Rest Uploader */
         add_shortcode( 'restUploader', [ $this, 'restUploaderForm'] );
+
+        /** Register Page */
+        add_shortcode( 'registerPage', [ $this, 'registerPage'] );
     }
 
     /**
@@ -392,5 +395,25 @@ class A2_Shortcodes{
         $content = ob_get_contents();
         ob_end_clean();
         return $content;
+    }
+
+    /**
+     * Shortcode página de cadastro
+     * 
+     */
+    public function registerPage( $atts )
+    {
+        $a = shortcode_atts( 
+            [
+                'title'     => 'Cadastro',
+                'subtitle'  => 'Cadastre-se GRATUITAMENTE de forma rápida e fácil!'
+			], 
+            $atts
+        );
+
+        ob_start();
+        $this->register->page();
+        
+        return ob_get_clean();
     }
 }
