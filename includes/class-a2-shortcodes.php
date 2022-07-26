@@ -45,9 +45,6 @@ class A2_Shortcodes{
         $this->a2Query  = new A2_Query();
         $this->gallery  = new A2_Gallery();
         $this->profile  = new A2_Profile();
-        
-        /** Formulário de cadastro */
-        add_shortcode( 'registerForm', [ $this, 'registerForm'] );
 
         /** Formulário de login */
         add_shortcode( 'loginForm', [ $this, 'loginForm'] );
@@ -72,27 +69,6 @@ class A2_Shortcodes{
 
         /** Register Page */
         add_shortcode( 'registerPage', [ $this, 'registerPage'] );
-    }
-
-    /**
-     * Shortcode: Formulário de cadastro de usuários
-     * 
-     * Após a seleção do tipo de perfil que o usuário deseja ser um formulário será mostrado.
-     * Este Formulário é chamado pelo método processForm() da classe A2_Register();
-     */
-    public function registerForm( $atts )
-    {
-        $a = shortcode_atts( 
-            [
-                'title' => 'Formulário de Cadastro'
-			], 
-            $atts
-        );
-
-        ob_start();
-        $this->register->proccessForm();
-        
-        return ob_get_clean();
     }
 
     /**
