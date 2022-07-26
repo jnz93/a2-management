@@ -57,6 +57,11 @@ class A2_Public {
 	private $Advertisement;
 
 	/**
+	 * The A2_Notificacoes instantiate class
+	 */
+	private $notifications;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
@@ -70,6 +75,7 @@ class A2_Public {
 		$this->profile = new A2_Profile();
 		$this->gallery = new A2_Gallery();
 		$this->Advertisement = new A2_Advertisement();
+		$this->notifications = new A2_Notifications();
 
 		/** Redirect para página de login Custom */
 		add_action( 'init', [ $this, 'redirectLoginPage' ] ); # Funcionando mas desativado em desenvolvimento
