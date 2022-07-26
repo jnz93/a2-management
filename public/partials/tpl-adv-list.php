@@ -2,35 +2,80 @@
     <div class="row g-4">
         <?php
         if ($query->have_posts()) {
+            # Meta Keys para coletar post metas
+            $metaKeys = array(
+                'id',
+                'first_name',
+                'last_name',
+                '_plan_level',
+                '_profile_url',
+                '_expiration_date',
+                '_profile_whatsapp',
+                '_profile_birthday',
+                '_profile_height',
+                '_profile_weight',
+                '_profile_eye_color',
+                '_profile_hair_color',
+                '_profile_tits_size',
+                '_profile_bust_size',
+                '_profile_waist_size',
+                '_profile_instagram',
+                '_profile_tiktok',
+                '_profile_onlyfans',
+                '_profile_address',
+                '_profile_cep',
+                '_profile_cache_quickie',
+                '_profile_cache_half_an_hour',
+                '_profile_cache_hour',
+                '_profile_cache_overnight_stay',
+                '_profile_cache_promotion',
+                '_profile_cache_promotion_activated',
+            );
+
             while ($query->have_posts()) {
                 $query->the_post();
                 $postId     = get_the_ID();
                 $authorId   = get_the_author_ID();
-                $profileId  = get_user_meta( $authorId, '_profile_page_id', true );
+                
+                $dataProfile = [];
+                foreach( $metaKeys as $key ){
+                    $dataProfile[$key] = get_post_meta( $postId, $key, true );
+                }
                 
                 # Definição de dados do anúncio
                 $title          = get_the_title( $postId );
                 $content        = get_the_content( $postId );
                 $thumbUrl       = get_the_post_thumbnail_url( $postId );
-                // $gallery        = get_post_meta( $postId, '' ); # get_post_meta()
-                // $isVerified     = get_post_meta( $postId, '', true ); # get_post_meta()
-                // $priceForHour   = get_post_meta( $postId, '', true ); # get_post_meta()
-                // $havePlace      = get_post_meta( $postId, '', true ); # get_post_meta() - Adicionar configuração na edição do perfil
-                // $location       = get_the_terms( $postId, '' );
-                // $genre          = get_the_terms( $postId, '' );
-                // $age            = $this->helper->getAge( $postId ); # Criar classe e método 
-                $planLevel      = get_post_meta( $postId, '_plan_level', true );
-                $contactMessage = 'Olá, ' . $title . '! Encontrei seu anúncio no A2 Acompanhantes. Gostaria de contratar seus serviços.'; # get_post_meta();
-
+                $age            = $this->profile->getAge($postId); # Criar classe e método
+                $pageProfileId  = $this->profile->getProfilePageId($authorId);
+                $pageProfileUrl = get_permalink( $pageProfileId );
+                $gallery        = $this->gallery->getUrls($pageProfileId);
+                $genreObj       = get_the_terms( $postId, 'profile_genre' );
+                $genre          = join('', wp_list_pluck($genreObj, 'name') );
+                $isVerified     = 'yes'; # Coletar verificação do perfil
+                $havePlace      = 'yes'; # Adicionar opção na edição do perfil
+                
+                // Formatando mensagem de contato
+                $baseWaApi      = '';
+                if( wp_is_mobile() ){
+                    $baseWaApi      = 'https://api.whatsapp.com/send?phone=';
+                } else {
+                    $baseWaApi      = 'https://web.whatsapp.com/send?phone=';
+                }
+                $countryCode    = '55';
+                $waNumber       = $countryCode . str_replace( ['(', ')', '-', ' '], '', $dataProfile['_profile_whatsapp'] );
+                $message        = urlencode('Olá, ' . $title . '! Encontrei seu anúncio no www.acompanhantesa2.com. *Podemos conversar?*');
+                $contactLink    = $baseWaApi . $waNumber . '&text=' . $message;
+                
                 # 0=silver; 1=gold; 2=diamond;
-                switch($planLevel){
-                    case 0:
+                switch($dataProfile['_plan_level']){
+                    case 1:
                         require plugin_dir_path( __DIR__ ) . 'partials/cards/adv-card-silver.php';
                         break;
-                    case 1:
+                    case 2:
                         require plugin_dir_path( __DIR__ ) . 'partials/cards/adv-card-gold.php';
                         break;
-                    case 2:
+                    case 3:
                         require plugin_dir_path( __DIR__ ) . 'partials/cards/adv-card-diamond.php';
                         break;
                     default:
