@@ -162,6 +162,12 @@ class A2 {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-a2-public.php';
 
+		/**
+		 * Classe com métodos genéricos e váriados que são utilizados para auxiliar
+         * em determinadas tarefas.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-a2-helper.php';
+
 		$this->loader = new A2_Loader();
 
 	}
