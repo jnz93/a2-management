@@ -1,4 +1,4 @@
-<div class="advCardInfo mb-4">
+<div class="advCardInfo col-xs-12 col-md-4 col-lg-4 mb-4">
     <span class="advCardInfo__title mb-2 d-block"><?php echo $a['title']; ?></span>
 
     <div class="card advCardInfo__container advCardInfo--diamond">
