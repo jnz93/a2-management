@@ -131,6 +131,9 @@ class A2_Public {
 		/** Action ajax p/ verificação de perfil */
 		add_action( 'wp_ajax_save_profile_evaluation_result', [ $this, 'saveProfileEvaluationResult' ] );
 
+		/** Action ajax p/ verificação de perfil */
+		add_action( 'wp_ajax_add_plan_to_cart', [ $this, 'addPlanToCart' ] );
+
 		/** Action para atualizar a lista de anúncios ativos */
 		add_action( 'publish_to_draft', [ $this, 'removeActivatedAdvertisement' ], 10, 1 );
 
@@ -831,4 +834,26 @@ class A2_Public {
 		}
 		die();
 	}
+
+    /**
+     * Adicionar um plano no carrinho via ajax
+     * 
+     */
+    public function addPlanToCart(){
+        $nonce          = $_POST['nonce'];
+        $verifyNonce    = wp_verify_nonce( $nonce, 'public-nonce' );
+        $url            = false;
+        if( $verifyNonce ){
+            $product    = $_POST['product'];
+            $variation  = $_POST['variation'];
+            $quantity   = 1;
+
+            WC()->cart->add_to_cart( $product, $quantity, $variation );
+
+            $url = wc_get_checkout_url();
+        }
+
+        echo $url;
+        die();
+    }
 }

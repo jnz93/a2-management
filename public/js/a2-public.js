@@ -659,7 +659,22 @@ jQuery(document).ready( function(){
 	/** Habilitando Filtro de cidades no campo de busca */
 	jQuery('#citiesFilter').keyup( function() {
 		filterList(); 
-	})
+	});
+
+    /** Manipulando a seleção de perído nos .cardProduct */
+    jQuery('.cardProduct__selectPeriod').change( function(e) {
+        let self = jQuery(this);
+        showProductPrice(self);
+    })
+
+    /** Inicializando o Carousel de planos no painel da conta */
+    planCardsCarousel();
+
+    /** Manipulando o clique em botões .cardProduct__buyButton */
+    jQuery('.cardProduct__buyButton').click( function(e) {
+        let self = jQuery(this);
+        handleBuyaPlan(self);
+    });
 });
 
 /**
@@ -731,4 +746,50 @@ function planCardsCarousel(){
             items: 1,
         });
     }
+}
+
+/**
+ * Função que manipula uma requisição ajax ao clicar botão de "Comprar"
+ * nos cartões de planos
+ * 
+ */
+function handleBuyaPlan(el){
+    let self    = el,
+        card    = self.siblings('.cardProduct'),
+        product = card.attr('id'),
+        prices  = card.find('.cardProduct__prices').children('h3');
+    var variationId;
+    
+    prices.each( function() {
+        let current = jQuery(this);
+        if( current.hasClass('active-price') ){
+            console.log(current);
+            variationId = current.attr('data-var-id');
+        }
+    });
+
+    let payload = {
+        action: 'add_plan_to_cart',
+        nonce: publicAjax.nonce,
+        product: product,
+        variation: variationId
+    };
+
+    jQuery.ajax({
+		type: 'POST',
+		url: publicAjax.url,
+		data: payload,
+        beforeSend: function( xhr ){
+            // Antes da submissão
+        },
+		error: function( request, status, error ) {
+			console.log(error);
+		},
+	})
+	.done( function(data){
+        console.log(data)
+        setTimeout(() => {
+            window.location.href = data;
+        }, 1000);
+	});
 }
