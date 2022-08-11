@@ -82,7 +82,13 @@
             $title          = __('Você é acompanhante?');
             $content        = __('Faça seu cadastro agora e seja destaque em <b>' . ucwords($titleCarousel) .'</b>!');
             $thumbUrl       = 'https://acompanhantesa2.com/wp-content/uploads/2022/04/undraw_Social_bio_re_0t9u.png';
-            $profileLink    = get_permalink( 365 );
+            $registerPage   = get_page_by_title( 'Cadastro' );
+            $registerLink   = '';
+            if( $registerPage ){
+                $registerLink = get_page_link( $registerPage->ID );
+            } else {
+                $registerLink = get_home_url() . '/cadastro';
+            }
 
             require plugin_dir_path( __DIR__ ) . 'cards/tpl-card-carousel-default.php';
         }
