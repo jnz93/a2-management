@@ -73,6 +73,9 @@ class A2_Shortcodes{
 
         /** Card Active Adv Info */
         add_shortcode( 'activeAdvInfo', [ $this, 'cardAdvActiveInfo'] );
+
+        /** Slider products */
+        add_shortcode( 'sliderProducts', [ $this, 'sliderProducts' ] );
     }
 
     /**
@@ -464,6 +467,85 @@ class A2_Shortcodes{
             }
         }
 
+        return ob_get_clean();
+    }
+
+    /**
+     * Shortcode slider de produtos/anúncios
+     * Ele vai mostrar em um slider as opções de anúncios para compra
+     * 
+     * @param array     $atts   Atributos passados pelo shortcode
+     */
+    public function sliderProducts( $atts )
+    {
+        $a = shortcode_atts( 
+            [
+                'title'     => __('Anúncie agora!', 'textdomain')
+			], 
+            $atts
+        );
+
+        $args = array(
+            'post_type'     => 'product',
+            'post_status'   => 'publish',
+            'orderby'       => 'name',
+        );
+        $products = new WP_Query( $args );
+        
+        $colors = [
+            'diamond_dark'  => '#1E81CE',
+            'diamond_light' => '#9BC9FF',
+            'gold_dark'     => '#E8B04B',
+            'gold_light'    => '#FFC54D',
+            'silver_dark'   => '#BCBCBC',
+            'silver_light'  => '#C9C9C9'
+        ];
+
+        $instructions = '<span>Ao clicar em comprar, você será redirecionado </br> para página de pagamento.</br> <b>Pagamento 100% seguro. Pague com PicPay.</b></span>';
+
+        ob_start();
+        if( $products->have_posts() ){
+            echo '<div class="owl-carousel" id="plan-carousel">';
+            while( $products->have_posts() ) {
+                $products->the_post();
+                $pID            = get_the_ID();
+                $thumbnailUrl   = get_the_post_thumbnail_url( $pID );
+                $title          = get_the_title();
+                $content        = get_the_content();
+                $product        = wc_get_product( $pID );
+                $durations      = explode(',', $product->get_attribute('duracao'));
+                $variations     = $product->get_available_variations();
+                $prices         = array();
+                if( !is_wp_error( $variations ) ){
+                    foreach( $variations as $variation ){
+                        $prices[$variation['attributes']['attribute_pa_duracao']] = [
+                            'id'    => $variation['variation_id'],
+                            'price' => $variation['display_price'],
+                        ];
+                    }
+                }
+                // Definição das cores
+                switch($title){
+                    case 'Anúncio Diamante':
+                        $primaryColor   = $colors['diamond_dark'];
+                        $secondaryColor = $colors['diamond_light'];
+                        break;
+                    case 'Anúncio Ouro':
+                        $primaryColor   = $colors['gold_dark'];
+                        $secondaryColor = $colors['gold_light'];
+                        break;
+                    default:
+                        $primaryColor   = $colors['silver_dark'];
+                        $secondaryColor = $colors['silver_light'];
+                        break;
+                }
+
+                require plugin_dir_path( __DIR__ ) . 'public/partials/cards/tpl-card-product.php';
+            }
+            echo '</div><div id="plan-carousel-dots"></div>' . $instructions ;
+        }
+        wp_reset_postdata();
+        
         return ob_get_clean();
     }
 }

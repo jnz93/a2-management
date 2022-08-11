@@ -684,3 +684,51 @@ function showMessageForRegisterSuccess(){
 		console.log(regCompleted +'[regCompleted] - Não encontrado' );
 	}
 }
+
+
+/**
+ * Função que vai manipular a seleção de periodo para mostrar o valor
+ * nos elementos .cardProduct
+ * 
+ * @param {*} element 
+ */
+function showProductPrice( element ){
+    
+    let value   = element.val(),
+        prices  = element.siblings('.cardProduct__prices').children('h3');
+    
+    prices.each( function(){
+        let period = this.getAttribute('data-var-period');
+        
+        if( period === value ){
+            jQuery(this).removeClass('d-none');
+            jQuery(this).addClass('active-price');
+        } else {
+            jQuery(this).addClass('d-none');
+            jQuery(this).removeClass('active-price');
+        }
+    });
+}
+
+/**
+ * Função que habilita o carousel slider nos cards de planos
+ * dentro do painel da conta
+ * 
+ */
+function planCardsCarousel(){
+
+    let carouselPlans = jQuery('#plan-carousel');
+
+    if( carouselPlans.length > 0 ){
+        carouselPlans.owlCarousel({
+            loop: true,
+            autoPlay: true,
+            margin: 10,
+            nav: false,
+            dots: true,
+            dotsEach: true,
+            dotsContainer: '#plan-carousel-dots',
+            items: 1,
+        });
+    }
+}
