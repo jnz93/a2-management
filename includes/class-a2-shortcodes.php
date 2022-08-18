@@ -462,7 +462,7 @@ class A2_Shortcodes{
                     $colorTwo   = $colors['diamond_light'];
                 }
 
-                require plugin_dir_path( __DIR__ ) . 'public/partials/dashboard/tpl-advCardInfo.php';
+                require plugin_dir_path( __DIR__ ) . 'public/partials/dashboard/tpl-cardAdvActiveInfo.php';
                 
             }
         }
