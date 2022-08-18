@@ -46,12 +46,11 @@
                 $title          = get_the_title( $postId );
                 $content        = get_the_content( $postId );
                 $thumbUrl       = get_the_post_thumbnail_url( $postId );
-                $age            = $this->profile->getAge($postId); # Criar classe e método
-                $pageProfileId  = $this->profile->getProfilePageId($authorId);
-                $pageProfileUrl = get_permalink( $pageProfileId );
-                $gallery        = $this->gallery->getUrls($pageProfileId);
-                $genreObj       = get_the_terms( $postId, 'profile_genre' );
-                $genre          = join('', wp_list_pluck($genreObj, 'name') );
+                $age            = $this->profileHelper->getAgeById($postId); # Criar classe e método
+                $pageProfileId  = $this->profileHelper->getPageIdByAuthor($authorId);
+                $gallery        = $this->profileHelper->getGalleryById($pageProfileId);
+                $pageProfileUrl = $this->profileHelper->getProfileLinkById($pageProfileId );
+                $genre          = $this->profileHelper->getGenreById($pageProfileId);
                 $isVerified     = 'yes'; # Coletar verificação do perfil
                 $havePlace      = 'yes'; # Adicionar opção na edição do perfil
                 

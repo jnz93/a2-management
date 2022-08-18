@@ -41,11 +41,11 @@ class A2_Shortcodes{
 	 */
     public function __construct()
     {
-        $this->register = new A2_Register();
-        $this->a2Query  = new A2_Query();
-        $this->gallery  = new A2_Gallery();
-        $this->profile  = new A2_Profile();
-        $this->Adv      = new A2_Advertisement();
+        $this->register         = new A2_Register();
+        $this->a2Query          = new A2_Query();
+        $this->gallery          = new A2_Gallery();
+        $this->profileHelper    = new A2_ProfileHelper();
+        $this->Adv              = new A2_Advertisement();
 
         /** Formulário de login */
         add_shortcode( 'loginForm', [ $this, 'loginForm'] );
