@@ -1,5 +1,5 @@
 <div class="col-xs-12 col-md-6 col-lg-6 mb-6">
-    <span class="mb-2 d-block text-capitalize"><?php _e( 'Anúncio <b>'. $advType . '</b>', 'textdomain'); ?></span>
+    <span class="mb-1 d-block text-capitalize text-muted"><?php _e( 'Anúncio <b>'. $advType . '</b>', 'textdomain'); ?></span>
 
     <div class="cardAdvActiveInfo card border border-0 shadow-sm pt-2 pb-2">
         <div class="d-flex align-items-center">
