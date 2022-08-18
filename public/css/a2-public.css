@@ -318,6 +318,34 @@ div.product .entry-summary div.product_meta{
     border-radius: 0 !important;
     border-bottom-left-radius: 8px !important;
     border-bottom-right-radius: 8px !important;
+    transition: 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.cardProduct__buyButton:hover{
+    transition: 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
+}
+
+
+/* Estilização #asideWrapper .plan-carousel-dots */
+#plan-carousel-dots{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+#plan-carousel-dots button.owl-dot{
+    background: none;
+    border: 1px solid #cdcdcd;
+    width: 16px;
+    height: 16px;
+    border-radius: 100%;
+    margin: 0 4px;
+    transition: 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+#plan-carousel-dots button.active{
+    background: #6c757d !important;
+    transition: 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 /* CSS RULES FOR DESKTOP */
