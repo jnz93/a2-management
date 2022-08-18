@@ -501,7 +501,7 @@ class A2_Shortcodes{
             'silver_light'  => '#C9C9C9'
         ];
 
-        $instructions = '<span>Ao clicar em comprar, você será redirecionado </br> para página de pagamento.</br> <b>Pagamento 100% seguro. Pague com PicPay.</b></span>';
+        $instructions = '<span class="text-muted text-center d-block mb-4">Ao clicar em comprar, você será redirecionado </br> para página de pagamento.</br> <b>Pagamento 100% seguro. Pague com PicPay.</b></span>';
 
         ob_start();
         if( $products->have_posts() ){
