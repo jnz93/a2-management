@@ -1,10 +1,10 @@
 <div class="col-xs-12 col-md-6 col-lg-6 mb-6">
     <span class="mb-1 d-block text-capitalize text-muted"><?php _e( 'Anúncio <b>'. $advType . '</b>', 'textdomain'); ?></span>
 
-    <div class="cardAdvActiveInfo card border border-0 shadow-sm pt-2 pb-2">
+    <div class="cardDashboard card border border-0 shadow-sm pt-2 pb-2">
         <div class="d-flex align-items-center">
             <div class="col-3">
-                <div class="d-flex justify-content-end align-items-center">
+                <div class="d-flex justify-content-center align-items-center">
                     <?php echo $advIcon; ?>
                 </div>
             </div>
@@ -16,7 +16,7 @@
             </div>
 
             <div class="col-2">
-                <a href="#" class="cardAdvActiveInfo__roundBtn d-flex align-items-center justify-content-center" id=""><i class="bi bi-clipboard2-data"></i></a>
+                <a href="#" class="cardDashboard__roundBtn d-flex align-items-center justify-content-center" id=""><i class="bi bi-clipboard2-data"></i></a>
             </div>
         </div>
     </div>

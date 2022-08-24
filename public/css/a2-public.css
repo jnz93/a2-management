@@ -249,20 +249,26 @@ div.product .entry-summary div.product_meta{
     font-size: 16px;
 }
 
-/* .cardAdvActiveInfo */
-.cardAdvActiveInfo{
+/* .cardDashboard */
+.cardDashboard{
     transition: 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    color: #5C646E !important;
 }
-.cardAdvActiveInfo:hover{
+.cardDashboard:hover{
     transition: 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
 }
-.cardAdvActiveInfo__roundBtn{
+.cardDashboard__roundBtn{
     width: 32px; 
     height: 32px; 
     background: #F0F0F0; 
     border-radius: 100%; 
     font-size: 20px;
+}
+.cardDashboard__icon{
+    font-size: 2em;
+    color: #5C646E;
+    margin: auto;
 }
 
 
