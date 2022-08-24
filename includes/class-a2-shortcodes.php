@@ -76,6 +76,9 @@ class A2_Shortcodes{
 
         /** Slider products */
         add_shortcode( 'sliderProducts', [ $this, 'sliderProducts' ] );
+
+        /** Caixa com cards estatísticos */
+        add_shortcode( 'profileStatistics', [$this , 'boxStatistics' ] );
     }
 
     /**
@@ -529,6 +532,56 @@ class A2_Shortcodes{
         }
         wp_reset_postdata();
         
+        return ob_get_clean();
+    }
+
+    /**
+     * Shortcode que mostra cards com estatísticas do perfil
+     * 
+     * @param array     $atts   Atributos passados pelo shortcode
+     */
+    public function boxStatistics( $atts )
+    {
+        $a = shortcode_atts( 
+            [
+                'title'     => __('Estatísticas', 'textdomain')
+			], 
+            $atts
+        );
+
+        $userId = get_current_user_id();
+        $pageId = $this->profileHelper->getPageIdByAuthor($userId);
+
+        // Visualizações, contatos e cliques em fotos
+        $metas = [
+            'views'     => '_a2_statistic_views',
+            'contacts'  => '_a2_statistic_contacts',
+            'clicks'    => '_a2_statistic_clicks',
+        ];
+        $postFix = '/mês';
+        ob_start();
+        foreach( $metas as $name => $key ){
+
+            switch($name){
+                case 'views':
+                    $title      = 'Visualizações';
+                    $icon       = '<i class="bi bi-emoji-heart-eyes cardDashboard__icon"></i>';
+                    $pageLink   = $this->profileHelper->getProfileLinkById($pageId);
+                    break;
+                case 'contacts':
+                    $title  = 'Contatos';
+                    $icon   = '<i class="bi bi-chat-right-heart cardDashboard__icon"></i>';
+                    break;
+                default: # clicks
+                    $title  = 'Cliques em fotos';
+                    $icon   = '<i class="bi bi-images cardDashboard__icon"></i>';
+                    break;
+            }
+            $value  = get_post_meta( $pageId, $key, true );
+
+            require plugin_dir_path( __DIR__ ) . 'public/partials/dashboard/tpl-cardStatistic.php';
+        }
+
         return ob_get_clean();
     }
 }
