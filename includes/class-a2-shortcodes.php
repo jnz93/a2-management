@@ -427,39 +427,22 @@ class A2_Shortcodes{
                 $advLvl     = get_post_meta( $item, '_plan_level', true );
                 $advType    = '';
                 $advIcon    = '';
-                $colorOne   = '';
-                $colorTwo   = '';
 
                 $icons  = [
                     'prata'     => '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><g id="_9554546_medal_silver_badge_achievement_reward_icon" data-name="9554546_medal_silver_badge_achievement_reward_icon" transform="translate(-27.8 -14.2)"><ellipse id="Elipse_62" data-name="Elipse 62" cx="32" cy="32" rx="32" ry="32" transform="translate(27.8 14.2)" fill="#ededed"/><circle id="Elipse_63" data-name="Elipse 63" cx="25.044" cy="25.044" r="25.044" transform="translate(34.756 21.156)" fill="#bcbcbc"/><path id="Caminho_299" data-name="Caminho 299" d="M60.852,31.206l4.119,8.468a1.567,1.567,0,0,0,.981.807l9.122,1.411a1.387,1.387,0,0,1,.785,2.319l-6.571,6.654a1.409,1.409,0,0,0-.392,1.21l1.569,9.376A1.326,1.326,0,0,1,68.5,62.862l-8.141-4.436a1.419,1.419,0,0,0-1.275,0l-8.239,4.436a1.349,1.349,0,0,1-1.962-1.411l1.569-9.376a1.409,1.409,0,0,0-.392-1.21l-6.571-6.654a1.349,1.349,0,0,1,.785-2.319L53.4,40.481a1.31,1.31,0,0,0,.981-.807L58.5,31.206A1.294,1.294,0,0,1,60.852,31.206Z" transform="translate(0.124 -0.336)" fill="#fff"/></g></svg>',
                     'ouro'      => '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><g id="_9554545_medal_gold_winner_badge_achievement_icon" data-name="9554545_medal_gold_winner_badge_achievement_icon" transform="translate(-27.8 -14.2)"><ellipse id="Elipse_60" data-name="Elipse 60" cx="32" cy="32" rx="32" ry="32" transform="translate(27.8 14.2)" fill="#ffc54d"/><circle id="Elipse_61" data-name="Elipse 61" cx="25.141" cy="25.141" r="25.141" transform="translate(34.659 21.059)" fill="#e8b04b"/><path id="Caminho_297" data-name="Caminho 297" d="M61.083,31.216,65.256,39.8a1.587,1.587,0,0,0,.994.817l9.24,1.43a1.406,1.406,0,0,1,.795,2.35l-6.657,6.743a1.428,1.428,0,0,0-.4,1.226l1.59,9.5a1.344,1.344,0,0,1-1.987,1.43l-8.246-4.5a1.437,1.437,0,0,0-1.292,0l-8.346,4.5a1.367,1.367,0,0,1-1.987-1.43l1.59-9.5a1.428,1.428,0,0,0-.4-1.226L43.5,44.4a1.367,1.367,0,0,1,.795-2.35l9.24-1.43a1.327,1.327,0,0,0,.994-.817L58.7,31.216A1.311,1.311,0,0,1,61.083,31.216Z" transform="translate(-0.091 -0.558)" fill="#fff"/></g></svg>',
                     'diamante'  => '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><g id="Grupo_465" data-name="Grupo 465" transform="translate(-1061 -604)"><circle id="Elipse_60" data-name="Elipse 60" cx="32" cy="32" r="32" transform="translate(1061 604)" fill="#9bc9ff"/><circle id="Elipse_64" data-name="Elipse 64" cx="25.044" cy="25.044" r="25.044" transform="translate(1068.057 611.057)" fill="#1e81ce"/><g id="_9035684_diamond_sharp_icon" data-name="9035684_diamond_sharp_icon" transform="translate(1074.658 618.656)"><path id="Caminho_288" data-name="Caminho 288" d="M274.381,32H264l6.606,8.808Z" transform="translate(-245.23 -32)" fill="#fff"/><path id="Caminho_289" data-name="Caminho 289" d="M115.69,32l3.776,8.808L126.071,32Z" transform="translate(-108.471 -32)" fill="#fff"/><path id="Caminho_290" data-name="Caminho 290" d="M197.022,74.67,192,81.365h10.043Z" transform="translate(-178.836 -71.322)" fill="#fff"/><path id="Caminho_291" data-name="Caminho 291" d="M379.923,51.06l-3.663,8.548h8.767Z" transform="translate(-348.734 -49.565)" fill="#fff"/><path id="Caminho_292" data-name="Caminho 292" d="M28.182,51.06,23,59.608h8.846Z" transform="translate(-23 -49.565)" fill="#fff"/><path id="Caminho_293" data-name="Caminho 293" d="M33.626,192H24l17.481,22.6h.042Z" transform="translate(-23.922 -179.631)" fill="#fff"/><path id="Caminho_294" data-name="Caminho 294" d="M272.567,192l-7.9,22.6h.042L282.193,192Z" transform="translate(-245.9 -179.631)" fill="#fff"/><path id="Caminho_295" data-name="Caminho 295" d="M194.127,192H182.61l5.758,16.32Z" transform="translate(-170.183 -179.569)" fill="#fff"/></g></g></svg>'
                 ];
-                
-                $colors = [
-                    'diamond_dark'  => '#1E81CE',
-                    'diamond_light' => '#9BC9FF',
-                    'gold_dark'     => '#E8B04B',
-                    'gold_light'    => '#FFC54D',
-                    'silver_dark'   => '#BCBCBC',
-                    'silver_light'  => '#C9C9C9'
-                ];
 
                 if( $advLvl == 1 ){
                     $advType    = 'prata';
                     $advIcon    = $icons[$advType];
-                    $colorOne   = $colors['silver_dark'];
-                    $colorTwo   = $colors['silver_light'];
                 } else if( $advLvl == 2 ) {
                     $advType    = 'ouro';
                     $advIcon    = $icons[$advType];
-                    $colorOne   = $colors['gold_dark'];
-                    $colorTwo   = $colors['gold_light'];
                 } else {
                     $advType    = 'diamante';
                     $advIcon    = $icons[$advType];
-                    $colorOne   = $colors['diamond_dark'];
-                    $colorTwo   = $colors['diamond_light'];
                 }
 
                 require plugin_dir_path( __DIR__ ) . 'public/partials/dashboard/tpl-cardAdvActiveInfo.php';
