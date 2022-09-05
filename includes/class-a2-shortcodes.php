@@ -274,6 +274,7 @@ class A2_Shortcodes{
             ],
             $atts
         );
+        $cities     = $this->a2Query->getCities();
         $taxonomies = [
             'profile_genre',
             'profile_ethnicity',
