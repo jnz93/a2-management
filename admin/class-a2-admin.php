@@ -118,6 +118,14 @@ class A2_Admin {
         add_action( 'wp_login', [$this, 'setLastTimeLogin'] );
         add_action( 'wp_head', [$this, 'setUserLastActivity'] );
 
+        # Registro de ação para exclusão de usuários obsoletos
+		add_action( 'a2_removeUsers', [ $this, 'removerObsoleteUsers' ], 10, 1 );
+
+        # Aplicando rotina para exclusão de usuários obsoletos
+		if( !wp_next_scheduled( 'a2_removeUsers' ) ){
+			wp_schedule_event( time(), 'weekly', 'a2_removeUsers' );
+		}
+
 	}
 
 	/**
@@ -725,6 +733,21 @@ class A2_Admin {
 
         if( !is_wp_error($userId) ){
             update_user_meta( $userId, '_last_activity', time() );
+        }
+    }
+
+    /**
+     * Remoção de cadastros obsoletos
+     * 
+     */
+    public function removerObsoleteUsers()
+    {
+        $list = $register->getObsoleteUsers();
+
+        if( !empty($list) ){
+            foreach( $list as $id ){
+                wp_delete_user( $id );
+            }
         }
     }
 }
