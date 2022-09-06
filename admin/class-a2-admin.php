@@ -114,6 +114,10 @@ class A2_Admin {
 		add_action( 'woocommerce_order_status_changed', [ $this, 'paymentComplete' ], 10, 4 ); # Pedidos com cupon ficam com o status "Processing", por isso reativamos esse hack.
 		add_action( 'woocommerce_order_status_completed', [ $this, 'createAdvertisement' ], 10, 1 );
 
+        /** Sistema LTO(last time online) */
+        add_action( 'wp_login', [$this, 'setLastTimeLogin'] );
+        add_action( 'wp_head', [$this, 'setUserLastActivity'] );
+
 	}
 
 	/**
@@ -684,4 +688,43 @@ class A2_Admin {
 	{
 		$this->advertisement->create( $order_id );
 	}
+
+    /**
+     * Salvar data do último login de um usuário
+     * Solução baseada no artigo: https://www.kvcodes.com/2015/12/how-to-set-user-last-login-date-and-time-in-wordpress/
+     * 
+     * @hook wp_login
+     * 
+     * @param string    $login 
+     */
+    public function setLastTimeLogin( $login )
+    {
+        $user = get_userdatabylogin($login);
+        $currentLoginTime = get_user_meta( $user->ID, '_current_login', true );
+        
+        if( !empty($currentLoginTime) ){
+            update_user_meta( $user->ID, '_last_login', $currentLoginTime );
+            update_user_meta( $user->ID, '_current_login', time() );
+        } else {
+            update_user_meta( $user->ID, '_current_login', time() );
+            update_user_meta( $user->ID, '_last_login', time() );
+        }
+    }
+
+    /**
+     * Salvar data da última atividade de um usuário logado
+     * Atividade online é considerada requisição ao servidor, atualização de página, envio de arquivos, etc...
+     * 
+     * @hook wp_head
+     */
+    public function setUserLastActivity()
+    {
+        if( !is_user_logged_in() ) return;
+
+        $userId = get_current_user_id();
+
+        if( !is_wp_error($userId) ){
+            update_user_meta( $userId, '_last_activity', time() );
+        }
+    }
 }
