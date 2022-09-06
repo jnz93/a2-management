@@ -124,6 +124,32 @@ class A2_Register{
     }
 
     /**
+     * Retornar usuários obsoletos
+     * Cadastros obsoletos são aqueles que não tem atividade de login há mais de 2 meses
+     * 
+     * @return array    $obsoleteList
+     */
+    public function getObsoleteUsers()
+    {
+        $limit          = strtotime('-2 months');
+        $obsoleteList   = [];
+        $args   = [
+            'capability' => ['a2_scort'],
+        ];
+        $users = get_users( $args );
+
+        if(!is_wp_error($users)){
+            foreach( $users as $user ){
+                $lastLoginTIme = get_user_meta($user->ID, '_last_login', true);
+                if( empty($lastLoginTIme) || $lastLoginTIme < $limit ){
+                    $obsoleteList[] = $user->ID;
+                }
+            }
+        }
+        return $obsoleteList;
+    }
+
+    /**
      * Este método recebe parâmetros como nome, email senha e tipo para 
      * adicionar um novo usuário do tipo acompanhante
      * 
