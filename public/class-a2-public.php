@@ -151,27 +151,6 @@ class A2_Public {
 		$this->Advertisement->removeActivatedItem( $postId, $customerId );
 	}
 
-
-	// Manipulando a consulta para remover anúncios expirados
-	public function filterExpiredAdvertisement( $query )
-	{
-		if( is_admin() ) return;
-
-		if( $query->is_main_query() && is_post_type_archive( 'a2_advertisement' ) ){
-			date_default_timezone_set('America/Sao_Paulo'); # Setando GMT padrão
-
-			$now = time();
-			$metaquery = array(
-				array(
-					 'key' 		=> '_expiration_date',
-					 'value' 	=> $now,
-					 'type' 	=> 'NUMERIC',
-					 'compare' 	=> '<'
-				)
-			);
-			$query->set( 'meta_query', $metaquery );
-		}
-	}
 	/**
 	 * Register the stylesheets for the public-facing side of the site.
 	 *
@@ -536,6 +515,33 @@ class A2_Public {
 			$query->set( 'meta_query', $metaQuery );
 		}
 
+	}
+
+    /**
+     * Manipulando consulta na query principal para remover anúncios de acompanhantes expirados
+     * 
+	 * @link https://codex.wordpress.org/Plugin_API/Action_Reference/pre_get_posts
+     * 
+     * @return void
+     */
+	public function filterExpiredAdvertisement( $query )
+	{
+		if( is_admin() ) return;
+
+		if( $query->is_main_query() && is_post_type_archive( 'a2_advertisement' ) ){
+			date_default_timezone_set('America/Sao_Paulo'); # Setando GMT padrão
+
+			$now = time();
+			$metaquery = array(
+				array(
+					 'key' 		=> '_expiration_date',
+					 'value' 	=> $now,
+					 'type' 	=> 'NUMERIC',
+					 'compare' 	=> '<'
+				)
+			);
+			$query->set( 'meta_query', $metaquery );
+		}
 	}
 
 	/**
