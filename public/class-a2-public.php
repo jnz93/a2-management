@@ -107,6 +107,9 @@ class A2_Public {
 		/** Customizando $query para anúncios */
 		add_action( 'pre_get_posts', [$this, 'advertisementPreGetPosts'], 1 );
 
+        /** Customizando a main query para remover anúncios expirados */
+		add_action( 'pre_get_posts', [ $this, 'filterExpiredAdvertisement' ], 10, 1 );
+
 		/** Action ajax p/ retorno dos children terms */
 		add_action( 'wp_ajax_listChildrenTerms', [ $this, 'getDescendantTerms' ] );
 
@@ -136,9 +139,6 @@ class A2_Public {
 
 		/** Action para atualizar a lista de anúncios ativos */
 		add_action( 'publish_to_draft', [ $this, 'removeActivatedAdvertisement' ], 10, 1 );
-
-		/** Alterando a main query para remover anúncios expirados */
-		add_action( 'pre_get_posts', [ $this, 'filterExpiredAdvertisement' ], 10, 1 );
 	}
 
 	// Remover anúncio da lista de ativados
