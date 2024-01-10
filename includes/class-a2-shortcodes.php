@@ -32,7 +32,7 @@ class A2_Shortcodes{
      * Instância da classe A2_Profile
      * Temporário para utilizaro método "getAge()"
      */
-    private $profile;
+    private $dataProfile;
 
     /**
 	 * Inicialização da classe e configurações de hooks, filtros e propriedades.
@@ -46,6 +46,36 @@ class A2_Shortcodes{
         $this->gallery          = new A2_Gallery();
         $this->profileHelper    = new A2_ProfileHelper();
         $this->Adv              = new A2_Advertisement();
+
+        # Meta Keys para coletar post metas
+        $this->profileMetas = [
+            'id',
+            'first_name',
+            'last_name',
+            '_plan_level',
+            '_profile_url',
+            '_expiration_date',
+            '_profile_whatsapp',
+            '_profile_birthday',
+            '_profile_height',
+            '_profile_weight',
+            '_profile_eye_color',
+            '_profile_hair_color',
+            '_profile_tits_size',
+            '_profile_bust_size',
+            '_profile_waist_size',
+            '_profile_instagram',
+            '_profile_tiktok',
+            '_profile_onlyfans',
+            '_profile_address',
+            '_profile_cep',
+            '_profile_cache_quickie',
+            '_profile_cache_half_an_hour',
+            '_profile_cache_hour',
+            '_profile_cache_overnight_stay',
+            '_profile_cache_promotion',
+            '_profile_cache_promotion_activated',
+        ];
 
         /** Formulário de login */
         add_shortcode( 'loginForm', [ $this, 'loginForm'] );
@@ -78,7 +108,10 @@ class A2_Shortcodes{
         add_shortcode( 'sliderProducts', [ $this, 'sliderProducts' ] );
 
         /** Caixa com cards estatísticos */
-        add_shortcode( 'profileStatistics', [$this , 'boxStatistics' ] );
+        add_shortcode( 'profileStatistics', [ $this , 'boxStatistics' ] );
+
+        /** Card de Anúncio */
+        add_shortcode( 'profileCard', [ $this, 'advCard' ] );
     }
 
     /**
@@ -584,5 +617,68 @@ class A2_Shortcodes{
         }
 
         return ob_get_clean();
+    }
+
+    /**
+     * Shortcode responsável por mostrar os cards das modelos
+     * Ele deve ser sempre chamado dentro de um loop
+     * 
+     * @param array     $atts   Atributos
+     */
+    public function advCard( $atts )
+    {
+        $a = shortcode_atts( 
+            [
+                'title' => ''
+			], 
+            $atts
+        );
+        global $post;
+        $postId     = $post->ID;
+        $authorId   = get_the_author_meta('ID');
+        $dataProfile    = [];
+        foreach( $this->profileMetas as $key ){
+            $dataProfile[$key] = get_post_meta( $postId, $key, true );
+        }
+
+        $title          = get_the_title( $postId );
+        $content        = get_the_content( $postId );
+        $thumbUrl       = get_the_post_thumbnail_url( $postId );
+        $age            = $this->profileHelper->getAgeById($postId); # Criar classe e método
+        $pageProfileId  = $this->profileHelper->getPageIdByAuthor($authorId);
+        $gallery        = $this->profileHelper->getGalleryById($pageProfileId);
+        $pageProfileUrl = $this->profileHelper->getProfileLinkById($pageProfileId );
+        $genre          = $this->profileHelper->getGenreById($pageProfileId);
+        $isVerified     = 'yes'; # Coletar verificação do perfil
+        $havePlace      = 'yes'; # Adicionar opção na edição do perfil
+        
+        // Formatando mensagem de contato
+        $baseWaApi      = '';
+        if( wp_is_mobile() ){
+            $baseWaApi      = 'https://api.whatsapp.com/send?phone=';
+        } else {
+            $baseWaApi      = 'https://web.whatsapp.com/send?phone=';
+        }
+        $countryCode    = '55';
+        $waNumber       = $countryCode . str_replace( ['(', ')', '-', ' '], '', $dataProfile['_profile_whatsapp'] );
+        $message        = urlencode('Olá, ' . $title . '! Encontrei seu anúncio no www.acompanhantesa2.com. *Podemos conversar?*');
+        $contactLink    = $baseWaApi . $waNumber . '&text=' . $message;
+
+        # 0=silver; 1=gold; 2=diamond;
+        switch($dataProfile['_plan_level']){
+            case 0:
+                require plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/cards/adv-card-silver.php';
+                break;
+            case 1:
+                require plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/cards/adv-card-gold.php';
+                break;
+            case 2:
+                require plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/cards/adv-card-diamond.php';
+                break;
+            default:
+                require plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/cards/adv-card-default.php';
+                break;
+        }
+        
     }
 }

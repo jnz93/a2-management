@@ -110,6 +110,9 @@ class A2_Public {
         /** Customizando a main query para remover anúncios expirados */
 		add_action( 'pre_get_posts', [ $this, 'filterExpiredAdvertisement' ], 10, 1 );
 
+        /** Customizando os resultados para taxonomia de localização */
+        add_action( 'pre_get_posts', [ $this, 'handleLocalizationTaxResult' ], 10, 1 );
+
 		/** Action ajax p/ retorno dos children terms */
 		add_action( 'wp_ajax_listChildrenTerms', [ $this, 'getDescendantTerms' ] );
 
@@ -234,6 +237,13 @@ class A2_Public {
 		if( get_post_type() == 'a2_escort' ){
 			wp_enqueue_script( 'nano-gallery-2', 'https://cdnjs.cloudflare.com/ajax/libs/nanogallery2/3.0.5/jquery.nanogallery2.min.js', [], '3.0.5', true );
 		}
+
+
+		wp_register_script( 'rest-uploader', plugin_dir_url( __FILE__ ) . 'js/rest-uploader.js', [ 'jquery' ], null, true );
+		wp_localize_script( 'rest-uploader', 'restVars', [
+			'endpoint' => esc_url_raw( rest_url( '/wp/v2/media/' ) ),
+			'nonce'    => wp_create_nonce( 'wp_rest' ),
+		] );
 	}
 	
 	/**
@@ -543,6 +553,32 @@ class A2_Public {
 			$query->set( 'meta_query', $metaquery );
 		}
 	}
+
+    /**
+     * Manipulando a query de resultados para páginas da taxonomia "profile_localization"
+     * 
+     * @hook pre_get_posts
+     * 
+     * @return void 
+     */
+    public function handleLocalizationTaxResult( $query )
+    {
+        if ( !is_tax('profile_localization') ) return;
+
+        $metaquery = [
+            [
+                # Meta de nível do anúncio(diamante > ouro > prata)
+                'key' 		=> '_nivel',
+                'value' 	=> '',
+                'type' 	    => 'NUMERIC',
+                'compare' 	=> '<'
+            ]
+        ];
+        $types  = ['a2_advertisement'];
+
+        $query->set( 'post_type', $types );
+        $query->set( 'posts_per_page', 20 );
+    }
 
 	/**
 	 * Retorna descendentes diretos do termo recebido via ajax

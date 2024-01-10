@@ -537,7 +537,7 @@ class A2_Admin {
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'query_var'         => true,
-			'rewrite'           => array( 'slug' => 'localizacao' ),
+			'rewrite'           => array( 'slug' => 'acompanhantes-em' ),
 		);
 		register_taxonomy( 'profile_localization', array( 'a2_escort', 'a2_advertisement' ), $args );
 		

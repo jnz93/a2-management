@@ -523,6 +523,12 @@ function filterList() {
 		citiesList.addClass('d-none');
 	}
 
+    /**
+     * MAnipular o texto digitado
+     * Encontrar caracteres com acento
+     * Traduzir para o mesmo caractere sem acento
+     * devolver a palavra ao filtro
+     */
     for (i = 0; i < li.length; i++) {
 		a 			= li[i];
 		txtValue 	= a.textContent || a.innerText;
