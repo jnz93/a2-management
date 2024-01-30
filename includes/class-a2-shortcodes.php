@@ -112,6 +112,9 @@ class A2_Shortcodes{
 
         /** Card de Anúncio */
         add_shortcode( 'profileCard', [ $this, 'advCard' ] );
+
+        /** Conteúdo da página de perfil da acompanhante */
+        add_shortcode('profileContent', [$this, 'scortProfileContent']);
     }
 
     /**
@@ -680,5 +683,798 @@ class A2_Shortcodes{
                 break;
         }
         
+    }
+
+    /**
+     * Perfil de modelo
+     * @template single-a2_scort
+     * 
+     */
+    public function scortProfileContent($atts)
+    {
+        $a = shortcode_atts( 
+            [
+                'title' => ''
+			], 
+            $atts
+        );
+        global $post;
+        $post_id                = $post->ID;
+        $userId					= get_the_author_ID();
+
+		# Coletando Informações - Transformar essa coleta em um método publico na classe A2_Profile
+		$profileData 			= array();
+		$profileData['name'] 	= get_the_title( $post_id );
+		$metaKeys 			= array(
+			'_profile_whatsapp',
+			'_profile_birthday',
+			'_profile_age',
+			'_profile_description',
+			'_profile_height',
+			'_profile_weight',
+			'_profile_eye_color',
+			'_profile_hair_color',
+			'_profile_tits_size',
+			'_profile_bust_size',
+			'_profile_waist_size',
+			'_profile_instagram',
+			'_profile_tiktok',
+			'_profile_onlyfans',
+			'_profile_address',
+			'_profile_cep',
+			'_profile_cache_quickie',
+			'_profile_cache_half_an_hour',
+			'_profile_cache_hour',
+			'_profile_cache_overnight_stay',
+			'_profile_cache_promotion',
+			'_profile_cache_promotion_activated',
+			'_profile_office_hour',
+			'_profile_cover',
+			'_profile_photo',
+			'_profile_gallery',
+			'_profile_verified_media',
+		);
+		
+		# Meta posts
+		foreach( $metaKeys as $key ){
+			if( $key == '_profile_photo' ){
+				$profileData[$key] = get_the_post_thumbnail_url( $post_id );
+			} else {
+				$profileData[$key] = get_post_meta( $post_id, $key, true );
+			}
+		}
+
+		# Taxonomias
+		$taxonomies = array(
+			'_profile_ethnicity' 		=> 'profile_ethnicity',
+			'_profile_genre'			=> 'profile_genre',
+			'_profile_sign'				=> 'profile_sign',
+			'_profile_preference'		=> 'profile_preference',
+			'_profile_services'			=> 'profile_services',
+			'_profile_place_of_service'	=> 'profile_place_of_service',
+			'_profile_work_days'		=> 'profile_work_days',
+			'_profile_payment_methods'	=> 'profile_payment_methods',
+			'_profile_languages'		=> 'profile_languages',
+			'_profile_specialties'		=> 'profile_specialties',
+			// '_profile_country'			=> 'profile_localization',
+			// '_profile_state'				=> 'profile_localization',
+			// '_profile_city'				=> 'profile_localization',
+			// '_profile_district'			=> 'profile_localization',
+		);
+		foreach( $taxonomies as $key => $taxonomy ){
+			$profileData[$key] = get_the_terms( $post_id, $taxonomy );
+		}
+
+		// Formatando mensagem de contato
+		$baseWaApi      = '';
+		if( wp_is_mobile() ){
+			$baseWaApi      = 'https://api.whatsapp.com/send?phone=';
+		} else {
+			$baseWaApi      = 'https://web.whatsapp.com/send?phone=';
+		}
+		$countryCode    = '55';
+		$waNumber       = $countryCode . str_replace( ['(', ')', '-', ' '], '', $profileData['_profile_whatsapp'] );
+		$message        = urlencode('Olá, ' . $profileData['name'] . '! Encontrei seu anúncio no www.acompanhantesa2.com. *Podemos conversar?*');
+		$contactLink    = $baseWaApi . $waNumber . '&text=' .$message;
+		$telLink 		= 'tel:+' . $waNumber; 
+
+        ob_start();
+		?>
+		<div class="profileContent">
+			<div class="profileCover">
+				<div class="profileCover__attachment" style="background-image: url('<?php echo wp_get_attachment_image_url( $profileData['_profile_cover'], 'big' ); ?>')"></div>
+			</div>
+
+			<!-- HTML DA PÀGINA AQUI -->
+			<div class="profile row align-items-center">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+					<div class="profile__adornment profile__adornment--n1 rounded-circle shadow">
+						<div class="profile__thumb rounded-circle" style="background-image: url('<?php echo $profileData['_profile_photo']; ?>');"></div>
+					</div>
+				</div>
+				<!-- /end profile__thumb -->
+
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+					<?php #do_action( 'profileCheckmark', $userId ); ?>
+					<h2 class="text-center fw-bold m-2"><?php echo $profileData['name']; ?></h2>
+					<p class="text-center"><?php _e(get_the_content(), 'a2'); ?></p>
+					
+					<div class="row mt-4">
+						<div class="col-12 mb-5">
+							<div class="profile__rating mb-2 d-inline-flex align-items-center d-none">
+								<div class="d-flex justify-content-start align-items-center">
+									<i class="profile__rating--color me-1 fas fa-star"></i>
+									<i class="profile__rating--color me-1 fas fa-star"></i>
+									<i class="profile__rating--color me-1 fas fa-star"></i>
+									<i class="profile__rating--color me-1 fas fa-star-half-alt"></i>
+									<i class="profile__rating--color me-1 far fa-star"></i>
+								</div>
+								<span class="c-white ms-2"><?php echo __('Ver Avaliações', 'textdomain'); ?></span>
+							</div>
+
+							<div class="mb-2">
+								<ul class="list-group list-group-horizontal text-center">
+									<li class="list-group-item list-group-item-action bg-transparent text-secondary fw-medium">
+										<i class="bi bi-gender-female"></i>
+										<span class=""><?php _e('Mulher', 'a2'); ?></span>
+									</li>
+									<li class="list-group-item list-group-item-action bg-transparent text-secondary fw-medium">
+										<i class="d-inline-flex justify-content-center">
+											<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-cake2-fill" viewBox="0 0 16 16">
+												<path d="m2.899.804.595-.792.598.79A.747.747 0 0 1 4 1.806v4.886q-.532-.09-1-.201V1.813a.747.747 0 0 1-.1-1.01ZM13 1.806v4.685a15 15 0 0 1-1 .201v-4.88a.747.747 0 0 1-.1-1.007l.595-.792.598.79A.746.746 0 0 1 13 1.806m-3 0a.746.746 0 0 0 .092-1.004l-.598-.79-.595.792A.747.747 0 0 0 9 1.813v5.17q.512-.02 1-.055zm-3 0v5.176q-.512-.018-1-.054V1.813a.747.747 0 0 1-.1-1.01l.595-.79.598.789A.747.747 0 0 1 7 1.806"/>
+												<path d="M4.5 6.988V4.226a23 23 0 0 1 1-.114V7.16c0 .131.101.24.232.25l.231.017q.498.037 1.02.055l.258.01a.25.25 0 0 0 .26-.25V4.003a29 29 0 0 1 1 0V7.24a.25.25 0 0 0 .258.25l.259-.009q.52-.018 1.019-.055l.231-.017a.25.25 0 0 0 .232-.25V4.112q.518.047 1 .114v2.762a.25.25 0 0 0 .292.246l.291-.049q.547-.091 1.033-.208l.192-.046a.25.25 0 0 0 .192-.243V4.621c.672.184 1.251.409 1.677.678.415.261.823.655.823 1.2V13.5c0 .546-.408.94-.823 1.201-.44.278-1.043.51-1.745.696-1.41.376-3.33.603-5.432.603s-4.022-.227-5.432-.603c-.702-.187-1.305-.418-1.745-.696C.408 14.44 0 14.046 0 13.5v-7c0-.546.408-.94.823-1.201.426-.269 1.005-.494 1.677-.678v2.067c0 .116.08.216.192.243l.192.046q.486.116 1.033.208l.292.05a.25.25 0 0 0 .291-.247M1 8.82v1.659a1.935 1.935 0 0 0 2.298.43.935.935 0 0 1 1.08.175l.348.349a2 2 0 0 0 2.615.185l.059-.044a1 1 0 0 1 1.2 0l.06.044a2 2 0 0 0 2.613-.185l.348-.348a.94.94 0 0 1 1.082-.175c.781.39 1.718.208 2.297-.426V8.833l-.68.907a.94.94 0 0 1-1.17.276 1.94 1.94 0 0 0-2.236.363l-.348.348a1 1 0 0 1-1.307.092l-.06-.044a2 2 0 0 0-2.399 0l-.06.044a1 1 0 0 1-1.306-.092l-.35-.35a1.935 1.935 0 0 0-2.233-.362.935.935 0 0 1-1.168-.277z"/>
+											</svg>
+										</i>
+										<span class=""><?php _e( '24 Anos'); ?></span>
+									</li>
+									<li class="list-group-item list-group-item-action bg-transparent text-secondary fw-medium">
+										<i class="d-inline-flex justify-content-center">
+											<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-house-check-fill" viewBox="0 0 16 16">
+												<path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293z"/>
+												<path d="m8 3.293 4.712 4.712A4.5 4.5 0 0 0 8.758 15H3.5A1.5 1.5 0 0 1 2 13.5V9.293z"/>
+												<path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.707l.547.547 1.17-1.951a.5.5 0 1 1 .858.514"/>
+											</svg>
+										</i>
+										<span class=""><?php _e( 'Com local'); ?></span>
+									</li>
+									<li class="list-group-item list-group-item-action bg-transparent text-secondary fw-medium">
+										<i class="bi bi-geo-alt-fill"></i>
+										<span class=""><?php _e('Jardim Shangri-la A'); ?></span>
+									</li>
+									<li class="list-group-item list-group-item-action bg-transparent text-secondary fw-medium">
+										<i class="bi bi-cash-stack"></i>
+										<span class=""><?php _e( 'R$' . $profileData['_profile_cache_hour'] . ' /h'); ?></span>
+									</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="col-12">
+							<div class="d-flex align-items-center">
+								<button class="btn btn-primary m-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasContact" aria-controls="offCanvasContact">
+									<i class="bi bi-arrow-through-heart-fill"></i> <?php _e('Conversar com ' . $profileData['name'], 'textdomain'); ?>
+								</button>
+
+								<div class="offcanvas offcanvas-bottom bg-transparent" tabindex="-1" id="offCanvasContact" aria-labelledby="offCanvasContactLabel">
+									<div class="offcanvas-header">
+										<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+									</div>
+									<div class="offcanvas-body bg-dark">
+										<div class="container text-center mt-3">
+											<h5 class=""><?php _e('Converse com ' . $profileData['name'], 'textdomain'); ?></h5>
+											<small class=""><?php _e('Ao entrar em contato seja educado(a), amigável e carinhoso(a)!', 'textdomain'); ?></small>
+											<div class="row mt-3">
+												<div class="col-4">
+													<button type="button" class="btn btn-outline-secondary w-100 border-0"><i class="bi bi-clipboard-check me-1"></i><?php echo $profileData['_profile_whatsapp'] ?></button>
+												</div>
+												<div class="col-4">
+													<button class="btn btn-primary w-100 border-0" data-href="<?php echo $telLink; ?>"><i class="bi bi-telephone-forward me-1"></i><?php _e( 'Ligar para ' . $profileData['name'], 'textdomain' ); ?></button>
+												</div>
+												<div class="col-4">
+													<button class="btn btn-primary w-100 border-0" data-href="<?php echo $contactLink; ?>"><i class="bi bi-whatsapp me-1"></i><?php _e( 'Chamar ' . $profileData['name'] , ' no Whatsapp', 'textdomain' ); ?></button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /end .profile -->
+			
+			<div class="d-flex row profileActionBar d-lg-none d-xl-none d-xxl-none" style="margin: auto">
+				<ul class="nav nav-tabs" id="myTab" role="tablist">
+					<li class="nav-item col-6" role="presentation">
+						<button class="profileActionBar__button nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="true"><i class="bi bi-person-lines-fill me-1"></i><?php _e('Perfil', 'textdomain'); ?></button>
+					</li>
+					<li class="nav-item col-6" role="presentation">
+						<button class="profileActionBar__button nav-link" id="gallery-tab" data-bs-toggle="tab" data-bs-target="#gallery" type="button" role="tab" aria-controls="gallery" aria-selected="false"><i class="bi bi-collection-fill me-1"></i><?php _e('Galeria', 'textdomain'); ?></button>
+					</li>
+				</ul>
+				<div class="tab-content p-0" id="myTabContent">
+					<div class="tab-pane profile-tab fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+						<div class="profile-description mt-3 mb-5">
+							<div class="card profileCard">
+								<div class="card-body" style="color: #fff;">
+									<h3 class="card-title fw-bold"><?php _e( 'Sobre mim', 'textdomain' ); ?></h3>
+									<p class="card-text"><?php echo get_the_content(); ?></p>
+								</div>
+							</div>
+						</div>
+						<!-- /end .profile-description -->
+						
+						<div class="card card-details mb-5">
+							<div class="row g-0">
+								<div class="col-12">
+									<div class="card-body">
+										<h3 class="card-title"><i class="bi bi-person-lines-fill me-1"></i><b>Detalhes</b></h3>
+										<ul class="list-group list-group-flush">
+											<li class="list-group-item"><?php _e( 'Sou <b>' . $profileData['_profile_genre'] . '</b>', 'textdomain'); ?></li>
+											<li class="list-group-item"><?php _e( 'Tenho <b>' . $profileData['_profile_age'] . '</b> anos', 'textdomain'); ?></li>
+											<li class="list-group-item"><?php _e( '<b>'. $profileData['_profile_height'] .'</b> de Altura', 'textdomain'); ?></li>
+											<li class="list-group-item"><?php _e( 'Com <b>'. $profileData['_profile_weight'] .'kg</b>', 'textdomain') ?></li>
+											<li class="list-group-item"><?php _e( 'Atendo <b>'. $profileData['_profile_preference'] .'</b>') ?></li>
+										</ul>												
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /end .card-details -->
+						<div class="accordion accordion-flush profileOptions mb-5" id="accordionFlushExample">
+							<div class="accordion-item accordion-priceList profileOptions__body">
+								<h2 class="accordion-header" id="flush-headingPriceList">
+								<button class="accordion-button profileOptions__button collapsed position-relative" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapsePriceList" aria-expanded="false" aria-controls="flush-collapsePriceList">
+									<i class="bi bi-bookmark-star-fill me-2"></i>
+									<b><?php _e( 'Valores', 'textdomain' );?></b>
+									
+								</button>
+								</h2>
+								<div id="flush-collapsePriceList" class="accordion-collapse collapse show" aria-labelledby="flush-headingPriceList" data-bs-parent="#accordionFlushExample">
+									<div class="accordion-body">
+									<ul class="profilePriceList">
+										<li class="profilePriceList__item d-flex">
+											<p class="d-none"><?php echo $profileData['_profile_whatsapp']; ?></p>
+											<a href="<?php echo $contactLink; ?>" target="_blank" rel="nofollow" class="profilePriceList__button btn btn-primary d-flex align-items-center">
+												<i class="fab fa-whatsapp profilePriceList__icon d-flex align-item-center justify-content-center"></i>
+												<span class="ms-2 d-flex flex-column">
+													<span class="profilePriceList__time fs-6"><?php _e( '30 Minutos', 'textdomain'); ?></span>
+													<span class="profilePriceList__price fs-4 fw-bold">R$<?php echo $profileData['_profile_cache_half_an_hour'] ?></span>
+												</span>
+											</a>
+										</li>
+										<li class="profilePriceList__item d-flex">
+											<a href="<?php echo $contactLink; ?>" target="_blank" rel="nofollow" class="profilePriceList__button btn btn-primary d-flex align-items-center">
+												<i class="fab fa-whatsapp profilePriceList__icon d-flex align-item-center justify-content-center"></i>
+												<span class="ms-2 d-flex flex-column">
+													<span class="profilePriceList__time fs-6"><?php _e( '1 Hora', 'textdomain'); ?></span>
+													<span class="profilePriceList__price fs-4 fw-bold">R$<?php echo $profileData['_profile_cache_hour'] ?></span>
+												</span>
+											</a>
+										</li>
+										<li class="profilePriceList__item d-flex">
+											<a href="<?php echo $contactLink; ?>" target="_blank" rel="nofollow" class="profilePriceList__button btn btn-primary d-flex align-items-center">
+												<i class="fab fa-whatsapp profilePriceList__icon d-flex align-item-center justify-content-center"></i>
+												<span class="ms-2 d-flex flex-column">
+													<span class="profilePriceList__time fs-6"><?php _e( 'Pernoite', 'textdomain'); ?></span>
+													<span class="profilePriceList__price fs-4 fw-bold">R$<?php echo $profileData['_profile_cache_overnight_stay'] ?></span>
+												</span>
+											</a>
+										</li>
+									</ul>
+									</div>
+								</div>
+							</div>
+							<!-- /end .accordion-priceList -->
+							<div class="accordion-item accordion-services profileOptions__body">
+								<h2 class="accordion-header" id="flush-headingServices">
+								<button class="accordion-button profileOptions__button collapsed position-relative" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseServices" aria-expanded="false" aria-controls="flush-collapseServices">
+									<i class="bi bi-bookmark-star-fill me-2"></i>
+									<b><?php _e( 'Serviços', 'textdomain' );?></b>
+									<span class="badge bg-danger text-white fw-normal ms-2"><?php echo ( !empty($profileData['_profile_services']) ? count($profileData['_profile_services']) : '0' ); ?></span>
+								</button>
+								</h2>
+								<div id="flush-collapseServices" class="accordion-collapse collapse" aria-labelledby="flush-headingServices" data-bs-parent="#accordionFlushExample">
+									<div class="accordion-body">
+										<ul class="profileList">
+											<?php
+											if( !empty($profileData['_profile_services']) ){
+												foreach( $profileData['_profile_services'] as $term ){
+													echo '<li class="profileList__item">
+															<a href="" class="c-body profileList__link" rel="tag">'. $term->name .'</a>
+														</li>';
+												}
+											}
+											?>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<!-- /end .accordion-services -->
+							<div class="accordion-item accordion-specialties profileOptions__body">
+								<h2 class="accordion-header" id="flush-headingSpecialties">
+								<button class="accordion-button profileOptions__button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSpecialties" aria-expanded="false" aria-controls="flush-collapseSpecialties">
+									<i class="bi bi-bookmark-star-fill me-2"></i>
+									<b><?php _e( 'Especialidades', 'textdomain' );?></b>
+									<span class="badge bg-danger text-white fw-normal ms-2"><?php echo ( !empty($profileData['_profile_specialties']) ? count($profileData['_profile_specialties']) : '0' ); ?></span>
+								</button>
+								</h2>
+								<div id="flush-collapseSpecialties" class="accordion-collapse collapse" aria-labelledby="flush-headingSpecialties" data-bs-parent="#accordionFlushExample">
+									<div class="accordion-body">
+										<ul class="profileList">
+											<?php 
+											if( is_array( $profileData['_profile_specialties']) && !empty( $profileData['_profile_specialties'] ) ){
+												foreach( $profileData['_profile_specialties'] as $term ){
+													echo '<li class="profileList__item">
+															<a href="" class="c-body profileList__link" rel="tag">'. $term->name .'</a>
+														</li>';
+												}
+											} else {
+												echo '<li class="">
+														<span class="c-body">'. __('Este perfil não possui especilidades.') .'</span>
+													</li>';
+											}
+											?>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<!-- /end .accordion-specialties -->
+							<div class="accordion-item accordion-locations profileOptions__body">
+								<h2 class="accordion-header" id="flush-headingLocations">
+								<button class="accordion-button profileOptions__button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseLocations" aria-expanded="false" aria-controls="flush-collapseLocations">
+									<i class="bi bi-bookmark-star-fill me-2"></i>
+									<b><?php _e( 'Locais', 'textdomain' );?></b>
+									<span class="badge bg-danger text-white fw-normal ms-2"><?php echo count($profileData['_profile_place_of_service']); ?></span>
+								</button>
+								</h2>
+								<div id="flush-collapseLocations" class="accordion-collapse collapse" aria-labelledby="flush-headingLocations" data-bs-parent="#accordionFlushExample">
+									<div class="accordion-body">
+										<ul class="profileList">
+											<?php 
+											if( !empty($profileData['_profile_place_of_service']) ){
+												foreach( $profileData['_profile_place_of_service'] as $term ){
+													echo '<li class="profileList__item">
+															<a href="" class="c-body profileList__link" rel="tag">'. $term->name .'</a>
+														</li>';
+												}
+											}
+											?>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<!-- /end .accordion-locations -->
+							<div class="accordion-item accordion-worksOfDay profileOptions__body">
+								<h2 class="accordion-header" id="flush-headingDaysOfWork">
+								<button class="accordion-button profileOptions__button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseDaysOfWork" aria-expanded="false" aria-controls="flush-collapseDaysOfWork">
+									<i class="bi bi-bookmark-star-fill me-2"></i>
+									<b><?php _e( 'Dias de trabalho', 'textdomain' );?></b>
+									<span class="badge bg-danger text-white fw-normal ms-2"><?php echo ( !empty($profileData['_profile_work_days']) ? count($profileData['_profile_work_days']) : '0' ); ?></span>
+								</button>
+								</h2>
+								<div id="flush-collapseDaysOfWork" class="accordion-collapse collapse" aria-labelledby="flush-headingDaysOfWork" data-bs-parent="#accordionFlushExample">
+									<div class="accordion-body">
+										<ul class="profileList">
+											<?php 
+											if( !empty($profileData['_profile_work_days']) ){
+												foreach( $profileData['_profile_work_days'] as $term ){
+													echo '<li class="profileList__item">
+															<a href="" class="c-body profileList__link" rel="tag">'. $term->name .'</a>
+														</li>';
+												}
+											}
+											?>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<!-- /end .accordion-worksOfDay -->
+							<div class="accordion-item accordion-languages profileOptions__body">
+								<h2 class="accordion-header" id="flush-headingLanguages">
+									<button class="accordion-button profileOptions__button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseLanguages" aria-expanded="false" aria-controls="flush-collapseLanguages">
+										<i class="bi bi-bookmark-star-fill me-2"></i>
+										<b><?php _e( 'Idiomas', 'textdomain' );?></b>
+										<span class="badge bg-danger text-white fw-normal ms-2"><?php echo ( !empty($profileData['_profile_languages']) ? count($profileData['_profile_languages']) : '0' ); ?></span>
+									</button>
+								</h2>
+								<div id="flush-collapseLanguages" class="accordion-collapse collapse" aria-labelledby="flush-headingLanguages" data-bs-parent="#accordionFlushExample">
+									<div class="accordion-body">
+										<ul class="profileList">
+											<?php
+											if( !empty( $profileData['_profile_languages'] )){
+												foreach( $profileData['_profile_languages'] as $term ){
+													echo '<li class="profileList__item">
+															<a href="" class="c-body profileList__link" rel="tag">'. $term->name .'</a>
+														</li>';
+												}
+											}
+											?>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<!-- /end .accordion-languages -->
+						</div>
+						<!-- /end .accordion -->
+
+						<div class="profileWrapper tab-rating mb-5 col-12 d-none">
+							<nav>
+								<div class="nav nav-tabs" id="nav-tab" role="tablist">
+									<button class="nav-link active" id="rating-tab" data-bs-toggle="tab" data-bs-target="#rating" type="button" role="tab" aria-controls="rating" aria-selected="true"><?php _e( 'Avaliações', 'textdomain' ); ?></button>
+									<button class="nav-link" id="form-comment-tab" data-bs-toggle="tab" data-bs-target="#form-comment" type="button" role="tab" aria-controls="form-comment" aria-selected="false"><?php _e( 'Faça uma avaliação', 'textdomain' ); ?></button>
+								</div>
+							</nav>
+						
+							<div class="tab-content">
+								<div class="tab-pane fade show active" id="rating" role="tabpanel" aria-labelledby="rating-tab">
+									<div class="row comment">
+										<div class="comment-metadata col-12">
+											<p class="c-white"><span class="author-name">Kauan Silva</span>/ 02 de Fevereiro, 2022</p>
+										</div>
+										<div class="comment-content col-12">
+											<p class="c-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vel leo a nibh mollis fermentum.</p>
+										</div>
+									</div>
+								</div>
+								<div class="tab-pane fade" id="form-comment" role="tabpanel" aria-labelledby="form-comment-tab">
+									<div class="rating d-flex">
+										<i class="fas fa-star"></i>
+										<i class="fas fa-star"></i>
+										<i class="fas fa-star"></i>
+										<i class="fas fa-star"></i>
+										<i class="fas fa-star"></i>
+									</div>
+									<form class="col-12">
+										<div class="row">
+											<div class="input-field col-12">
+												<input id="user_name" type="text" class="validate">
+												<label for="user_name">Nome/Apelido</label>
+											</div>
+											<div class="input-field col-12">
+												<textarea id="user_feedback" class="materialize-textarea"></textarea>
+												<label for="user_feedback">Comentário</label>
+											</div>
+										</div>
+										<button class="waves-effect waves-light btn-large">Enviar</button>
+									</form>
+								</div>
+							</div>
+						</div>
+						<!-- /end .tab-rating -->
+					</div>
+					<!-- /end .profile-tab -->
+
+					<div class="tab-pane profile-gallery fade mt-3 mb-5" id="gallery" role="tabpanel" aria-labelledby="gallery-tab">
+						<div class="col-12 mb-5">
+							<!-- ### start of the gallery definition ### -->								
+							<div id="mobileGallery" data-nanogallery2 = '{
+								"thumbnailHeight":  auto,
+								"thumbnailWidth":   auto,
+								"itemsBaseURL":     ""}'>
+								<?php 
+									$gallery = $profileData['_profile_gallery']	;
+									$galleryItems = '';
+									if( !empty( $gallery ) ){
+										foreach( $gallery as $item ){
+											$imgOriginal 		= wp_get_attachment_url( $item );
+											list($imgW, $imgH) 	= getimagesize($imgOriginal);
+											
+											$icon 	= false;
+											$size 	= '';
+											if( $imgW > $imgH ){
+												$size = 'o-hr';
+											} else {
+												$size = 'o-vr';
+											}
+											$img 	= wp_get_attachment_image_url( $item, $size, $icon );
+											$imgUrl	= $img;
+
+											$galleryItems .= '<a href="'. $imgUrl .'"   data-ngThumb="'. $imgUrl .'" ><i class="bi bi-hand-thumbs-up"></i></a>';
+										}
+									}
+									echo $galleryItems;
+								?>
+							</div>
+							<!-- ### end of the gallery definition ### -->
+						</div>
+					</div>
+					<!-- /end .profile-gallery -->
+				</div>
+			</div>
+			<!-- /end Mobile Content -->
+			
+			<div class="row d-none d-lg-flex d-xl-flex d-xxl-flex" style="margin-top: -50px;">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+					<div class="row">
+						<div class="profileWrapper col-12 d-none">
+							<div class="profileWrapper__box bordered">
+								<div class="row">
+									<div class="aboutMe col-6">
+										<h5 class="c-white"><?php _e( 'Sobre mim', 'textdomain' ); ?></h5>
+										<p class="c-body"><?php echo get_the_content(); ?></p>
+									</div>
+
+									<div class="socialNetwork col-6">
+										<h5 class="c-white mb-3"><?php _e('Redes sociais', 'textdomain'); ?></h5>
+										<ul class="profileSocialNetwork__list d-flex">
+											<?php
+											$socialNetworks = ['_profile_instagram', '_profile_tiktok', '_profile_onlyfans'];
+											foreach( $socialNetworks as $item ):
+												if( strlen($profileData[$item]) > 1 ):
+													$icon = '';
+													switch( $item ){
+														case '_profile_instagram': 
+															$icon = 'fab fa-instagram';
+															break;
+														case '_profile_tiktok':
+															$icon = 'fab fa-tiktok';
+															break;
+														case '_profile_onlyfans':
+															$icon = 'fas fa-link';
+															break;
+														default:
+															$icon = '';
+															break;
+													}
+													?>											
+													<li class="profileSocialNetwork__item d-flex justify-content-center align-items-center">
+														<a href="<?php echo $profileData[$item]; ?>" target="_blank" class="profileSocialNetwork__link c-white"><i class="<?php echo $icon ?>"></i></a>
+													</li>
+													<?php
+												endif;
+											endforeach;
+											?>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /End About -->
+
+						<div class="profileWrapper col-12">
+							<div class="profileWrapper__box bordered">
+								<div class="row">
+									<div class="col-8">
+										<h5 class="text-uppercase text-light mb-3"><?php _e( 'Sobre mim', 'textdomain' ); ?></h5>
+										<hr class="border">
+										<p class="">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ultrices felis sit amet massa convallis ultrices. Donec ut ipsum consectetur, vestibulum diam id, elementum nisl. Ut sed nunc nec eros lobortis mattis et at metus. Donec pharetra nunc ultrices, blandit dolor facilisis, cursus sapien. Vivamus lorem lacus, pharetra quis convallis quis, suscipit vel sem. Praesent ultricies arcu quis est porta, in sollicitudin sem pharetra. Ut fringilla convallis ante id euismod.</p>
+									</div>
+									<div class="col-4">
+										<h5 class="text-uppercase text-light mb-3"><?php _e('Detalhes', 'textdomain'); ?></h5>
+										<hr class="">
+										<ul class="list-group list-group-flush">
+											<li class="list-group-item bg-transparent text-light">
+												<span class="fw-bold"><?php _e('Genêro:', 'a2'); ?></span>
+												<span class="ms-1 text-italic"><?php _e('Mulher', 'a2'); ?></span>
+											</li>
+											<li class="list-group-item  bg-transparent text-light">
+												<span class="fw-bold"><?php _e('Etnia:', 'a2'); ?></span>
+												<span class="ms-1 text-italic"><?php _e($profileData['_profile_ethnicity'][0]->name, 'a2'); ?></span>
+											</li>
+											<li class="list-group-item  bg-transparent text-light">
+												<span class="fw-bold"><?php _e('Altura:', 'a2'); ?></span>
+												<span class="ms-1 text-italic"><?php _e($profileData['_profile_height'] . ' m', 'a2'); ?></span>
+											</li>
+											<li class="list-group-item  bg-transparent text-light">
+												<span class="fw-bold"><?php _e('Peso:', 'a2'); ?></span>
+												<span class="ms-1 text-italic"><?php _e($profileData['_profile_weight'] . ' KG', 'a2'); ?></span>
+											</li>
+											<li class="list-group-item  bg-transparent text-light">
+												<span class="fw-bold"><?php _e('Busto:', 'a2'); ?></span>
+												<span class=""><?php _e($profileData['_profile_bust_size'] . ' cm', 'a2'); ?></span>
+											</li>
+										<ul>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /End Details-->
+
+						<div class="profileWrapper col-12">
+							<div class="profileWrapper__box bordered">
+								<div class="col-12 mb-5">
+									<h5 class="text-uppercase text-light mb-3"><?php _e('Fotos & Vídeos', 'textdomain'); ?></h5>
+									<hr class="">
+									<!-- ### start of the gallery definition ### -->								
+									<div id="desktopGallery" data-nanogallery2 = '{"thumbnailHeight": auto, "thumbnailWidth": auto, "itemsBaseURL": ""}'>
+										<?php echo $galleryItems; ?>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /End .profileGallery -->
+
+						<div class="profileWrapper col-12">
+							<div class="profileWrapper__box bordered">
+								<div class="row">
+									<div class="col-4">
+										<h5 class="text-uppercase text-light mb-3"><?php _e( 'Serviços', 'textdomain' ); ?></h5>
+										<hr class="">
+										<ul class="profileList">
+											<?php 
+											if( !empty($profileData['_profile_services']) ){
+												foreach( $profileData['_profile_services'] as $term ){
+													echo '<li class="profileList__item">
+															<a href="" class="c-body profileList__link" rel="tag">'. $term->name .'</a>
+														</li>';
+												}
+											}
+											?>
+										</ul>
+									</div>
+									<div class="col-4">
+										<h5 class="text-uppercase text-light mb-3"><?php _e( 'Especilidades', 'textdomain' ); ?></h5>
+										<hr class="">
+										<ul class="profileList">
+											<?php 
+											if( is_array( $profileData['_profile_specialties']) && !empty( $profileData['_profile_specialties'] ) ){
+												foreach( $profileData['_profile_specialties'] as $term ){
+													echo '<li class="profileList__item">
+															<a href="" class="c-body profileList__link" rel="tag">'. $term->name .'</a>
+														</li>';
+												}
+											} else {
+												echo '<li class="">
+														<span class="c-body">'. __('Este perfil não possui especilidades.') .'</span>
+													</li>';
+											}
+											?>
+										</ul>
+									</div>
+									<div class="col-4">
+										<h5 class="text-uppercase text-light mb-3"><?php _e( 'Idiomas', 'textdomain' ); ?></h5>
+										<hr class="">
+										<ul class="profileList">
+											<?php 
+											if( is_array( $profileData['_profile_languages']) && !empty( $profileData['_profile_languages'] ) ){
+												foreach( $profileData['_profile_languages'] as $term ){
+													echo '<li class="profileList__item">
+															<a href="" class="c-body profileList__link" rel="tag">'. $term->name .'</a>
+														</li>';
+												}
+											} else {
+												echo '<li class="">
+														<span class="c-body">'. __('Este perfil não possui idiomas.') .'</span>
+													</li>';
+											}
+											?>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /End Services -->
+
+						<div class="profileWrapper col-12">
+							<div class="profileWrapper__box bordered">
+								<div class="row">
+									<div class="col-4">
+										<h5 class="text-uppercase text-light mb-3"><?php _e( 'Atendimento', 'textdomain'); ?></h5>
+										<hr class="">
+										<ul class="profileList">
+											<?php 
+											if( !empty($profileData['_profile_place_of_service']) ){
+												foreach( $profileData['_profile_place_of_service'] as $term ){
+													echo '<li class="profileList__item">
+															<a href="" class="c-body profileList__link" rel="tag">'. $term->name .'</a>
+														</li>';
+												}
+											}
+											?>
+										</ul>
+									</div>
+									<div class="col-4">
+										<h5 class="text-uppercase text-light mb-3"><?php _e( 'Dias de trabalho', 'textdomain'); ?></h5>
+										<hr class="">
+										<ul class="profileList">
+											<?php
+											if( !empty($profileData['_profile_work_days']) ){
+												foreach( $profileData['_profile_work_days'] as $term ){
+													echo '<li class="profileList__item">
+															<a href="" class="c-body profileList__link" rel="tag">'. $term->name .'</a>
+														</li>';
+												}
+											}
+											?>
+										</ul>
+									</div>
+									<div class="col-4">
+										<h5 class="text-uppercase text-light mb-3"><?php _e( 'Valores', 'textdomain' ); ?></h5>
+										<hr>
+										<ul class="profilePriceList">
+											<li class="profilePriceList__item d-flex">
+												<span class="profilePriceList__time c-body"><i class="bi bi-hourglass-split me-1"></i><?php _e( '30 Minutos', 'textdomain'); ?></span>
+												<span class="profilePriceList__price c-white">R$<?php echo $profileData['_profile_cache_half_an_hour'] ?></span>
+													<a href="<?php echo $contactLink; ?>" target="_blank" rel="nofollow" class="profilePriceList__button btn btn-primary btn-sm">
+													<span><?php _e('Whatsapp', 'textdomain'); ?> <i class="fab fa-whatsapp"></i></span>
+												</a>
+											</li>
+											<li class="profilePriceList__item d-flex">
+												<span class="profilePriceList__time c-body"><i class="bi bi-hourglass-split me-1"></i><?php _e( '1 Hora', 'textdomain'); ?></span>
+												<span class="profilePriceList__price c-white">R$<?php echo $profileData['_profile_cache_hour'] ?></span>
+													<a href="<?php echo $contactLink; ?>" target="_blank" rel="nofollow" class="profilePriceList__button btn btn-primary btn-sm">
+													<span><?php _e('Whatsapp', 'textdomain'); ?> <i class="fab fa-whatsapp"></i></span>
+												</a>
+											</li>
+											<li class="profilePriceList__item d-flex">
+												<span class="profilePriceList__time c-body"><i class="bi bi-calendar2-heart-fill me-1"></i><?php _e( 'Pernoite', 'textdomain'); ?></span>
+												<span class="profilePriceList__price c-white">R$<?php echo $profileData['_profile_cache_overnight_stay'] ?></span>
+													<a href="<?php echo $contactLink; ?>" target="_blank" rel="nofollow" class="profilePriceList__button btn btn-primary btn-sm">
+													<span><?php _e('Whatsapp', 'textdomain'); ?> <i class="fab fa-whatsapp"></i></span>
+												</a>
+											</li>
+										</ul>
+										<span class="c-body"><b><?php _e( 'Formas de pagamento: ', 'textdomain' ); ?></b></span>
+										<ul class="profileList mt-2">
+											<?php
+											if( !empty($profileData['_profile_payment_methods']) ){
+												foreach( $profileData['_profile_payment_methods'] as $term ){
+													echo '<li class="profileList__item">
+															<a href="" class="c-body profileList__link" rel="tag">'. $term->name .'</a>
+														</li>';
+												}
+											}
+											?>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /End Places -->
+
+						<div class="profileWrapper col-12 d-none">
+							<nav>
+								<div class="nav nav-tabs" id="nav-tab" role="tablist">
+									<button class="nav-link active" id="rating-tab" data-bs-toggle="tab" data-bs-target="#rating" type="button" role="tab" aria-controls="rating" aria-selected="true"><?php _e( 'Avaliações', 'textdomain' ); ?></button>
+									<button class="nav-link" id="form-comment-tab" data-bs-toggle="tab" data-bs-target="#form-comment" type="button" role="tab" aria-controls="form-comment" aria-selected="false"><?php _e( 'Faça uma avaliação', 'textdomain' ); ?></button>
+								</div>
+							</nav>
+						
+							<div class="tab-content">
+								<div class="tab-pane fade show active" id="rating" role="tabpanel" aria-labelledby="rating-tab">
+									<div class="row comment">
+										<div class="comment-metadata col-12">
+											<p class="c-white"><span class="author-name">Kauan Silva</span>/ 02 de Fevereiro, 2022</p>
+										</div>
+										<div class="comment-content col-12">
+											<p class="c-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vel leo a nibh mollis fermentum.</p>
+										</div>
+									</div>
+								</div>
+								<div class="tab-pane fade" id="form-comment" role="tabpanel" aria-labelledby="form-comment-tab">
+									<div class="rating d-flex">
+										<i class="fas fa-star"></i>
+										<i class="fas fa-star"></i>
+										<i class="fas fa-star"></i>
+										<i class="fas fa-star"></i>
+										<i class="fas fa-star"></i>
+									</div>
+									<form class="col-12">
+										<div class="row">
+											<div class="input-field col-12">
+												<input id="user_name" type="text" class="validate">
+												<label for="user_name">Nome/Apelido</label>
+											</div>
+											<div class="input-field col-12">
+												<textarea id="user_feedback" class="materialize-textarea"></textarea>
+												<label for="user_feedback">Comentário</label>
+											</div>
+										</div>
+										<button class="waves-effect waves-light btn-large">Enviar</button>
+									</form>
+								</div>
+							</div>
+						</div>
+						<!-- /End Avaliações -->
+					</div>
+				</div>
+			</div>
+			<!-- /end Desktop Content -->
+		</div>
+		<?php
+
+        return ob_get_clean();
     }
 }

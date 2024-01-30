@@ -168,21 +168,68 @@
     background-image: none !important;
 }
 
+/* Menu painel minha conta */
+.woocommerce-MyAccount-navigation{
+    width: 20% !important;
+}
+li.woocommerce-MyAccount-navigation-link{
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #dee2e6;
+    transition: 0.3s ease-in-out;
+}
+li.woocommerce-MyAccount-navigation-link:hover{
+    transition: 0.3s ease-in-out;
+    padding-left: 12px;
+    box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
+}
+
+li.woocommerce-MyAccount-navigation-link:hover a{
+    color:#e91e63 !important;
+    transition: 0.3s ease-in-out;
+}
+
+li.woocommerce-MyAccount-navigation-link a{
+    font-size: 16px;
+    padding-left: 8px;
+    display: block;
+    color: rgb(108,117,125) !important;
+}
+li.is-active a{
+    color: #e91e63 !important;
+    padding-left: 12px;    
+}
 /* Adicionando ícones aos menus do painel */
-body.woocommerce-account nav.woocommerce-MyAccount-navigation a:before{
+nav.woocommerce-MyAccount-navigation a:before{
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
     width: 25px;
     display: inline-block;
 }
-body.woocommerce-account nav.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link--gallery a:before{
+li.woocommerce-MyAccount-navigation-link--dashboard a:before{
+    content: "\f625";
+}
+li.woocommerce-MyAccount-navigation-link--edit-account a:before{
+    content: "\f2c1";
+}
+li.woocommerce-MyAccount-navigation-link--gallery a:before{
     content: "\f87c";
 }
-body.woocommerce-account nav.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link--advertisements a:before{
+li.woocommerce-MyAccount-navigation-link--advertisements a:before{
     content: "\f3ff";
 }
-body.woocommerce-account nav.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link--change-password a:before{
-    content: "\f023";
+li.woocommerce-MyAccount-navigation-link--orders a:before{
+    content: "\f571";
+}
+li.woocommerce-MyAccount-navigation-link--customer-logout a:before{
+    content: "\f2f5";
+}
+
+
+
+/* Content do painel minha conta */
+.woocommerce-MyAccount-content{
+    width: 78% !important;
 }
 
 /* Hack esconder .product_meta */
@@ -423,4 +470,10 @@ div.product .entry-summary div.product_meta{
         background: rgba(255, 255, 255, .8);
         padding: 16px;
     }
+}
+
+
+/* Esconder header */
+div.page-header{
+    display: none !important;
 }

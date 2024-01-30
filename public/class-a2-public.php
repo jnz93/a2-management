@@ -142,6 +142,9 @@ class A2_Public {
 
 		/** Action para atualizar a lista de anúncios ativos */
 		add_action( 'publish_to_draft', [ $this, 'removeActivatedAdvertisement' ], 10, 1 );
+
+		/** profileContent na página da acompanhante */
+		add_filter('the_content', [$this, 'insertProfileContentToScortPage']);
 	}
 
 	// Remover anúncio da lista de ativados
@@ -898,4 +901,18 @@ class A2_Public {
         echo $url;
         die();
     }
+
+
+	/**
+	 * Função que substitui o conteúdo de páginas de perfis pelo shortcode
+	 * 
+	 */
+	public function insertProfileContentToScortPage($content)
+	{
+		if(is_single() && get_post_type() == 'a2_escort'){
+			$content = '[profileContent]';
+		}
+
+		return $content;
+	}
 }
