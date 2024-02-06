@@ -81,6 +81,7 @@ class A2_Admin {
 		$this->profile 		= new A2_Profile();
 		$this->advertisement = new A2_Advertisement();
 		$this->gallery 		= new A2_Gallery();
+		$this->woocTemplates = new SL_WoocTemplates();
 
 		/**
 		 * Adição do menu na dashboard admin
@@ -126,6 +127,8 @@ class A2_Admin {
 			wp_schedule_event( time(), 'weekly', 'a2_removeUsers' );
 		}
 
+		# Filtro para substituir templates woocommerce
+		add_filter('wc_get_template', [$this, 'customWoocMyAccountTemplates'], 10, 3);
 	}
 
 	/**
@@ -750,4 +753,19 @@ class A2_Admin {
             }
         }
     }
+
+
+	/**
+	 * Substituição dos templates padrões do painel "minha-conta" do woocommerce
+	 * 
+	 */
+	public function customWoocMyAccountTemplates($template, $template_name, $args) {
+		if('myaccount/form-edit-account.php' === $template_name){
+			$content = do_shortcode('[sl_tplEditCccount]');
+
+			return print('<div class="custom-edit-account-content">' . $content . '</div>');
+		}
+		
+		return $template;
+	}
 }
