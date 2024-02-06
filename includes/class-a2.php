@@ -174,6 +174,8 @@ class A2 {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-a2-profileHelper.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-a2-woocTemplates.php';
+
 		$this->loader = new A2_Loader();
 
 	}
