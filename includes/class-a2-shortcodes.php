@@ -435,8 +435,7 @@ class A2_Shortcodes{
         );
 
         ob_start();
-        $this->register->page();
-        
+        require plugin_dir_path( __DIR__ ) . '/templates/pages/register-form.php';
         return ob_get_clean();
     }
 

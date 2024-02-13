@@ -223,7 +223,8 @@ class A2_Public {
 		wp_enqueue_script( 'a2-public', plugin_dir_url( __FILE__ ) . 'js/a2-public.js', array( 'jquery' ), $this->version, false );
 		wp_localize_script( 'a2-public', 'publicAjax', array(
 			'nonce'     => wp_create_nonce( 'public-nonce' ),
-			'url'		=> admin_url( 'admin-ajax.php' )
+			'url'		=> admin_url( 'admin-ajax.php' ),
+			'restUrl'	=> site_url() . '/wp-json/sl/v1/',
 		) );
 		wp_enqueue_script( 'a2-terms-and-conditions', plugin_dir_url( __FILE__ ) . 'js/terms-and-conditions.js', array( 'jquery' ), $this->version, false );
 		

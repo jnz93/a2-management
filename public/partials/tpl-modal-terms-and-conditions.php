@@ -19,12 +19,12 @@
             </div>
             <div class="modal-body text-center">
                 <div class="">
-                    <p class=""><?php _e( 'Entendo que o site <b>Acompanhantes A2</b> apresenta <b>conteúdo explícito</b> destinado a <b>adultos</b>.', 'textdomain' );?></p>
+                    <p class=""><?php _e( 'Entendo que o site <b>Spice Love</b> apresenta <b>conteúdo explícito</b> destinado a <b>ADULTOS</b>.', 'textdomain' );?></p>
                     <a href="" class=""><?php _e( 'Termos de uso', 'textdomain' ) ?></a>
                 </div>
                 <div class="mt-3">
                     <h6 class="text-uppercase"><?php _e( 'Aviso de cookies', 'textdomain' ) ?></h6>
-                    <p class=""><?php _e( 'Nós usamos cookies e outras tecnologias semelhantes para melhorar a sua experiência em nosso site.', 'textdomain' );?></p>
+                    <p class=""><?php _e( 'Nós usamos cookies e outras tecnologias semelhantes para melhorar a sua experiência em nossa plataforma.', 'textdomain' );?></p>
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-center flex-column">
@@ -32,7 +32,7 @@
                     <input class="form-check-input me-2" type="checkbox" role="switch" id="comeOfAgeConfirmation">
                     <label class="form-check-label" for="comeOfAgeConfirmation"><?php _e( 'Sou maior de 18 anos.') ?></label>
                 </div>
-                <button type="button" class="btn btn-primary" onclick="acceptTermsAndConditions()"><?php _e( 'Aceitar', 'textdomain' ); ?></button>
+                <button type="button" class="btn btn-primary w-100" onclick="acceptTermsAndConditions()"><?php _e( 'Acessar Site', 'textdomain' ); ?></button>
             </div>
         </div>
     </div>

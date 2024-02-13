@@ -260,7 +260,7 @@ div.product .entry-summary div.product_meta{
     
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url('https://acompanhantesa2.com/wp-content/uploads/2022/07/pexels-jr-tavares-5526782-scaled.jpg');
+    background-image: url('http://acompanhantesa2.com.br/wp-content/uploads/2023/07/pexels-anni-roenkae-2156884.jpg');
 }
 .register__backgroundImage::after{
     content: '';
@@ -476,4 +476,15 @@ div.product .entry-summary div.product_meta{
 /* Esconder header */
 div.page-header{
     display: none !important;
+}
+
+/** Padronização de familia de fontes **/
+h1, h2, h3, h4, h5, h6{
+    font-family: "Montserrat", Sans-serif !important;
+    font-weight: 400;
+    line-height: 1.2em;
+}
+
+p, span, li, a, small, input, textarea, select, button{
+    font-family: "Lora", Sans-serif !important;
 }

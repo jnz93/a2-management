@@ -799,3 +799,91 @@ function handleBuyaPlan(el){
         }, 1000);
 	});
 }
+
+/**
+ * Upload de imagem com rest
+ * 
+ */
+function handleUploadImage(event){
+    console.log(event); 
+    const files     = event.target.files,
+        targetEl    = jQuery('#' + event.target.id),
+        payloadForm = new FormData(),
+        endpoint    = publicAjax.url + 'a2/v1/upload-image',
+        viewEl 		= targetEl.parents('div.mb-3').siblings('div.thumbnail-view'),
+		inputId 	= targetEl.parent().siblings('input'),
+		spinner 	= viewEl.children('div.spinner-border');;
+
+    spinner.removeClass('d-none')
+    payloadForm.append('nonce', publicAjax.nonce);
+    for(let index = 0; index < files.length; index++){
+        
+        payloadForm.append('file', files[index]);
+
+        fetch(endpoint, {
+            method: 'POST',
+            body: payloadForm
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+           
+			
+            setTimeout(() => {
+                spinner.addClass('d-none');
+                applyAttachOnElement( data.url, viewEl );
+			    inputId.val(data.id);
+            }, 200);
+        })
+        .catch(error => {
+            console.error('Erro ao fazer o upload do arquivo', error);
+        });
+    }
+}
+
+
+
+/**
+ * Cadastro de usuários REST
+ * @param {*} form 
+ */
+async function submitEscortForm(form) {
+    try {
+        var formData = new FormData(form);
+        var endpoint = publicAjax.restUrl + 'cadastrar-acompanhante';
+		
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (!response.ok) {
+			console.error(response);
+            throw new Error('Erro na solicitação. Status: ' + response.status);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Erro na solicitação AJAX:', error);
+        throw error;
+    }
+}
+
+/**
+ * Utilize para mostrar alertas no no front-end
+ * Alert bootstrap
+ * @param {*} message 
+ * @param {*} type 
+ */
+const showAlert = (message, type) => {
+	const alertPlaceholder = document.getElementById('slAlertPlaceholder'),
+		wrapper = document.createElement('div')
+
+	wrapper.innerHTML = `<div class="alert alert-${type} alert-dismissible text-center" role="alert">
+		<div>${message}</div>
+		<button type="" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>`;
+
+	alertPlaceholder.append(wrapper);
+}

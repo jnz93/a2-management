@@ -82,6 +82,7 @@ class A2_Admin {
 		$this->advertisement = new A2_Advertisement();
 		$this->gallery 		= new A2_Gallery();
 		$this->woocTemplates = new SL_WoocTemplates();
+		$this->restWorkers 	= new SL_RestWorkers();
 
 		/**
 		 * Adição do menu na dashboard admin
