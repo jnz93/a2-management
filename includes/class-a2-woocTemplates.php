@@ -3,9 +3,50 @@ class SL_WoocTemplates{
 
     public function __construct()
     {
+		$this->metaKeys = [
+			'_profile_whatsapp',
+			'_profile_birthday',
+			'_profile_description',
+			'_profile_height',
+			'_profile_weight',
+			'_profile_eye_color',
+			'_profile_hair_color',
+			'_profile_tits_size',
+			'_profile_bust_size',
+			'_profile_waist_size',
+			'_profile_ethnicity',
+			'_profile_genre',
+			'_profile_sign',
+			'_profile_he_meets',
+			'_profile_services',
+			'_profile_place',
+			'_profile_specialties',
+			'_profile_languages',
+			'_profile_instagram',
+			'_profile_tiktok',
+			'_profile_onlyfans',
+			'_profile_country',
+			'_profile_state',
+			'_profile_city',
+			'_profile_district',
+			'_profile_address',
+			'_profile_cep',
+			'_profile_cache_quickie',
+			'_profile_cache_half_an_hour',
+			'_profile_cache_hour',
+			'_profile_cache_overnight_stay',
+			'_profile_cache_promotion',
+			'_profile_cache_promotion_activated',
+			'_profile_work_days',
+			'_profile_office_hour',
+			'_profile_photo',
+			'_profile_cover'
+		];
         # Register shortcodes
-        add_shortcode('sl_tplEditCccount', [$this, 'tplEditAccount']);
+        add_shortcode('sl_tplEditAccount', [$this, 'tplEditAccount']);
 		add_shortcode('sl_tplGallery', [$this, 'tplGallery']);
+		add_shortcode('sl_tplNavigation', [$this, 'tplNavigation']);
+		add_shortcode('sl_tplDashboard', [$this, 'tplDashboard']);
     }
    
 	/**
@@ -24,7 +65,6 @@ class SL_WoocTemplates{
 
 		defined( 'ABSPATH' ) || exit;
 		# Coletando $userData
-		$user =  wp_get_current_user();
 		$metaKeys = array(
 			'_profile_whatsapp',
 			'_profile_birthday',
@@ -168,6 +208,71 @@ class SL_WoocTemplates{
 		}
 		ob_start();
 		require plugin_dir_path( __DIR__ ) . 'templates/dashboard/my-gallery.php';
+		return ob_get_clean();
+	}
+
+	/**
+	 * Navigation Escort
+	 */
+	public function tplNavigation($atts)
+	{
+		$a = shortcode_atts( 
+            [
+                'title' => ''
+			], 
+            $atts
+        );
+		
+		$user 		= wp_get_current_user();
+		$userId 	= $user->ID;
+		$userData 	= [];
+		foreach( $this->metaKeys as $key ){
+			$userData[$key] = get_user_meta( $userId, $key, true );
+		}
+
+		$profilePhotoUrl = wp_get_attachment_url( $userData['_profile_photo'] );
+		$profileCoverUrl = wp_get_attachment_image_url($userData['_profile_cover'], 'full');
+
+		ob_start();
+		require plugin_dir_path( __DIR__ ) . 'templates/dashboard/navigation.php';
+		return ob_get_clean();
+	}
+
+	/**
+	 * Dashboard Escort
+	 * 
+	 */
+	public function tplDashboard($atts)
+	{
+		$a = shortcode_atts( 
+            [
+                'title' => ''
+			], 
+            $atts
+        );
+
+		$profileHelper      = new A2_ProfileHelper();
+		$verificationStatus = $profileHelper->getVerifyStatus();
+		$profilePage 		= $profileHelper->getProfileLink();
+		$defaultUserThumb 	= get_stylesheet_directory_uri() . '/images/default-user-profile.png';
+		$showNotifications 	= true;
+
+		if( strlen($verificationStatus) > 1 ){
+			$showNotifications = false;
+		}
+		if( $profilePage ){
+			$showNotifications = false;
+		}
+
+		$args = [
+			'post_type'		=> 'post',
+			'numberposts'	=> -1,
+			'category_name'	=> 'guias',
+		];
+		$guides = new WP_Query($args);
+
+		ob_start();
+		require plugin_dir_path( __DIR__ ) . 'templates/dashboard/dashboard.php';
 		return ob_get_clean();
 	}
 }
