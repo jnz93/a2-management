@@ -418,6 +418,15 @@ div.product .entry-summary div.product_meta{
         z-index: 999;
         left: calc((100% / 2) - 45%);
     }
+
+    #liveAlertPlaceholder{
+        left: calc(100% / 2 - 25%);
+        z-index: 999;
+    }
+
+    #liveLoader{
+        z-index: 999;
+    }
 }
 
 /* CSS RULES FOR MOBILE */

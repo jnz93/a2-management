@@ -887,3 +887,26 @@ const showAlert = (message, type) => {
 
 	alertPlaceholder.append(wrapper);
 }
+
+// 2024
+/**
+ * Função auxiliar para manipular o componente "alert" e mostrar mensagens ao usuário no front-end
+ * @param {*} message 
+ * @param {*} type 
+ * @returns 
+ */
+const appendAlert = (message, type) => {
+	const alertPlaceholder = document.getElementById('liveAlertPlaceholder'),
+		wrapper = document.createElement('div');
+
+	wrapper.innerHTML = [
+		`<div class="alert alert-${type} alert-dismissible text-center" role="alert">
+			<div class="row">
+				<div class="col-11">${message}</div>
+				<div class="col-1"><button type="button" class="" data-bs-dismiss="alert" aria-label="Close"><i class="fa-regular fa-circle-xmark"></i></button></div>
+			</div>
+		</div>`
+	].join('');
+
+	alertPlaceholder.append(wrapper);
+}

@@ -63,3 +63,11 @@
         </div>
     </div>
 </div>
+
+<div id="liveAlertPlaceholder" class="w-50 m-auto position-fixed bottom-0 mb-5"></div>
+
+<div id="liveLoader" class="position-fixed start-0 top-0 end-0 bottom-0 bg-dark opacity-50 d-flex align-items-center justify-content-center d-none">
+    <div class="spinner-border text-light" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
