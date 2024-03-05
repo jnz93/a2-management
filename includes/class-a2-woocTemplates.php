@@ -163,6 +163,8 @@ class SL_WoocTemplates{
 		$localizacao = get_terms( $args );
 
 		# Coleta de dados do usuário
+		$userId = get_current_user_id();
+		$user = get_userdata($userId);
 		$userData = [];
 		foreach( $metaKeys as $key ){
 			$userData[$key] = get_user_meta( $user->ID, $key, true );

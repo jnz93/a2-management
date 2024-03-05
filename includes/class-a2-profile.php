@@ -25,7 +25,7 @@ class A2_Profile{
 	 * 
 	 * @param integer $userId 
 	 */
-	public function saveData( $userId ) 
+	public function saveData($data, $userId ) 
 	{
 
 		$metaKeys = array(
@@ -85,8 +85,10 @@ class A2_Profile{
 		# Salvando meta-campos
 		$log = array();
 		foreach( $metaKeys as $key ){
-			$value = $_POST[$key];
-			if( in_array($key, ['_profile_he_meets', '_profile_services', '_profile_place', '_profile_work_days', '_profile_specialties', '_profile_languages']) ){
+			$value = $data[$key];
+			if(empty($value)) continue;
+			
+			if( in_array($key, ['_profile_he_meets', '_profile_services', '_profile_place', '_profile_work_days', '_profile_specialties', '_profile_languages'])){
 				update_user_meta( $userId, $key, $value );
 			} else {
 				// Cálculando a idade
@@ -97,8 +99,10 @@ class A2_Profile{
 				update_user_meta( $userId, $key, sanitize_text_field($value) );
 			}
 
-			$log[$key] = $_POST[$key];
+			$log[$key] = $data[$key];
 		}
+		
+		return $log;
 
 		// $profileIsReady = $this->validateAccount( $userId, $metaKeys ); Desativado métdo "checkData" está com problema
 		$profileIsReady = true;

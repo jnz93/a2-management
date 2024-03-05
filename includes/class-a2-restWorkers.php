@@ -4,11 +4,18 @@ class SL_RestWorkers{
     public function __construct()
     {
         $this->registerClass = new A2_Register();
+        $this->profileClass = new A2_Profile();
+
         $this->namespace = 'sl/v1';
         $this->routes = [
             '/cadastrar-acompanhante/' => [
                 'methods'               => ['POST'],
                 'callback'              => [$this, 'registerEscort'],
+                'permission_callback'   => '__return_true'
+            ],
+            '/profile-update/' => [
+                'methods'               => ['POST'],
+                'callback'              => [$this, 'updateProfile'],
                 'permission_callback'   => '__return_true'
             ],
         ];
@@ -47,4 +54,19 @@ class SL_RestWorkers{
         $minhaContaURL = get_permalink($minhaContaID);
         return new WP_REST_Response( ['success' => true, 'url' => $minhaContaURL, 'msg' => 'Cadastro realizado com sucesso!'], 200);
     }
+
+    /**
+     * Recebe os dados e faz a solicitação do update do perfil do usuário
+     */
+    public function updateProfile($request)
+    {
+        $params = $request->get_params();
+        $userId = $params['user_id'];
+        $result = $this->profileClass->saveData($params, $userId);
+
+        return new WP_REST_Response( ['success' => true, 'msg' => 'Perfil atualizado com sucesso!', 'log' => $result], 200);
+    }
+    // $user = ['account_first_name','account_last_name','account_display_name','account_email']
+    // metas = ['_profile_whatsapp','_profile_birthday','_profile_description,_profile_height,_profile_weight,_profile_eye_color,_profile_hair_color,_profile_tits_size,_profile_bust_size,_profile_waist_size,'_profile_instagram,_profile_tiktok,_profile_onlyfans,_profile_address,_profile_cep,]
+    // [_profile_ethnicity,_profile_genre,_profile_sign,_profile_he_meets,_profile_services,_profile_place,_profile_specialties,_profile_languages,_profile_country,_profile_state,_profile_city,_profile_district,]
 }

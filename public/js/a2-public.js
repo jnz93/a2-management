@@ -910,3 +910,29 @@ const appendAlert = (message, type) => {
 
 	alertPlaceholder.append(wrapper);
 }
+
+/**
+ * Função auxiliar para efetuar requisições rest
+ * @param {*} payload 
+ * @param {*} endpoint 
+ * @returns 
+ */
+async function fetchData(payload, endpoint)
+{
+	try {
+		const response = await fetch(endpoint, {
+			method: 'POST',
+			body: payload
+		});
+        
+		if (!response.status) {
+			console.error(response);
+            throw new Error('Erro na solicitação: ' + response.status);
+        }
+		
+		return response.json();
+	} catch (error) {
+		console.error(error );
+		throw new Error('Erro na solicitação: ' + error);
+	}
+}
