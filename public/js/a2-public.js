@@ -138,7 +138,7 @@ function uploadImage(el){
 
 	formData.append('action', 'upload_attachment');
 	formData.append('file', img);
-	
+
 	if (fileList.length > 0) {
 		jQuery.ajax({
 			type: 'POST',
@@ -564,16 +564,6 @@ function filterList() {
  * Inicialização de funções e monitoramento de elementos
  * */
 jQuery(document).ready( function(){
-	// Manipulando o upload da foto de perfil
-	jQuery('#_select_profile_photo').change( function(){
-		uploadImage(jQuery(this));
-	});
-	
-	// Manipulando o upload da foto de capa
-	jQuery('#_select_profile_cover').change( function(){
-		uploadImage(jQuery(this));
-	});
-	
 	// Manipulando o upload da frente do documento
 	jQuery('#_front_of_document').change( function(){
 		console.log('Upload da foto');
@@ -935,4 +925,36 @@ async function fetchData(payload, endpoint)
 		console.error(error );
 		throw new Error('Erro na solicitação: ' + error);
 	}
+}
+
+/**
+ * Atualizar foto do perfil e capa de acompanhantes
+ * 
+ */
+const slProfileImagesUpdate = async function(){
+	const file      = this.files[0],
+		payload 	= new FormData(),
+		endpoint    = `${publicAjax.restUrl}profile-update-image`,
+		targetEl    = jQuery('#' + this.getAttribute('id')),
+		viewEl 		= targetEl.parents('div.mb-3').siblings('div.thumbnail-view'),
+		inputId 	= targetEl.parent().siblings('input'),
+		spinner 	= viewEl.children('div.spinner-border'),
+		userId  	= jQuery('#user_id').val(),
+		nonce 		= jQuery('#upload_profile_image_nonce').val(),
+		id 			= this.getAttribute('id');
+
+	spinner.removeClass('d-none');
+	payload.append('file', file);
+	payload.append('user_id', userId);
+	payload.append('nonce', nonce);
+	payload.append('type', id);
+	
+	const response = await fetchData(payload, endpoint);
+	if(response.status){
+		appendAlert(response.msg, 'success');
+		applyAttachOnElement(response.url, viewEl);
+	} else {
+		appendAlert(response.msg, 'danger');
+	}
+	spinner.addClass('d-none');
 }

@@ -115,6 +115,25 @@ class A2_Profile{
 		}
 	}
 
+
+	/**
+	 * Atualizar foto de perfil
+	 * 
+	 */
+	public function updateProfilePhoto($id, $userId)
+	{
+		return update_user_meta($userId, '_profile_photo', $id);
+	}
+
+	/**
+	 * Atualizar foto de capa
+	 * 
+	 */
+	public function updateProfileCover($id, $userId)
+	{
+		return update_user_meta($userId, '_profile_cover', $id);
+	}
+
 	/**
 	 * Este método retorna se o perfil foi marcado como pronto ou não
 	 * 

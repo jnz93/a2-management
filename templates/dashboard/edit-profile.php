@@ -15,7 +15,7 @@
 		</div>
 		<div class="mb-3">
 			<label for="_select_profile_photo" class="form-label">Selecione a foto de Perfil</label>
-			<input class="form-control" type="file" accept="image/png, image/jpeg" id="_select_profile_photo">
+			<input class="form-control sl-upload-image" type="file" id="_select_profile_photo" name="_select_profile_photo">
 			<input type="hidden" name="_profile_photo" id="_profile_photo" value="<?php echo strlen($userData['_profile_photo']) != 0 ? $userData['_profile_photo'] : '' ?>">
 		</div>
 	</div>
@@ -28,7 +28,7 @@
 		</div>
 		<div class="mb-3">
 			<label for="_select_profile_cover" class="form-label">Selecione a foto de Capa</label>
-			<input class="form-control" type="file" accept="image/png, image/jpeg" id="_select_profile_cover">
+			<input class="form-control sl-upload-image" type="file" accept="image/png, image/jpeg" id="_select_profile_cover">
 			<input type="hidden" name="_profile_cover" id="_profile_cover" value="<?php echo strlen($userData['_profile_cover']) != 0 ? $userData['_profile_cover'] : '' ?>">
 		</div>
 	</div>
@@ -642,6 +642,12 @@
 
 				loader.addClass('d-none');
 			}, false);
+		});
+
+		// upload de imagens(perfil e capa)
+		const elementsUpload = document.querySelectorAll('.sl-upload-image');
+		Array.from(elementsUpload).forEach(input => {
+			input.addEventListener('change', slProfileImagesUpdate);
 		});
 	});
 })();
