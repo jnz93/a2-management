@@ -3,6 +3,8 @@ class SL_WoocTemplates{
 
     public function __construct()
     {
+		$this->helper = new A2_Helper();
+
 		$this->metaKeys = [
 			'_profile_whatsapp',
 			'_profile_birthday',
