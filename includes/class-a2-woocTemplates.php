@@ -42,7 +42,8 @@ class SL_WoocTemplates{
 			'_profile_work_days',
 			'_profile_office_hour',
 			'_profile_photo',
-			'_profile_cover'
+			'_profile_cover',
+			'_profile_page_id'
 		];
         # Register shortcodes
         add_shortcode('sl_tplEditAccount', [$this, 'tplEditAccount']);
@@ -66,47 +67,14 @@ class SL_WoocTemplates{
         );
 
 		defined( 'ABSPATH' ) || exit;
-		# Coletando $userData
-		$metaKeys = array(
-			'_profile_whatsapp',
-			'_profile_birthday',
-			'_profile_description',
-			'_profile_height',
-			'_profile_weight',
-			'_profile_eye_color',
-			'_profile_hair_color',
-			'_profile_tits_size',
-			'_profile_bust_size',
-			'_profile_waist_size',
-			'_profile_ethnicity',
-			'_profile_genre',
-			'_profile_sign',
-			'_profile_he_meets',
-			'_profile_services',
-			'_profile_place',
-			'_profile_specialties',
-			'_profile_languages',
-			'_profile_instagram',
-			'_profile_tiktok',
-			'_profile_onlyfans',
-			'_profile_country',
-			'_profile_state',
-			'_profile_city',
-			'_profile_district',
-			'_profile_address',
-			'_profile_cep',
-			'_profile_cache_quickie',
-			'_profile_cache_half_an_hour',
-			'_profile_cache_hour',
-			'_profile_cache_overnight_stay',
-			'_profile_cache_promotion',
-			'_profile_cache_promotion_activated',
-			'_profile_work_days',
-			'_profile_office_hour',
-			'_profile_photo',
-			'_profile_cover',
-			'_profile_page_id',
-		);
+
+		# Coleta de dados do usuário
+		$userId 	= get_current_user_id();
+		$user 		= get_userdata($userId);
+		$userData 	= [];
+		foreach( $this->metaKeys as $key ){
+			$userData[$key] = get_user_meta( $user->ID, $key, true );
+		}
 
 		#Signos
 		$args = array(
@@ -159,17 +127,30 @@ class SL_WoocTemplates{
 			}
 		}
 
-		# Localização
+		# Paises
 		$args['taxonomy'] = 'profile_localization';
 		$args['parent'] = 0;
-		$localizacao = get_terms( $args );
+		$countries = get_terms($args);
 
-		# Coleta de dados do usuário
-		$userId = get_current_user_id();
-		$user = get_userdata($userId);
-		$userData = [];
-		foreach( $metaKeys as $key ){
-			$userData[$key] = get_user_meta( $user->ID, $key, true );
+		# Estados
+		$states = '';
+		if($userData['_profile_country']){
+			$args['parent']	= $userData['_profile_country'];
+			$states = get_terms($args);
+		}
+
+		# Cidade 
+		$city = '';
+		if($userData['_profile_city']){
+			$city = get_term_by('name', $userData['_profile_city'], 'profile_localization');
+		}
+
+		# Cidades pelo estado
+		$cities = '';
+		if($userData['_profile_state']){
+			$stateObj = get_term_by('id', $userData['_profile_state'], 'profile_localization');
+			$cities = $this->helper->getCitiesByUfFromIBGE($stateObj->slug);
+			$sanitizedCities = $this->helper->sanitizeCitiesFromIBGE($cities);
 		}
 
 		// Coletando a url da foto de perfil, se existir uma
