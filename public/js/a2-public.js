@@ -82,6 +82,37 @@ function getLocalizationChildrenTerms( el ){;
 }
 
 /**
+ * Retornar cidades de um estado passado como parâmetro
+ * API IBGE LOCALIDADES
+ * 
+ * @param {*} e 
+ */
+function getCitiesByUf(e){
+	let options = e.children();
+	const selectCity = jQuery('#_profile_city'); 
+	options.each(async function(i, item){
+		if(item.selected === true){
+			let selectedOption = jQuery(this),
+				termSlug = selectedOption.attr('term-slug'),
+				endpoint = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${termSlug}/municipios`;
+
+			let towns = await getData(endpoint);
+			let elements = '<option value="" disabled selected>Selecione uma opção</option>';
+			if(towns.length){
+				towns.forEach((city) => {
+					elements += `<option value="${city.nome}" city-id="${city.id}">${city.nome}</option>`;
+				});
+				// Organizar as informações da cidade em um json no atributo "data-city", como no php;
+			}
+
+			selectCity.html(elements);
+			selectCity.attr('disabled', false);
+			selectCity.focus();
+		}
+	});
+}
+
+/**
  * Função responsável por preencher as opções conforme o type do select
  * Opções referentes a localização na edição do perfil
  * 
