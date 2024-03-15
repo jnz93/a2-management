@@ -594,7 +594,8 @@ class A2_Public {
 	{
 		if( empty( $_POST ) ) die();
 
-		$termId 	= $_POST['termId'];		
+		$termId 	= $_POST['termId'];
+		$userId 	= $_POST['userId'];		
 		$args 		= array(
 			'taxonomy'		=> 'profile_localization',
 			'parent'		=> $termId,
@@ -606,9 +607,15 @@ class A2_Public {
 
 		$data = array();
 		if( !empty( $terms ) ){
+			$currStateId = get_user_meta($userId, '_profile_state', true);
 			foreach( $terms as $term ){
 				if( $term->parent != 0 ){
-					$data[] = [ 'id' => $term->term_id, 'name' => $term->name ];
+					$isCurrent = false;
+					if($term->term_id === $currStateId){
+						$isCurrent = true;
+					}
+					
+					$data[] = ['id' => $term->term_id, 'name' => $term->name, 'slug' => $term->slug, 'current' => $isCurrent];
 				}
 			}
 		}
