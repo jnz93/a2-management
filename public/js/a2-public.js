@@ -933,13 +933,12 @@ const appendAlert = (message, type) => {
 }
 
 /**
- * Função auxiliar para efetuar requisições rest
+ * Função auxiliar para efetuar requisições rest POST
  * @param {*} payload 
  * @param {*} endpoint 
  * @returns 
  */
-async function fetchData(payload, endpoint)
-{
+async function fetchData(payload, endpoint){
 	try {
 		const response = await fetch(endpoint, {
 			method: 'POST',
