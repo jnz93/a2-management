@@ -59,14 +59,19 @@ function getLocalizationChildrenTerms( el ){;
 	options.each( function( index, element ) {
 		if( element.selected === true ){
 			let _self = jQuery(this),
-				term = _self.attr('term-id')
+				term = _self.attr('term-id'),
+				userId = _self.attr('user-id'),
 				type = _self.attr('children-type');
 	
-				console.log(  );
+			console.log(type);
+			console.log(term);
+			console.log(_self);
+
 			dataSend = {
 				action: 'listChildrenTerms',
 				nonce: publicAjax.nonce,
 				termId: term,
+				userId: userId,
 			}
 			
 			jQuery.ajax({
@@ -143,12 +148,12 @@ function fillLocalizationOptions( options, type ){
 		let elements = '<option value="" disabled selected>Selecione uma opção</option>';
 
 		jQuery.each( _items, function( index, item ){
-			elements += '<option value="'+ item.id +'" term-id="'+ item.id +'" children-type="'+ _childType +'">'+ item.name +'</option>'
+			elements += '<option value="'+ item.id +'" term-id="'+ item.id +'" term-slug="'+ item.slug +'" children-type="'+ _childType +'">'+ item.name +'</option>'
 		});
 
 		_select.html(elements);
 		_select.attr('disabled', false);
-		_select.formSelect();
+		_select.focus();
 	}
 }
 
