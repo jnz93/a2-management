@@ -57,7 +57,7 @@
 	<?php endif; ?>
 </ul>
 
-<div class="tab-content" id="myTabContent">
+<div class="tab-content mb-5" id="myTabContent">
 	<div class="tab-pane fade show active" id="personalInformation-tab-pane" role="tabpanel" aria-labelledby="personalInformation-tab" tabindex="0">
 		<div class="row mt-3">
 			<h5 class="d-none"><?php echo __( 'Informações Pessoais', 'textdomain' ); ?></h5>
@@ -407,17 +407,17 @@
 				<div class="clear"></div>
 				<form class="needs-validation" action="profile-update" data-tab-info="localization" novalidate>
 					<div class="row g-3">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6 mb-3">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-2 mb-3">
 							<label for="_profile_country" class="form-label"><?php echo __( 'Selecione o País', 'textdomain' ) ?></label>
 							<select name="_profile_country" id="_profile_country" class="form-select" onchange="getLocalizationChildrenTerms( jQuery(this) )" required>
 								<option value="" disabled selected><?php echo __( 'País', 'textdomain' ) ?></option>
 								<?php 
-									if( !empty( $localizacao ) ){
-										foreach( $localizacao as $item ){
-											echo '<option value="'. $item->term_id .'" term-id="'. $item->term_id .'" children-type="states"';
-											// if( $item->term_id == $userData['_profile_country'] ){
-											// 	echo 'selected';
-											// }
+									if( !empty( $countries ) ){
+										foreach( $countries as $item ){
+											echo '<option value="'. $item->term_id .'" term-id="'. $item->term_id .'" children-type="states" user-id="'. $userId .'"';
+											if( $item->term_id == $userData['_profile_country'] ){
+												echo 'selected';
+											}
 											echo '>'. __( $item->name, 'textdomain' ) .'</option>';
 										}
 									}
@@ -428,42 +428,59 @@
 							</div>
 						</div>
 
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6 mb-3">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
 							<label for="_profile_state" class="form-label"><?php echo __( 'Selecione o Estado', 'textdomain' ) ?></label>
-							<select name="_profile_state" id="_profile_state" class="form-select" onchange="getLocalizationChildrenTerms( jQuery(this) )" disabled required>
+							<select name="_profile_state" id="_profile_state" class="form-select" onchange="getCitiesByUf(jQuery(this))" required>
 								<option value="" disabled selected><?php echo __( 'Estado', 'textdomain' ) ?></option>
+								<?php
+									if(!empty($states)){
+										foreach($states as $item){
+											echo '<option value="'. $item->term_id .'" term-id="'. $item->term_id .'" children-type="cities" user-id="'. $userId .'" term-slug="'. $item->slug .'"';
+											if( $item->term_id == $userData['_profile_state'] ){
+												echo 'selected';
+											}
+											echo '>'. __( $item->name, 'textdomain' ) .'</option>';
+										}
+									}
+								?>
 							</select>
 							<div class="invalid-feedback">
 								<?php echo __( 'Por favor, selecione uma opção.', 'textdomain' ) ?>
 							</div>
 						</div>
 						
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6 mb-3">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
 							<label for="_profile_city" class="form-label"><?php echo __( 'Selecione a Cidade', 'textdomain' ) ?></label>
-							<select name="_profile_city" id="_profile_city" class="form-select" onchange="getLocalizationChildrenTerms( jQuery(this) )" disabled required>
+							<select name="_profile_city" id="_profile_city" class="form-select" required>
 								<option value="" disabled selected><?php echo __( 'Cidade', 'textdomain' ) ?></option>
+								<?php
+									if(!empty($sanitizedCities)){
+										foreach($sanitizedCities as $item){
+											echo '<option value="'. $item['name'] .'" city-data=\''. $item['data'] .'\' user-id="'. $userId .'"';
+											if( $item['name'] == $userData['_profile_city'] ){
+												echo 'selected';
+											}
+											echo '>'. __( $item['name'], 'textdomain' ) .'</option>';
+										}
+									}
+								?>
 							</select>
 							<div class="invalid-feedback">
 								<?php echo __( 'Por favor, selecione uma opção.', 'textdomain' ) ?>
 							</div>
 						</div>
 
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6 mb-3">
-							<label for="_profile_district" class="form-label"><?php echo __( 'Selecione o Bairro', 'textdomain' ) ?></label>
-							<select name="_profile_district" id="_profile_district" class="form-select" onchange="getLocalizationChildrenTerms( jQuery(this) )" disabled required>
-								<option value="" disabled selected><?php echo __( 'Bairro', 'textdomain' ) ?></option>
-							</select>
-							<div class="invalid-feedback">
-								<?php echo __( 'Por favor, selecione uma opção.', 'textdomain' ) ?>
-							</div>
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
+							<label for="_profile_district" class="form-label"><?php echo __( 'Bairro', 'textdomain' ) ?></label>
+							<input name="_profile_district" id="_profile_district" type="text" class="form-input" value="<?php echo esc_attr( $userData['_profile_district'] ); ?>">
 						</div>
 
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 col-xxl-8 mb-3">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-5 mb-3">
 							<label for="_profile_address" class="form-label"><?php echo __( 'Endereço', 'textdomain' ) ?></label>
 							<input name="_profile_address" id="_profile_address" type="text" class="form-input" value="<?php echo esc_attr( $userData['_profile_address'] ); ?>">
 						</div>
 
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4 mb-3">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-2 mb-3">
 							<label for="_profile_cep" class="form-label"><?php echo __( 'CEP', 'textdomain' ) ?></label>
 							<input name="_profile_cep" id="_profile_cep" type="text" class="form-input" value="<?php echo esc_attr( $userData['_profile_cep'] ); ?>">
 						</div>
