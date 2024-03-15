@@ -959,6 +959,32 @@ async function fetchData(payload, endpoint)
 }
 
 /**
+ * Função auxiliar para efetuar requisições GET
+ * @param {*} endpoint 
+ * @returns 
+ */ 
+async function getData(endpoint){
+	try {
+		const response = await fetch(endpoint, {
+			method: 'GET'
+		});
+
+		if(!response.status){
+			console.error(response);
+			appendAlert(response.status + ': Tente novamente', 'warning');
+			throw new Error('Erro na solicitação: ' + error);
+		}
+
+		return response.json();
+	} catch (error) {
+		console.error(error);
+		appendAlert('Erro de conexão, tente novamente.', 'warning');
+		throw new Error('Erro na solicitação: ' + error);
+	}
+}
+
+
+/**
  * Atualizar foto do perfil e capa de acompanhantes
  * 
  */
