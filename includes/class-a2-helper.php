@@ -182,6 +182,40 @@ class A2_Helper{
         }
     }
 
+
+    public function sanitizeCitiesFromIBGE($obj){
+        /**
+         * Organizar cidades retornadas do ibge
+         * 
+         * @param object $obj
+         * 
+         * @return array $cities
+        */
+
+        $cities = [];
+        if(!empty($obj)){
+            foreach($obj as $item){
+                $city = json_decode(json_encode($item), true);
+
+                $sanitizedCity = [
+                    'name'  => $city['municipio-nome'],
+                    'data'  => json_encode([
+                        'id'                    => $city['municipio-id'],
+                        'microregion'           => [$city['microrregiao-id'], $city['microrregiao-nome']],
+                        'mesoregion'            => [$city['mesorregiao-id'], $city['mesorregiao-nome']],
+                        'intermediate-region'   => [$city['regiao-intermediaria-id'], $city['regiao-intermediaria-nome']],
+                        'uf'                    => [$city['UF-id'], $city['UF-nome'], $city['UF-sigla']],
+                        'region'                => [$city['regiao-id'], $city['regiao-nome'], $city['regiao-sigla']]
+                    ]),
+                ];
+
+                $cities[] = $sanitizedCity;
+            }
+        }
+
+        return $cities;
+    }
+    
     /**
      * Método que importa cidades da API do IBGE e salva na taxonomia "profile_localization"
      * 
