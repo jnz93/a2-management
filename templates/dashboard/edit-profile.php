@@ -645,6 +645,9 @@
 					var key = item.getAttribute('name'),
 						value = item.value;
 
+					if(['_profile_he_meets', '_profile_services', '_profile_place', '_profile_specialties', '_profile_languages', '_profile_work_days'].includes(key)){
+						value = jQuery(`#${key}`).val();
+					}
 					payload.append(key, value);
 				});
 
