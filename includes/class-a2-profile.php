@@ -30,7 +30,7 @@ class A2_Profile{
 
 		$metaKeys = array(
 			'_profile_whatsapp',
-			'_profile_birthday',
+			'_profile_birthdate',
 			'_profile_description',
 			'_profile_height',
 			'_profile_weight',
@@ -92,7 +92,7 @@ class A2_Profile{
 				update_user_meta( $userId, $key, $value );
 			} else {
 				// Cálculando a idade
-				if( $key == '_profile_birthday' ){
+				if( $key == '_profile_birthdate' ){
 					$value 	= $this->calculateAge($value);
 					$key 	= '_profile_age';
 				}
@@ -174,7 +174,7 @@ class A2_Profile{
 		# Meta post
 		$metaKeys = array(
 			'_profile_whatsapp',
-			'_profile_birthday',
+			'_profile_birthdate',
 			'_profile_age',
 			'_profile_description',
 			'_profile_height',
@@ -474,7 +474,7 @@ class A2_Profile{
 	{
 		if( is_null($postId) ) return;
 
-		$birthday 	= get_post_meta( $postId, '_profile_birthday', true );
+		$birthday 	= get_post_meta( $postId, '_profile_birthdate', true );
 		$age 		= null;
 		if( $birthday ){
 			// Coletando datas atuais
@@ -600,7 +600,7 @@ class A2_Profile{
 			'_profile_url',
 			'_expiration_date',
 			'_profile_whatsapp',
-			'_profile_birthday',
+			'_profile_birthdate',
 			'_profile_height',
 			'_profile_weight',
 			'_profile_eye_color',
