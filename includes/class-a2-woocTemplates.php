@@ -7,7 +7,7 @@ class SL_WoocTemplates{
 
 		$this->metaKeys = [
 			'_profile_whatsapp',
-			'_profile_birthday',
+			'_profile_birthdate',
 			'_profile_description',
 			'_profile_height',
 			'_profile_weight',

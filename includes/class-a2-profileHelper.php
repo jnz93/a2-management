@@ -16,7 +16,7 @@ class A2_ProfileHelper{
         $this->currentUserId    = get_current_user_id();
         $this->metaKeyPageId    = '_profile_page_id';
         $this->metaKeyGallery   = '_profile_gallery';
-        $this->metaKeyBirthday  = '_profile_birthday';
+        $this->metaKeyBirthday  = '_profile_birthdate';
         $this->metaKeyVerified  = '_verified_profile';
         $this->taxGenre         = 'profile_genre';
 

@@ -56,7 +56,7 @@ class A2_Shortcodes{
             '_profile_url',
             '_expiration_date',
             '_profile_whatsapp',
-            '_profile_birthday',
+            '_profile_birthdate',
             '_profile_height',
             '_profile_weight',
             '_profile_eye_color',
@@ -706,7 +706,7 @@ class A2_Shortcodes{
 		$profileData['name'] 	= get_the_title( $post_id );
 		$metaKeys 			= array(
 			'_profile_whatsapp',
-			'_profile_birthday',
+			'_profile_birthdate',
 			'_profile_age',
 			'_profile_description',
 			'_profile_height',

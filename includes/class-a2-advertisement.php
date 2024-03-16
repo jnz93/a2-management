@@ -272,7 +272,7 @@ class A2_Advertisement{
 		$metaKeys = array(
 			'_profile_page_id',
 			'_profile_whatsapp',
-			'_profile_birthday',
+			'_profile_birthdate',
 			'_profile_description',
 			'_profile_height',
 			'_profile_weight',

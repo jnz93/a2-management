@@ -484,7 +484,7 @@ class A2_Public {
 		// Idade
 		if( !empty(get_query_var('_age_min')) ){
 			$metaQuery[] = [
-				'key'		=> '_profile_birthday', # Substituir por um novo meta_campo "_profile_age"
+				'key'		=> '_profile_birthdate', # Substituir por um novo meta_campo "_profile_age"
 				'value'		=> get_query_var('_age_min'),
 				'compare'	=> '>=',
 				'type'		=> 'NUMERIC'
@@ -494,7 +494,7 @@ class A2_Public {
 		// Idade
 		if( !empty(get_query_var('_age_max')) ){
 			$metaQuery[] = [
-				'key'		=> '_profile_birthday', # Substituir por um novo meta_campo "_profile_age"
+				'key'		=> '_profile_birthdate', # Substituir por um novo meta_campo "_profile_age"
 				'value'		=> get_query_var('_age_max'),
 				'compare'	=> '<=',
 				'type'		=> 'NUMERIC'

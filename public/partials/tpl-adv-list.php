@@ -11,7 +11,7 @@
                 '_profile_url',
                 '_expiration_date',
                 '_profile_whatsapp',
-                '_profile_birthday',
+                '_profile_birthdate',
                 '_profile_height',
                 '_profile_weight',
                 '_profile_eye_color',
