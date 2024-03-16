@@ -91,11 +91,6 @@ class A2_Profile{
 			if( in_array($key, ['_profile_he_meets', '_profile_services', '_profile_place', '_profile_work_days', '_profile_specialties', '_profile_languages'])){
 				update_user_meta( $userId, $key, $value );
 			} else {
-				// Cálculando a idade
-				if( $key == '_profile_birthdate' ){
-					$value 	= $this->calculateAge($value);
-					$key 	= '_profile_age';
-				}
 				update_user_meta( $userId, $key, sanitize_text_field($value) );
 			}
 
