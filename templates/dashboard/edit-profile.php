@@ -105,8 +105,8 @@
 					</div>
 
 					<div class="col-md-6 mb-3">
-						<label for="_profile_birthday" class="form-label"><?php echo __( 'Data de Nascimento', 'textdomain' ) ?></label>
-						<input name="_profile_birthday" id="_profile_birthday" type="date" min="1940-01-01" max="2006-12-31" class="form-control" value="<?php echo esc_attr( $userData['_profile_birthday'] ); ?>" required>
+						<label for="_profile_birthdate" class="form-label"><?php echo __( 'Data de Nascimento', 'textdomain' ) ?></label>
+						<input name="_profile_birthdate" id="_profile_birthdate" type="date" min="1940-01-01" max="2006-12-31" class="form-control" value="<?php echo esc_attr( $userData['_profile_birthdate'] ); ?>" required>
 						<div class="invalid-feedback">
 							<?php echo __( 'Por favor, forneça uma data válida.', 'textdomain' ) ?>
 						</div>
@@ -254,13 +254,13 @@
 
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6 mb-3">
 							<label for="_profile_he_meets" class="form-label d-block"><?php echo __( 'Atende', 'textdomain' ) ?></label>
-							<select name="_profile_he_meets[]" id="_profile_he_meets" class="selectpicker" multiple data-live-search="true" required>
+							<select name="_profile_he_meets" id="_profile_he_meets" class="selectpicker" multiple data-live-search="true" required>
 								<option value="" disabled selected><?php echo __( 'Atende', 'textdomain' ) ?></option>
 								<?php
 									if( !empty( $preferencias ) ){
 										foreach( $preferencias as $item ){
 											echo '<option value="'. $item->name .'"';
-											if( is_array($userData['_profile_he_meets']) && in_array($item->name, $userData['_profile_he_meets']) ){
+											if(in_array($item->name, explode(',', $userData['_profile_he_meets']))){
 												echo 'selected';
 											}
 											echo '>'. __( $item->name, 'textdomain' ) .'</option>';
@@ -275,13 +275,13 @@
 
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6 mb-3">
 							<label for="_profile_services" class="form-label d-block"><?php echo __( 'Serviços', 'textdomain' ) ?></label>
-							<select name="_profile_services[]" id="_profile_services" class="selectpicker" multiple data-live-search="true" required>
+							<select name="_profile_services" id="_profile_services" class="selectpicker" multiple data-live-search="true" required>
 								<option value="" disabled selected><?php echo __( 'Serviços', 'textdomain' ) ?></option>
 								<?php 
 									if( !empty( $servicos ) ){
 										foreach( $servicos as $item ){
 											echo '<option value="'. $item->name .'"';
-											if( is_array($userData['_profile_services']) && in_array($item->name, $userData['_profile_services']) ){
+											if(in_array($item->name, explode(',', $userData['_profile_services']))){
 												echo 'selected';
 											}
 											echo '>'. __( $item->name, 'textdomain' ) .'</option>';
@@ -296,13 +296,13 @@
 
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6 mb-3">
 							<label for="_profile_place" class="form-label d-block"><?php echo __( 'Local de atendimento', 'textdomain' ) ?></label>	
-							<select name="_profile_place[]" id="_profile_place" class="selectpicker" multiple data-live-search="true" required>
+							<select name="_profile_place" id="_profile_place" class="selectpicker" multiple data-live-search="true" required>
 								<option value="" disabled selected><?php echo __( 'Local de atendimento', 'textdomain' ) ?></option>
 								<?php 
 									if( !empty( $locaisAtendimento ) ){
 										foreach( $locaisAtendimento as $item ){
 											echo '<option value="'. $item->name .'"';
-											if( is_array($userData['_profile_place']) && in_array($item->name, $userData['_profile_place']) ){
+											if(in_array($item->name, explode(',', $userData['_profile_place']))){
 												echo 'selected';
 											}
 											echo '>'. __( $item->name, 'textdomain' ) .'</option>';
@@ -317,13 +317,13 @@
 
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6 mb-3">
 							<label for="_profile_specialties" class="form-label d-block"><?php echo __( 'Especialidades', 'textdomain' ) ?></label>
-							<select name="_profile_specialties[]" id="_profile_specialties" class="selectpicker" multiple data-live-search="true" required>
+							<select name="_profile_specialties" id="_profile_specialties" class="selectpicker" multiple data-live-search="true" required>
 								<option value="" disabled selected><?php echo __( 'Especialidades', 'textdomain' ) ?></option>
 								<?php 
 									if( !empty( $especialidades ) ){
 										foreach( $especialidades as $item ){
 											echo '<option value="'. $item->name .'"';
-											if( is_array($userData['_profile_specialties']) && in_array($item->name, $userData['_profile_specialties']) ){
+											if(in_array($item->name, explode(',', $userData['_profile_specialties']))){
 												echo 'selected';
 											}
 											echo '>'. __( $item->name, 'textdomain' ) .'</option>';
@@ -338,13 +338,13 @@
 
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6 mb-3">
 							<label for="_profile_languages" class="form-label d-block"><?php echo __( 'Idiomas', 'textdomain' ) ?></label>
-							<select name="_profile_languages[]" id="_profile_languages" class="selectpicker" multiple data-live-search="true" required>
+							<select name="_profile_languages" id="_profile_languages" class="selectpicker" multiple data-live-search="true" required>
 								<option value="" disabled selected><?php echo __( 'Idiomas', 'textdomain' ) ?></option>
 								<?php 
 									if( !empty( $idiomas ) ){
 										foreach( $idiomas as $item ){
 											echo '<option value="'. $item->name .'"';
-											if( is_array($userData['_profile_languages']) && in_array($item->name, $userData['_profile_languages']) ){
+											if(in_array($item->name, explode(',', $userData['_profile_languages']))){
 												echo 'selected';
 											}
 											echo '>'. __( $item->name, 'textdomain' ) .'</option>';
@@ -500,13 +500,13 @@
 					<div class="row g-3">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 mb-3">
 							<label for="_profile_work_days" class="form-label d-block"><?php echo __( 'Selecione os dias de trabalho', 'textdomain' ) ?></label>
-							<select name="_profile_work_days[]" id="_profile_work_days"  class="selectpicker" multiple data-live-search="true" required>
+							<select name="_profile_work_days" id="_profile_work_days"  class="selectpicker" multiple data-live-search="true" required>
 								<option value="" disabled selected><?php echo __( 'Dias de Expediente', 'textdomain' ) ?></option>
 								<?php 
 									if( !empty( $diasTrabalho ) ){
 										foreach( $diasTrabalho as $item ){
 											echo '<option value="'. $item->name .'"';
-											if( is_array($userData['_profile_work_days']) && in_array($item->name, $userData['_profile_work_days']) ){
+											if(in_array($item->name, explode(',', $userData['_profile_work_days']))){
 												echo 'selected';
 											}
 											echo '>'. __( $item->name, 'textdomain' ) .'</option>';
