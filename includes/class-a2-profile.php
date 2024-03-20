@@ -15,20 +15,7 @@ class A2_Profile{
 
     public function __construct()
     {
-        /** Action para salvar dados na edição de perfil */
-        add_action( 'woocommerce_save_account_details', [ $this, 'saveData' ], 12, 1 );
-		// Actions devem ser movidas para um arquivo único pois não podem ser registradas no __contruct de uma classe que é invocada por outras.
-    }
-
-    /**
-	 * Salvar dados customs no perfil do usuário 
-	 * 
-	 * @param integer $userId 
-	 */
-	public function saveData($data, $userId ) 
-	{
-
-		$metaKeys = array(
+		$this->metaKeys = [
 			'_profile_whatsapp',
 			'_profile_birthdate',
 			'_profile_description',
@@ -66,8 +53,19 @@ class A2_Profile{
 			'_profile_office_hour',
 			'_profile_photo',
 			'_profile_cover'
-		);
+		];
+        /** Action para salvar dados na edição de perfil */
+        add_action( 'woocommerce_save_account_details', [ $this, 'saveData' ], 12, 1 );
+		// Actions devem ser movidas para um arquivo único pois não podem ser registradas no __contruct de uma classe que é invocada por outras.
+    }
 
+    /**
+	 * Salvar dados customs no perfil do usuário 
+	 * 
+	 * @param integer $userId 
+	 */
+	public function saveData($data, $userId) 
+	{
 		# Coletando Formas de pagamento
 		$args = array(
 			'taxonomy'		=> 'profile_payment_methods',
@@ -84,7 +82,7 @@ class A2_Profile{
 
 		# Salvando meta-campos
 		$log = array();
-		foreach( $metaKeys as $key ){
+		foreach($this->metaKeys as $key){
 			$value = $data[$key];
 			if(empty($value)) continue;
 			
@@ -97,16 +95,13 @@ class A2_Profile{
 			$log[$key] = $data[$key];
 		}
 		
-		return $log;
-
-		// $profileIsReady = $this->validateAccount( $userId, $metaKeys ); Desativado métdo "checkData" está com problema
-		$profileIsReady = true;
-		if( $profileIsReady == true ){
-			$this->setupPage( $userId );
-			$this->markAsComplete( $userId );
+		$isValid = $this->checkProfile($userId);
+		if($isValid){
+			$this->setupPage($userId);
+			$this->markAsComplete($userId);
 		} else {
-			$this->markAsIncomplete( $userId );
-			$this->saveIncompleteLog( $userId, $profileIsReady );
+			$this->markAsIncomplete($userId);
+			$this->saveIncompleteLog($userId, $validateProfile);
 		}
 	}
 
@@ -155,8 +150,6 @@ class A2_Profile{
      */
     private function setupPage( $userId )
     {
-		if( !current_user_can('a2_scort') ) return;
-
 		$userData 					= array();
 		$user 						= get_userdata( $userId );
 		$userData['id']				= $userId;
@@ -165,48 +158,6 @@ class A2_Profile{
 		$userData['display_name'] 	= $user->display_name;
 		$userData['full_name']		= $user->first_name . ' ' . $user->last_name;
 		$userData['email']			= $user->user_email;
-
-		# Meta post
-		$metaKeys = array(
-			'_profile_whatsapp',
-			'_profile_birthdate',
-			'_profile_age',
-			'_profile_description',
-			'_profile_height',
-			'_profile_weight',
-			'_profile_eye_color',
-			'_profile_hair_color',
-			'_profile_tits_size',
-			'_profile_bust_size',
-			'_profile_waist_size',
-			'_profile_ethnicity',
-			'_profile_genre',
-			'_profile_sign',
-			'_profile_he_meets',
-			'_profile_services',
-			'_profile_place',
-			'_profile_specialties',
-			'_profile_languages',
-			'_profile_instagram',
-			'_profile_tiktok',
-			'_profile_onlyfans',
-			'_profile_country',
-			'_profile_state',
-			'_profile_city',
-			'_profile_district',
-			'_profile_address',
-			'_profile_cep',
-			'_profile_cache_quickie',
-			'_profile_cache_half_an_hour',
-			'_profile_cache_hour',
-			'_profile_cache_overnight_stay',
-			'_profile_cache_promotion',
-			'_profile_cache_promotion_activated',
-			'_profile_work_days',
-			'_profile_office_hour',
-			'_profile_photo',
-			'_profile_cover'
-		);		
 
 		# Taxonomias
 		// profile meta key => taxonomy
@@ -243,12 +194,12 @@ class A2_Profile{
 		}
 
 		# Preenchendo $userData
-		foreach( $metaKeys as $key ){
+		foreach( $this->metaKeys as $key ){
 			$userData[$key] = get_user_meta( $userId, $key, true );
 		}
 
 		# Checar se a página de perfil já existe
-		$foundProfile = $this->checkProfilePageExists( $userId );
+		$foundProfile = $this->checkProfilePageExists($userId);
 		$postid = '';
 		if( $foundProfile ){
 			# Pegar o ID da página de perfil
@@ -324,18 +275,15 @@ class A2_Profile{
 	 * @param int $userId		
 	 * @param array $metaKeys 	para retornar os dados gravados na conta
 	 */
-	private function validateAccount( $userId, $metaKeys )
+	private function checkProfile($userId)
 	{
-        if( is_null( $userId ) || !user_can( $userId, 'a2_scort' ) )
-			return;
-
-		$profileData = array();
-		foreach( $metaKeys as $key ){
-			$profileData[$key] = get_user_meta( $userId, $key, true );
+		$data = [];
+		foreach($this->metaKeys as $key){
+			$data[$key] = get_user_meta($userId, $key, true);
 		}
 
 		# Checagem
-		return $this->checkData( $profileData );
+		return $this->validateProfile($data);
 	}
 
 	/**
@@ -346,27 +294,17 @@ class A2_Profile{
 	 * @param array $profileData 	Array com dados que serão testados
 	 * @return bool $result
 	 */
-	private function checkData( $profileData )
+	private function validateProfile($data)
 	{
-		if( empty( $profileData ) || is_null( $profileData ) )
-			return false;
+		if(empty($data)) return false;
 
-		$log 	= array();
-		foreach( $profileData as $key => $value ){
-			// Este pedaço de código está com erro.
-			if( strlen( $value ) == 0 && !is_array( $value ) ){
-				$log[$key] = $value;
-			}elseif( is_array( $value ) && empty($value) ){
-				$log[$key] = $value;
+		foreach($data as $key => $value ){
+			if (empty($value)) {
+				return false;
 			}
 		}
 
-		$result = true;
-		if( !empty( $log ) ){
-			$result	= $log;
-		}
-
-		return $result;
+		return true;
 	}
 
 	/**
