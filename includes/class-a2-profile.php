@@ -258,7 +258,20 @@ class A2_Profile{
 
 			# Salvando Localizações
 			if( !empty( $selectedLocalization ) ){
-				wp_set_post_terms( $postid, $selectedLocalization, 'profile_localization' );
+				$cityName = $selectedLocalization[2];
+				$taxonomy = 'profile_localization';
+
+				// Verifica se o termo existe pelo nome
+				$term = get_term_by('name', $cityName, $taxonomy);
+				if($term){
+					$selectedLocalization[2] = $term->term_id;
+				} else {
+					if($term->parent != 106){
+						$newTerm = wp_insert_term($cityName, $taxonomy, ['parent' => $selectedLocalization[1]]);
+						$selectedLocalization[2] = $newTerm['term_id'];
+					}
+				}
+				wp_set_post_terms($postid, $selectedLocalization, $taxonomy);
 			}
 
 			# Salvar o $postid da página no user meta
